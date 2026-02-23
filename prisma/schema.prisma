@@ -1,0 +1,190 @@
+// =============================================================================
+// Prisma Schema — E-commerce de Relógios Premium
+//
+// Decisões de segurança e LGPD:
+// - Senhas armazenadas como hash bcrypt (nunca plaintext).
+// - Campos LGPD obrigatórios: marketingConsent, termsAcceptedAt, anonymized.
+// - anonymized=true permite "exclusão lógica" (Art. 18 LGPD) sem quebrar
+//   integridade referencial de pedidos/notas fiscais.
+// - AuditLog registra todas as ações sensíveis para auditoria e compliance.
+// - Índices em campos de busca frequente para performance.
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =============================================================================
+// AUTH & USERS
+// =============================================================================
+
+model User {
+  id            String    @id @default(uuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  passwordHash  String    // bcrypt hash — NUNCA armazene senha em plaintext
+  image         String?
+
+  // --- LGPD Compliance ---
+  marketingConsent Boolean   @default(false)  // Consentimento opt-in para marketing
+  termsAcceptedAt  DateTime                   // Data/hora de aceite dos termos
+  anonymized       Boolean   @default(false)  // Exclusão lógica (Art. 18 LGPD)
+  anonymizedAt     DateTime?                  // Quando foi anonimizado
+
+  // --- Relationships ---
+  sessions   Session[]
+  accounts   Account[]
+  orders     Order[]
+  auditLogs  AuditLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([anonymized])
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// =============================================================================
+// AUDIT LOG — Registro de ações sensíveis (LGPD Art. 37 + OWASP Logging)
+// =============================================================================
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String   // Ex: "PASSWORD_CHANGE", "PURCHASE", "DATA_DELETION", "LOGIN_ATTEMPT"
+  entity    String?  // Ex: "User", "Order"
+  entityId  String?  // ID do registro afetado
+  metadata  Json?    // Dados adicionais (sem dados sensíveis!)
+  ipAddress String?
+  userAgent String?
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// =============================================================================
+// PRODUCTS
+// =============================================================================
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  brand       String
+  description String   @db.Text
+  price       Decimal  @db.Decimal(10, 2)
+  images      String[] // Array de URLs
+  category    String
+  inStock     Boolean  @default(true)
+  stockCount  Int      @default(0)
+
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([brand])
+  @@index([category])
+  @@map("products")
+}
+
+// =============================================================================
+// ORDERS
+// =============================================================================
+
+model Order {
+  id              String      @id @default(uuid())
+  userId          String
+  status          OrderStatus @default(PENDING)
+  totalAmount     Decimal     @db.Decimal(10, 2)
+  paymentMethod   String
+  paymentToken    String?     // Referência ao gateway — NUNCA armazene dados do cartão
+  shippingAddress Json        // Endereço completo como JSON
+
+  user  User        @relation(fields: [userId], references: [id])
+  items OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  productId String
+  quantity  Int
+  unitPrice Decimal @db.Decimal(10, 2)
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
