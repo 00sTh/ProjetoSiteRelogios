@@ -1,0 +1,199 @@
+// =================================================================
+// Prisma Schema — E-commerce de Relógios
+//
+// Decisões de segurança e conformidade LGPD:
+//
+// 1. Senhas: Armazenadas como hash bcrypt (campo passwordHash).
+//    Nunca armazene senhas em texto plano. O hash é feito na camada
+//    de aplicação antes de salvar no banco.
+//
+// 2. LGPD — Consentimento: Os campos marketingConsent e
+//    termsAcceptedAt registram o consentimento explícito do titular.
+//    O consentimento de marketing é granular e independente dos termos.
+//
+// 3. LGPD — Direito ao Esquecimento: O campo anonymized permite
+//    exclusão lógica de dados pessoais. Quando true, todos os campos
+//    PII (nome, e-mail, CPF, telefone) são substituídos por valores
+//    anonimizados, mantendo a integridade referencial dos pedidos
+//    para fins contábeis/fiscais.
+//
+// 4. AuditLog: Registra todas as ações sensíveis (mudanças de senha,
+//    compras, exclusão de dados, alteração de consentimento) com
+//    timestamp, IP e user-agent. Essencial para auditoria LGPD e
+//    investigação de incidentes.
+//
+// 5. Indexes: Criados em campos de busca frequente (email, cpf)
+//    e em campos de auditoria (userId, action, createdAt) para
+//    consultas eficientes sem full table scans.
+// =================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String
+  name          String
+  cpf           String    @unique
+  phone         String?
+
+  // --- LGPD Compliance Fields ---
+  marketingConsent  Boolean   @default(false)
+  termsAcceptedAt   DateTime
+  anonymized        Boolean   @default(false)
+  anonymizedAt      DateTime?
+
+  // --- Auth ---
+  emailVerified DateTime?
+  role          UserRole  @default(CUSTOMER)
+
+  // --- Timestamps ---
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- Relations ---
+  orders    Order[]
+  sessions  Session[]
+  auditLogs AuditLog[]
+
+  @@index([email])
+  @@index([cpf])
+  @@map("users")
+}
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  brand       String
+  description String   @db.Text
+  priceCents  Int
+  images      String[]
+  stock       Int      @default(0)
+  active      Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orderItems OrderItem[]
+
+  @@index([slug])
+  @@index([brand])
+  @@map("products")
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  userId          String
+  status          OrderStatus @default(PENDING)
+  totalCents      Int
+  shippingAddress Json
+  billingAddress  Json?
+  paymentToken    String
+  couponCode      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User        @relation(fields: [userId], references: [id])
+  items OrderItem[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("orders")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+model OrderItem {
+  id             String @id @default(uuid())
+  orderId        String
+  productId      String
+  quantity       Int
+  unitPriceCents Int
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+// =================================================================
+// AuditLog — Registro de Ações Sensíveis
+//
+// Todas as ações que envolvem dados pessoais ou financeiros devem
+// ser registradas aqui. O campo `details` armazena metadados em JSON
+// (ex: quais campos foram alterados, motivo da ação).
+//
+// Campos de IP e userAgent são capturados para investigação de
+// incidentes e detecção de atividade anômala.
+//
+// Este modelo é append-only: registros NUNCA devem ser editados
+// ou excluídos (imutabilidade para auditoria).
+// =================================================================
+
+model AuditLog {
+  id        String          @id @default(uuid())
+  userId    String?
+  action    AuditAction
+  details   Json?
+  ipAddress String?
+  userAgent String?
+
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+enum AuditAction {
+  USER_REGISTERED
+  USER_LOGIN
+  USER_LOGIN_FAILED
+  PASSWORD_CHANGED
+  EMAIL_CHANGED
+  PROFILE_UPDATED
+  CONSENT_UPDATED
+  DATA_ANONYMIZED
+  DATA_EXPORT_REQUESTED
+  ORDER_PLACED
+  ORDER_CANCELLED
+  ORDER_REFUNDED
+  ADMIN_ACTION
+}
