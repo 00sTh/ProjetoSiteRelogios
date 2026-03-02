@@ -8,12 +8,15 @@ import { prisma } from "@/lib/prisma";
  */
 export async function logErrorAction(
   digest: string,
-  path: string
+  path: string,
+  message?: string
 ): Promise<void> {
   try {
     await prisma.errorLog.create({
       data: {
-        message: `Client error — digest: ${digest}`,
+        message: message
+          ? `Client error — ${message.slice(0, 500)}`
+          : `Client error — digest: ${digest}`,
         digest,
         path: path.slice(0, 500),
       },

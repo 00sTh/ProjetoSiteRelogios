@@ -14,9 +14,11 @@ interface ErrorPageProps {
 export default function ErrorPage({ error, reset }: ErrorPageProps) {
   useEffect(() => {
     console.error(error);
-    if (error.digest) {
-      logErrorAction(error.digest, window.location.pathname).catch(() => {});
-    }
+    logErrorAction(
+      error.digest ?? "no-digest",
+      window.location.pathname,
+      error.message
+    ).catch(() => {});
   }, [error]);
 
   return (

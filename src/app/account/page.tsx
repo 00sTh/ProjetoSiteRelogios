@@ -142,7 +142,7 @@ export default async function AccountPage() {
                     `Total: ${formatPrice(orderTotal)}\n\n` +
                     `Poderia me ajudar a finalizar o pagamento?`
                   );
-                  whatsappUrl = `https://wa.me/${settings.whatsappNumber}?text=${msg}`;
+                  whatsappUrl = `https://wa.me/${settings?.whatsappNumber ?? ""}?text=${msg}`;
                 }
 
                 return (

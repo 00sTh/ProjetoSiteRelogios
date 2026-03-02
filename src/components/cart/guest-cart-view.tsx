@@ -114,7 +114,8 @@ export function GuestCartView() {
     setMounted(true);
     if (cart.length > 0) {
       getProductsByIds(cart.map((i) => i.productId))
-        .then((p) => setProducts(p as ProductData[]))
+        .then((p) => setProducts((p ?? []) as ProductData[]))
+        .catch(() => setProducts([]))
         .finally(() => setLoading(false));
     } else {
       setLoading(false);
