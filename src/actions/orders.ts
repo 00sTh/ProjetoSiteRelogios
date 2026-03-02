@@ -23,6 +23,7 @@ import {
   sendOrderConfirmationToCustomer,
   sendNewOrderNotification,
 } from "@/lib/mailer";
+import { logError } from "@/lib/logger";
 
 // ─── Schemas ──────────────────────────────────────────────────────────────────
 
@@ -405,7 +406,11 @@ async function processPayment({
             data: { stock: { increment: item.quantity } },
           });
         }
-        console.error("Rede error:", err);
+        await logError({
+          message: `Rede payment error — order ${order.id}: ${err instanceof Error ? err.message : String(err)}`,
+          stack: err instanceof Error ? err.stack : undefined,
+          path: "/checkout",
+        });
         return { success: false, error: "Erro ao conectar com a Rede. Tente novamente." };
       }
 
@@ -487,7 +492,11 @@ async function processPayment({
           data: { stock: { increment: item.quantity } },
         });
       }
-      console.error("Cielo error:", err);
+      await logError({
+        message: `Cielo payment error — order ${order.id}: ${err instanceof Error ? err.message : String(err)}`,
+        stack: err instanceof Error ? err.stack : undefined,
+        path: "/checkout",
+      });
       return { success: false, error: "Erro ao conectar com o gateway de pagamento. Tente novamente." };
     }
 
@@ -548,7 +557,11 @@ async function processPayment({
         where: { id: order.id },
         data: { status: "CANCELLED" },
       });
-      console.error("Cielo PIX error:", err);
+      await logError({
+        message: `Cielo PIX error — order ${order.id}: ${err instanceof Error ? err.message : String(err)}`,
+        stack: err instanceof Error ? err.stack : undefined,
+        path: "/checkout",
+      });
       return { success: false, error: "Erro ao gerar PIX. Tente novamente." };
     }
 
