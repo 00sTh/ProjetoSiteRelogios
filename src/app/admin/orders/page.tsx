@@ -63,7 +63,7 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
                 borderBottom: "1px solid rgba(201,162,39,0.1)",
               }}
             >
-              {["Pedido", "Cliente", "Itens", "Total", "Status", "Data", ""].map((h) => (
+              {["Pedido", "Cliente", "Gateway", "Itens", "Total", "Status", "Data", ""].map((h) => (
                 <th
                   key={h}
                   className="px-5 py-3 text-left text-xs font-semibold tracking-wider uppercase"
@@ -78,7 +78,7 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
             {orders.length === 0 ? (
               <tr>
                 <td
-                  colSpan={7}
+                  colSpan={8}
                   className="px-5 py-12 text-center text-sm"
                   style={{ color: "rgba(200,187,168,0.4)" }}
                 >
@@ -125,6 +125,21 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
                           </p>
                         )}
                       </div>
+                    </td>
+                    <td className="px-5 py-4">
+                      {order.gateway ? (
+                        <span
+                          className="text-xs font-mono px-2 py-0.5 rounded"
+                          style={{
+                            backgroundColor: order.gateway === "REDE" ? "rgba(249,115,22,0.15)" : "rgba(59,130,246,0.15)",
+                            color: order.gateway === "REDE" ? "#FB923C" : "#60A5FA",
+                          }}
+                        >
+                          {order.gateway}
+                        </span>
+                      ) : (
+                        <span style={{ color: "rgba(200,187,168,0.3)" }}>—</span>
+                      )}
                     </td>
                     <td className="px-5 py-4 text-sm" style={{ color: "#C8BBA8" }}>
                       {totalItems}

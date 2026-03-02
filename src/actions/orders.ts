@@ -272,13 +272,8 @@ export async function createOrder(
       });
     }
 
-    await tx.cartItem.deleteMany({ where: { cartId: cart.id } });
-
     return created;
   });
-
-  revalidatePath("/cart");
-  revalidatePath("/", "layout");
 
   const result = await processPayment({
     order,
@@ -294,6 +289,10 @@ export async function createOrder(
   });
 
   if (result.success) {
+    // Só limpa o carrinho depois que o pagamento foi confirmado
+    await prisma.cartItem.deleteMany({ where: { cartId: cart.id } });
+    revalidatePath("/cart");
+    revalidatePath("/", "layout");
     sendOrderEmails({
       id: order.id,
       customerName: d.name,

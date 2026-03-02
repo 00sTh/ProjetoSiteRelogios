@@ -137,16 +137,27 @@ export default async function AdminOrderPage({ params }: Props) {
           </div>
 
           {/* Payment */}
-          {order.cieloPaymentId && (
+          {(order.cieloPaymentId || order.redePaymentId || order.gateway) && (
             <div
               className="rounded-2xl p-5"
               style={{ backgroundColor: "#0A2419", border: "1px solid rgba(201,162,39,0.15)" }}
             >
               <h2 className="font-semibold text-sm mb-4" style={{ color: "#F5F0E6" }}>
-                Pagamento Cielo
+                Pagamento{order.gateway ? ` — ${order.gateway}` : ""}
               </h2>
-              <div className="space-y-1 text-xs" style={{ color: "rgba(200,187,168,0.6)" }}>
-                <p className="font-mono truncate">{order.cieloPaymentId}</p>
+              <div className="space-y-2 text-xs" style={{ color: "rgba(200,187,168,0.6)" }}>
+                {order.cieloPaymentId && (
+                  <div>
+                    <p className="uppercase tracking-wider mb-0.5" style={{ color: "rgba(200,187,168,0.4)", fontSize: "10px" }}>Cielo PaymentId</p>
+                    <p className="font-mono truncate">{order.cieloPaymentId}</p>
+                  </div>
+                )}
+                {order.redePaymentId && (
+                  <div>
+                    <p className="uppercase tracking-wider mb-0.5" style={{ color: "rgba(200,187,168,0.4)", fontSize: "10px" }}>Rede TID</p>
+                    <p className="font-mono truncate">{order.redePaymentId}</p>
+                  </div>
+                )}
               </div>
             </div>
           )}
