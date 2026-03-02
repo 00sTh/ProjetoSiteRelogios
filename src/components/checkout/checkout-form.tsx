@@ -85,6 +85,7 @@ function FocusInput(
 }
 
 type PaymentMethod = "CREDIT_CARD" | "PIX" | "WHATSAPP";
+type CreditGateway = "CIELO" | "REDE";
 
 // ─── Card validators ──────────────────────────────────────────────────────────
 
@@ -138,6 +139,7 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [method, setMethod] = useState<PaymentMethod>("PIX");
+  const [creditGateway, setCreditGateway] = useState<CreditGateway>("CIELO");
   const [cardNumber, setCardNumber] = useState("");
   const [cardExpiry, setCardExpiry] = useState("");
   const [cpf, setCpf] = useState("");
@@ -170,6 +172,7 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
     if (method === "CREDIT_CARD") {
       formData.set("cardNumber", cardNumber.replace(/\s/g, ""));
       formData.set("cardExpiry", cardExpiry);
+      formData.set("creditGateway", creditGateway);
     }
 
     formData.set("cpf", cpf.replace(/\D/g, ""));
@@ -424,6 +427,34 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
         >
           <h3 className="label-luxury" style={{ color: "#C9A227" }}>Dados do Cartão</h3>
 
+          {/* Gateway selector */}
+          <div>
+            <label style={labelStyle}>Plataforma de pagamento</label>
+            <div className="flex gap-2">
+              {(["CIELO", "REDE"] as CreditGateway[]).map((gw) => (
+                <button
+                  key={gw}
+                  type="button"
+                  onClick={() => setCreditGateway(gw)}
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all"
+                  style={{
+                    border: creditGateway === gw ? "2px solid #C9A227" : "1px solid rgba(201,162,39,0.2)",
+                    backgroundColor: creditGateway === gw ? "rgba(201,162,39,0.12)" : "rgba(15,74,55,0.4)",
+                    color: creditGateway === gw ? "#C9A227" : "rgba(200,187,168,0.6)",
+                  }}
+                >
+                  {creditGateway === gw && (
+                    <div
+                      className="h-3 w-3 rounded-full"
+                      style={{ backgroundColor: "#C9A227" }}
+                    />
+                  )}
+                  {gw === "CIELO" ? "Cielo" : "Rede"}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <Field label="Número do cartão *">
             <FocusInput
               name="cardNumberDisplay"
@@ -491,7 +522,7 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
           </Field>
 
           <p className="text-xs" style={{ color: "rgba(200,187,168,0.5)" }}>
-            🔒 Seus dados de cartão são enviados diretamente para a Cielo via conexão segura (TLS 1.3) e nunca são armazenados em nossos servidores.
+            🔒 Seus dados de cartão são enviados diretamente para a {creditGateway === "REDE" ? "Rede" : "Cielo"} via conexão segura (TLS 1.3) e nunca são armazenados em nossos servidores.
           </p>
         </div>
       )}

@@ -14,6 +14,12 @@ import {
   type CieloCreditCard,
 } from "@/lib/cielo";
 import {
+  createRedeCreditPayment,
+  isRedeApproved,
+  isRedeDenied,
+  getRedeFriendlyError,
+} from "@/lib/rede";
+import {
   sendOrderConfirmationToCustomer,
   sendNewOrderNotification,
 } from "@/lib/mailer";
@@ -363,14 +369,78 @@ async function processPayment({
     return { success: true, type: "whatsapp", orderId: order.id };
   }
 
-  // ── Cielo — Cartão de Crédito ──────────────────────────────────────────────
+  // ── Cartão de Crédito ─────────────────────────────────────────────────────
   if (paymentMethod === "CREDIT_CARD") {
     const cardNumber = (formData.get("cardNumber") as string) ?? "";
     const cardHolder = (formData.get("cardHolder") as string) ?? "";
     const cardExpiry = (formData.get("cardExpiry") as string) ?? "";
     const cardCvv = (formData.get("cardCvv") as string) ?? "";
     const installments = parseInt((formData.get("installments") as string) || "1", 10);
+    const creditGateway = (formData.get("creditGateway") as string) || "CIELO";
 
+    // ── Rede ────────────────────────────────────────────────────────────────
+    if (creditGateway === "REDE") {
+      const [expiryMM = "", expiryYYYY = ""] = cardExpiry.split("/");
+
+      let redeResp;
+      try {
+        redeResp = await createRedeCreditPayment({
+          reference: order.id,
+          amountInReais: total,
+          installments,
+          cardNumber,
+          cardholderName: cardHolder,
+          expirationMonth: expiryMM,
+          expirationYear: expiryYYYY,
+          securityCode: cardCvv,
+        });
+      } catch (err) {
+        await prisma.order.update({
+          where: { id: order.id },
+          data: { status: "CANCELLED", gateway: "REDE" },
+        });
+        for (const item of items) {
+          await prisma.product.update({
+            where: { id: item.productId },
+            data: { stock: { increment: item.quantity } },
+          });
+        }
+        console.error("Rede error:", err);
+        return { success: false, error: "Erro ao conectar com a Rede. Tente novamente." };
+      }
+
+      if (isRedeApproved(redeResp)) {
+        await prisma.order.update({
+          where: { id: order.id },
+          data: { status: "PAID", redePaymentId: redeResp.tid, gateway: "REDE" },
+        });
+        return { success: true, type: "paid", orderId: order.id };
+      }
+
+      if (isRedeDenied(redeResp)) {
+        await prisma.order.update({
+          where: { id: order.id },
+          data: { status: "CANCELLED", redePaymentId: redeResp.tid, gateway: "REDE" },
+        });
+        for (const item of items) {
+          await prisma.product.update({
+            where: { id: item.productId },
+            data: { stock: { increment: item.quantity } },
+          });
+        }
+        const friendly = getRedeFriendlyError(redeResp.returnCode, redeResp.returnMessage);
+        return { success: false, error: `Pagamento recusado: ${friendly} Verifique os dados ou tente outro cartão.` };
+      }
+
+      // Status desconhecido — mantém PENDING
+      await prisma.order.update({
+        where: { id: order.id },
+        data: { redePaymentId: redeResp.tid, gateway: "REDE" },
+      });
+      return { success: true, type: "paid", orderId: order.id };
+    }
+
+    // ── Cielo (padrão) ──────────────────────────────────────────────────────
     const brand = detectCardBrand(cardNumber);
     if (!brand) {
       await prisma.order.update({
@@ -409,9 +479,8 @@ async function processPayment({
     } catch (err) {
       await prisma.order.update({
         where: { id: order.id },
-        data: { status: "CANCELLED" },
+        data: { status: "CANCELLED", gateway: "CIELO" },
       });
-      // Restore stock
       for (const item of items) {
         await prisma.product.update({
           where: { id: item.productId },
@@ -427,7 +496,7 @@ async function processPayment({
     if (isPaymentConfirmed(Payment.Status)) {
       await prisma.order.update({
         where: { id: order.id },
-        data: { status: "PAID", cieloPaymentId: Payment.PaymentId },
+        data: { status: "PAID", cieloPaymentId: Payment.PaymentId, gateway: "CIELO" },
       });
       return { success: true, type: "paid", orderId: order.id };
     }
@@ -435,7 +504,7 @@ async function processPayment({
     if (isPaymentDenied(Payment.Status)) {
       await prisma.order.update({
         where: { id: order.id },
-        data: { status: "CANCELLED", cieloPaymentId: Payment.PaymentId },
+        data: { status: "CANCELLED", cieloPaymentId: Payment.PaymentId, gateway: "CIELO" },
       });
       for (const item of items) {
         await prisma.product.update({
@@ -457,12 +526,10 @@ async function processPayment({
       return { success: false, error: `Pagamento recusado: ${friendly} Verifique os dados ou tente outro cartão.` };
     }
 
-    // Status pendente (0=NotFinished, 12=Pending, 20=Scheduled):
-    // Pedido mantém status PENDING no banco.
-    // O webhook /api/webhooks/cielo atualizará para PAID quando confirmado.
+    // Status pendente — webhook /api/webhooks/cielo atualizará para PAID
     await prisma.order.update({
       where: { id: order.id },
-      data: { cieloPaymentId: Payment.PaymentId },
+      data: { cieloPaymentId: Payment.PaymentId, gateway: "CIELO" },
     });
     return { success: true, type: "paid", orderId: order.id };
   }

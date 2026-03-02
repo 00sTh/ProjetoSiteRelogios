@@ -134,6 +134,8 @@ model Order {
   stripePaymentId String?
   stripeSessionId String?
   cieloPaymentId  String?
+  redePaymentId   String?
+  gateway         String?
   paymentMethod   PaymentMethod @default(WHATSAPP)
   pixQrCode       String?
   customerName    String?
@@ -154,6 +156,7 @@ model Order {
   @@index([status])
   @@index([createdAt])
   @@index([cieloPaymentId])
+  @@index([redePaymentId])
   @@map("orders")
 }
 

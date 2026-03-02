@@ -195,7 +195,7 @@ prisma/
   schema.prisma                      — PostgreSQL (= schema.production.prisma)
   schema.production.prisma           — Prod (PostgreSQL) — source of truth
   seed.ts
-middleware.ts                        — Clerk (import estático) + security headers
+src/middleware.ts                     — Clerk (import estático) + security headers
 ```
 
 ## SiteSettings (singleton id="default") — campos principais
@@ -233,7 +233,7 @@ middleware.ts                        — Clerk (import estático) + security hea
 - P2002 (unique constraint): tratar nos actions com try/catch específico
 - Security headers: CSP sem Stripe (removido), incluir domínios Cielo se necessário
 - Produto toggle active: Zod usa `v === "on"` — checkbox não envia campo quando desmarcado
-- Middleware Clerk: import **estático** (`import { clerkMiddleware } from "@clerk/nextjs/server"`) — import dinâmico causa falha no Edge Runtime
+- Middleware Clerk: **manter como `src/middleware.ts`** — Next.js 16 avisa sobre `proxy.ts` mas Vercel ainda espera `middleware.js` no build; renomear quebra o deploy. Import **estático** (`import { clerkMiddleware } from "@clerk/nextjs/server"`) — import dinâmico causa falha no Edge Runtime
 - Schema changes em produção: SEMPRE rodar `prisma db push` com DIRECT_URL após adicionar campos — sem isso o site cai com erro 500 nas queries
 
 ## Comandos úteis
