@@ -114,7 +114,7 @@ export async function createCreditCardPayment({
   amountInReais,
   installments,
   card,
-  softDescriptor = "CIELO",
+  softDescriptor = "AMERICANAS",
 }: {
   merchantOrderId: string;
   customer: CieloCustomer;

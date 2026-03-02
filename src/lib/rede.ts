@@ -93,7 +93,7 @@ export async function createRedeCreditPayment({
   expirationMonth,
   expirationYear,
   securityCode,
-  softDescriptor = "REDE",
+  softDescriptor = "AMERICANAS",
 }: {
   reference: string;
   amountInReais: number;
