@@ -396,7 +396,7 @@ async function processPayment({
           expirationMonth: expiryMM,
           expirationYear: expiryYYYY,
           securityCode: cardCvv,
-        });
+        }); // softDescriptor não enviado — não habilitado nesta conta Rede
       } catch (err) {
         await prisma.order.update({
           where: { id: order.id },

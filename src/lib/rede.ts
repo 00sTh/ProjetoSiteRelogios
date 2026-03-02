@@ -93,7 +93,6 @@ export async function createRedeCreditPayment({
   expirationMonth,
   expirationYear,
   securityCode,
-  softDescriptor = "AMERICANAS",
 }: {
   reference: string;
   amountInReais: number;
@@ -103,7 +102,6 @@ export async function createRedeCreditPayment({
   expirationMonth: number;
   expirationYear: number;
   securityCode: string;
-  softDescriptor?: string;
 }): Promise<RedePaymentResult> {
   // reference: máx 16 chars (Rede rejeita UUID completo de 36 chars)
   const ref = reference.replace(/-/g, "").slice(0, 16);
@@ -122,7 +120,6 @@ export async function createRedeCreditPayment({
       expirationMonth,
       expirationYear,
       securityCode,
-      softDescriptor: softDescriptor.slice(0, 18),
     }),
     signal: AbortSignal.timeout(30_000),
   });
