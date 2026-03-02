@@ -81,7 +81,8 @@ export function getRedeFriendlyError(
 
 /**
  * Cria pagamento com cartão de crédito via Rede eRede (captura imediata).
- * expirationMonth: "MM" (dois dígitos), expirationYear: "YYYY" (quatro dígitos)
+ * expirationMonth: número inteiro 1-12
+ * expirationYear: número inteiro ex: 2028
  */
 export async function createRedeCreditPayment({
   reference,
@@ -99,26 +100,29 @@ export async function createRedeCreditPayment({
   installments: number;
   cardNumber: string;
   cardholderName: string;
-  expirationMonth: string;
-  expirationYear: string;
+  expirationMonth: number;
+  expirationYear: number;
   securityCode: string;
   softDescriptor?: string;
 }): Promise<RedePaymentResult> {
+  // reference: máx 16 chars (Rede rejeita UUID completo de 36 chars)
+  const ref = reference.replace(/-/g, "").slice(0, 16);
+
   const resp = await fetch(`${BASE_URL}/transactions`, {
     method: "POST",
     headers: headers(),
     body: JSON.stringify({
       capture: true,
       kind: "credit",
-      reference,
+      reference: ref,
       amount: toCentavosRede(amountInReais),
       installments,
-      cardholderName: cardholderName.toUpperCase().slice(0, 25),
+      cardholderName: cardholderName.toUpperCase().slice(0, 30),
       cardNumber: cardNumber.replace(/\s/g, ""),
-      expirationMonth: expirationMonth.padStart(2, "0"),
+      expirationMonth,
       expirationYear,
       securityCode,
-      softDescriptor: softDescriptor.slice(0, 13),
+      softDescriptor: softDescriptor.slice(0, 18),
     }),
     signal: AbortSignal.timeout(30_000),
   });

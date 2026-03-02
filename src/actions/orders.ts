@@ -381,7 +381,9 @@ async function processPayment({
 
     // ── Rede ────────────────────────────────────────────────────────────────
     if (creditGateway === "REDE") {
-      const [expiryMM = "", expiryYYYY = ""] = cardExpiry.split("/");
+      const [expiryMMStr = "0", expiryYYYYStr = "0"] = cardExpiry.split("/");
+      const expiryMM = parseInt(expiryMMStr, 10);
+      const expiryYYYY = parseInt(expiryYYYYStr, 10);
 
       let redeResp;
       try {
