@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Lock, ShieldCheck } from "lucide-react";
+import { redirect } from "next/navigation";
 import { CheckoutForm } from "@/components/checkout/checkout-form";
 import { getCart } from "@/actions/cart";
 import { getServerAuth } from "@/lib/auth";
@@ -11,12 +12,12 @@ export const metadata: Metadata = {
 export default async function CheckoutPage() {
   const { userId } = await getServerAuth();
 
-  // Auth users: load DB cart
-  let cart = null;
-  if (userId) {
-    cart = await getCart();
-    // If auth user has empty cart, show form anyway (guest items may exist via GuestCartSync)
+  // Guests must sign in to checkout
+  if (!userId) {
+    redirect("/sign-in?redirect_url=%2Fcheckout");
   }
+
+  const cart = await getCart();
 
   return (
     <div
@@ -68,7 +69,7 @@ export default async function CheckoutPage() {
           className="rounded-3xl overflow-hidden"
           style={{ border: "1px dashed rgba(201,162,39,0.25)" }}
         >
-          <CheckoutForm cart={cart} isGuest={!userId} />
+          <CheckoutForm cart={cart} />
         </div>
       </div>
     </div>

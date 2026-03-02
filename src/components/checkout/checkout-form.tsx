@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useTransition, useRef, useEffect } from "react";
+import { useState, useTransition, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import {
   Loader2,
   CreditCard,
@@ -14,14 +15,11 @@ import {
 import Link from "next/link";
 import { formatPrice, parseImages } from "@/lib/utils";
 import { createOrder } from "@/actions/orders";
-import { getProductsByIds } from "@/actions/products";
-import { getGuestCart, clearGuestCart, type GuestCartItem } from "@/hooks/use-guest-cart";
 import { ProductImage } from "@/components/ui/product-image";
 import type { CartWithItems } from "@/types";
 
 interface CheckoutFormProps {
   cart: CartWithItems | null;
-  isGuest?: boolean;
 }
 
 // ─── Styles ────────────────────────────────────────────────────────────────────
@@ -90,7 +88,6 @@ type PaymentMethod = "CREDIT_CARD" | "PIX" | "WHATSAPP";
 
 // ─── Card validators ──────────────────────────────────────────────────────────
 
-/** Detecta bandeira client-side (espelha cielo.ts — sem import do server) */
 function detectCardBrandClient(n: string): string | null {
   if (/^4/.test(n)) return "Visa";
   if (/^(5[1-5]|2(2[2-9][1-9]|[3-6]\d{2}|7[01]\d|720))/.test(n)) return "Mastercard";
@@ -101,7 +98,6 @@ function detectCardBrandClient(n: string): string | null {
   return null;
 }
 
-/** Algoritmo de Luhn para validar número do cartão */
 function luhnCheck(n: string): boolean {
   let sum = 0;
   let alt = false;
@@ -134,23 +130,11 @@ function formatCpf(val: string) {
   return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`;
 }
 
-// ─── Guest Cart Types ─────────────────────────────────────────────────────────
-
-type ProductData = {
-  id: string;
-  name: string;
-  price: { toString(): string };
-  images: string[];
-  stock: number;
-  slug: string;
-};
-
-type EnrichedGuestItem = GuestCartItem & { product: ProductData };
-
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export function CheckoutForm({ cart, isGuest = false }: CheckoutFormProps) {
+export function CheckoutForm({ cart }: CheckoutFormProps) {
   const router = useRouter();
+  const { user } = useUser();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [method, setMethod] = useState<PaymentMethod>("PIX");
@@ -159,54 +143,23 @@ export function CheckoutForm({ cart, isGuest = false }: CheckoutFormProps) {
   const [cpf, setCpf] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
 
-  // Guest cart state
-  const [guestItems, setGuestItems] = useState<GuestCartItem[]>([]);
-  const [guestProducts, setGuestProducts] = useState<ProductData[]>([]);
-  const [guestLoading, setGuestLoading] = useState(isGuest);
-
-  useEffect(() => {
-    if (!isGuest) return;
-    const items = getGuestCart();
-    setGuestItems(items);
-    if (items.length > 0) {
-      getProductsByIds(items.map((i) => i.productId))
-        .then((p) => setGuestProducts(p as ProductData[]))
-        .finally(() => setGuestLoading(false));
-    } else {
-      setGuestLoading(false);
-    }
-  }, [isGuest]);
-
-  // Build enriched cart lines (same structure for auth + guest)
-  const enrichedGuest: EnrichedGuestItem[] = guestItems
-    .map((item) => {
-      const product = guestProducts.find((p) => p.id === item.productId);
-      if (!product) return null;
-      return { ...item, product };
-    })
-    .filter(Boolean) as EnrichedGuestItem[];
-
-  const cartLines = isGuest
-    ? enrichedGuest.map((i) => ({
-        name: i.product.name,
-        quantity: i.quantity,
-        price: Number(i.product.price),
-        images: i.product.images,
-      }))
-    : (cart?.items ?? []).map((i) => ({
-        name: i.product.name,
-        quantity: i.quantity,
-        price: Number(i.product.price),
-        images: i.product.images as string[],
-      }));
+  const cartLines = (cart?.items ?? []).map((i) => ({
+    name: i.product.name,
+    quantity: i.quantity,
+    price: Number(i.product.price),
+    images: i.product.images as string[],
+  }));
 
   const total = cartLines.reduce((acc, i) => acc + i.price * i.quantity, 0);
+
+  // Pre-fill from Clerk profile
+  const defaultName = user?.fullName ?? "";
+  const defaultEmail = user?.primaryEmailAddress?.emailAddress ?? "";
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
 
-    // Validate cart has items
     if (cartLines.length === 0) {
       setError("Seu carrinho está vazio.");
       return;
@@ -214,24 +167,13 @@ export function CheckoutForm({ cart, isGuest = false }: CheckoutFormProps) {
 
     const formData = new FormData(e.currentTarget);
 
-    // Inject formatted card fields
     if (method === "CREDIT_CARD") {
       formData.set("cardNumber", cardNumber.replace(/\s/g, ""));
       formData.set("cardExpiry", cardExpiry);
     }
 
-    // Inject CPF (digits only)
     formData.set("cpf", cpf.replace(/\D/g, ""));
 
-    // Inject guest cart items for server-side processing
-    if (isGuest) {
-      formData.set(
-        "guestItems",
-        JSON.stringify(guestItems.map((i) => ({ productId: i.productId, quantity: i.quantity })))
-      );
-    }
-
-    // ── Validações client-side para cartão de crédito ──────────────────────
     if (method === "CREDIT_CARD") {
       const rawCard = cardNumber.replace(/\s/g, "");
 
@@ -274,9 +216,6 @@ export function CheckoutForm({ cart, isGuest = false }: CheckoutFormProps) {
         setError(result.error);
         return;
       }
-
-      // Clear guest cart on success
-      if (isGuest) clearGuestCart();
 
       if (result.type === "paid") {
         router.push(`/checkout/sucesso?orderId=${result.orderId}&paid=1`);
@@ -329,48 +268,8 @@ export function CheckoutForm({ cart, isGuest = false }: CheckoutFormProps) {
     </button>
   );
 
-  // ── Guest loading state ──────────────────────────────────────────────────────
-
-  if (isGuest && guestLoading) {
-    return (
-      <div className="p-6 space-y-4" style={{ backgroundColor: "#0F4A37" }}>
-        {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className="h-12 rounded-xl animate-pulse"
-            style={{ backgroundColor: "rgba(201,162,39,0.08)" }}
-          />
-        ))}
-      </div>
-    );
-  }
-
-  // ── Guest with empty cart ────────────────────────────────────────────────────
-
-  if (isGuest && cartLines.length === 0) {
-    return (
-      <div
-        className="p-10 text-center space-y-4"
-        style={{ backgroundColor: "#0F4A37" }}
-      >
-        <ShoppingCart className="h-12 w-12 mx-auto" style={{ color: "rgba(201,162,39,0.3)" }} />
-        <p className="font-serif text-xl" style={{ color: "#F5F0E6" }}>
-          Seu carrinho está vazio
-        </p>
-        <Link
-          href="/products"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold"
-          style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
-        >
-          Explorar produtos <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
-    );
-  }
-
-  // ── Auth user with empty DB cart ─────────────────────────────────────────────
-
-  if (!isGuest && cartLines.length === 0) {
+  // Empty cart
+  if (cartLines.length === 0) {
     return (
       <div
         className="p-10 text-center space-y-4"
@@ -456,10 +355,10 @@ export function CheckoutForm({ cart, isGuest = false }: CheckoutFormProps) {
         <h3 className="label-luxury" style={{ color: "#C9A227" }}>Dados de Contato</h3>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Field label="Nome completo *" className="sm:col-span-2">
-            <FocusInput name="name" placeholder="Ana Silva" required />
+            <FocusInput name="name" placeholder="Ana Silva" required defaultValue={defaultName} />
           </Field>
           <Field label="E-mail *">
-            <FocusInput name="email" type="email" placeholder="ana@email.com" required />
+            <FocusInput name="email" type="email" placeholder="ana@email.com" required defaultValue={defaultEmail} />
           </Field>
           <Field label="CPF *">
             <FocusInput
@@ -499,14 +398,6 @@ export function CheckoutForm({ cart, isGuest = false }: CheckoutFormProps) {
           </Field>
           <Field label="UF *">
             <FocusInput name="state" placeholder="SP" maxLength={2} required />
-          </Field>
-          <Field label="Observações" className="sm:col-span-2">
-            <textarea
-              name="notes"
-              placeholder="Ponto de referência, instruções de entrega..."
-              rows={2}
-              style={{ ...inputStyle, resize: "vertical" }}
-            />
           </Field>
         </div>
       </div>

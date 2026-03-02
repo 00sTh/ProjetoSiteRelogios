@@ -13,6 +13,10 @@ import {
   isPaymentDenied,
   type CieloCreditCard,
 } from "@/lib/cielo";
+import {
+  sendOrderConfirmationToCustomer,
+  sendNewOrderNotification,
+} from "@/lib/mailer";
 
 // ─── Schemas ──────────────────────────────────────────────────────────────────
 
@@ -185,7 +189,7 @@ export async function createOrder(
     });
 
     // Process payment (same logic as auth users)
-    return await processPayment({
+    const guestResult = await processPayment({
       order,
       paymentMethod,
       formData,
@@ -196,6 +200,17 @@ export async function createOrder(
         return { productId: item.productId, quantity: item.quantity, price: Number(product.price) };
       }),
     });
+    if (guestResult.success) {
+      sendOrderEmails({
+        id: order.id,
+        customerName: d.name,
+        customerEmail: d.email,
+        price: total,
+        paymentMethod,
+        itemCount: guestItems.reduce((a, i) => a + i.quantity, 0),
+      });
+    }
+    return guestResult;
   }
 
   // ── Authenticated checkout ──────────────────────────────────────────────────
@@ -258,7 +273,7 @@ export async function createOrder(
   revalidatePath("/cart");
   revalidatePath("/", "layout");
 
-  return await processPayment({
+  const result = await processPayment({
     order,
     paymentMethod,
     formData,
@@ -270,6 +285,52 @@ export async function createOrder(
       price: Number(item.product.price),
     })),
   });
+
+  if (result.success) {
+    sendOrderEmails({
+      id: order.id,
+      customerName: d.name,
+      customerEmail: d.email,
+      price: total,
+      paymentMethod,
+      itemCount: cart.items.reduce((a, i) => a + i.quantity, 0),
+    });
+  }
+
+  return result;
+}
+
+// ─── sendOrderEmails (fire-and-forget) ────────────────────────────────────────
+
+function sendOrderEmails(params: {
+  id: string;
+  customerName: string;
+  customerEmail: string;
+  price: number;
+  paymentMethod: string;
+  itemCount: number;
+}) {
+  const orderSummary = {
+    id: params.id,
+    customerName: params.customerName,
+    customerEmail: params.customerEmail,
+    price: params.price,
+    paymentMethod: params.paymentMethod,
+    itemCount: params.itemCount,
+  };
+
+  // Email para o cliente
+  sendOrderConfirmationToCustomer(orderSummary).catch(console.error);
+
+  // Email para o admin (se notificationEmail configurado)
+  prisma.siteSettings
+    .findUnique({ where: { id: "default" }, select: { notificationEmail: true } })
+    .then((s) => {
+      if (s?.notificationEmail) {
+        sendNewOrderNotification(orderSummary, s.notificationEmail).catch(console.error);
+      }
+    })
+    .catch(console.error);
 }
 
 // ─── processPayment ───────────────────────────────────────────────────────────

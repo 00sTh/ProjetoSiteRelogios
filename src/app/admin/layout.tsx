@@ -11,6 +11,7 @@ import {
   Tag,
   ChevronRight,
   AlertTriangle,
+  Users,
 } from "lucide-react";
 import { APP_NAME } from "@/lib/constants";
 
@@ -20,6 +21,7 @@ const navItems = [
   { href: "/admin/categories", label: "Categorias", icon: Tag },
   { href: "/admin/media", label: "Mídia", icon: Image },
   { href: "/admin/orders", label: "Pedidos", icon: ShoppingCart },
+  { href: "/admin/users", label: "Usuários", icon: Users },
   { href: "/admin/settings", label: "Configurações", icon: Settings },
   { href: "/admin/newsletter", label: "Newsletter", icon: Mail },
   { href: "/admin/logs", label: "Logs de Erro", icon: AlertTriangle },

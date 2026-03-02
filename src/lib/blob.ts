@@ -1,10 +1,8 @@
 /**
- * src/lib/blob.ts — Abstração para upload de imagens
+ * src/lib/blob.ts — Upload de imagens via Cloudinary
  *
- * Desenvolvimento: salva em public/uploads/ (servido estaticamente)
- * Produção Vercel: configure BLOB_READ_WRITE_TOKEN e instale @vercel/blob:
- *   npm install @vercel/blob
- *   BLOB_READ_WRITE_TOKEN="vercel_blob_..."
+ * Produção: CLOUDINARY_CLOUD_NAME + CLOUDINARY_API_KEY + CLOUDINARY_API_SECRET
+ * Dev local: salva em public/uploads/ (servido estaticamente)
  */
 
 import fs from "fs/promises";
@@ -19,33 +17,53 @@ export async function uploadImage(
   file: Buffer | Blob,
   filename: string
 ): Promise<UploadResult> {
-  // ── Vercel Blob (produção) ─────────────────────────────────────────────
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
-    const { put } = await import("@vercel/blob");
-    const blob = await put(`uploads/${filename}`, file, { access: "public" });
-    return { url: blob.url, pathname: blob.pathname };
-  }
+  // ── Cloudinary (produção) ──────────────────────────────────────────────────
+  if (
+    process.env.CLOUDINARY_CLOUD_NAME &&
+    process.env.CLOUDINARY_API_KEY &&
+    process.env.CLOUDINARY_API_SECRET
+  ) {
+    const { v2: cloudinary } = await import("cloudinary");
 
-  // ── Fallback local: public/uploads/ ───────────────────────────────────
-  const uploadsDir = path.join(process.cwd(), "public", "uploads");
-
-  try {
-    await fs.mkdir(uploadsDir, { recursive: true });
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key:    process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+    });
 
     const buffer =
       file instanceof Buffer ? file : Buffer.from(await (file as Blob).arrayBuffer());
 
-    // Sanitize filename
-    const safe = filename.replace(/[^a-zA-Z0-9._-]/g, "-");
-    const filepath = path.join(uploadsDir, safe);
-    await fs.writeFile(filepath, buffer);
+    const result = await new Promise<{ secure_url: string; public_id: string }>(
+      (resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "altheia", resource_type: "image" },
+          (err, res) => {
+            if (err || !res) return reject(err ?? new Error("Cloudinary upload falhou"));
+            resolve(res as { secure_url: string; public_id: string });
+          }
+        );
+        stream.end(buffer);
+      }
+    );
 
+    return { url: result.secure_url, pathname: result.public_id };
+  }
+
+  // ── Fallback local: public/uploads/ (apenas dev) ───────────────────────────
+  const uploadsDir = path.join(process.cwd(), "public", "uploads");
+  try {
+    await fs.mkdir(uploadsDir, { recursive: true });
+    const buffer =
+      file instanceof Buffer ? file : Buffer.from(await (file as Blob).arrayBuffer());
+    const safe = filename.replace(/[^a-zA-Z0-9._-]/g, "-");
+    await fs.writeFile(path.join(uploadsDir, safe), buffer);
     return { url: `/uploads/${safe}`, pathname: `uploads/${safe}` };
   } catch (err: unknown) {
     const code = (err as NodeJS.ErrnoException).code;
     if (code === "EROFS" || code === "EACCES") {
       throw new Error(
-        "Upload de arquivo não disponível neste ambiente. Use uma URL de imagem no campo 'URLs de imagens'."
+        "Configure CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY e CLOUDINARY_API_SECRET para upload em produção."
       );
     }
     throw err;
@@ -53,18 +71,28 @@ export async function uploadImage(
 }
 
 export async function deleteImage(pathname: string): Promise<void> {
-  // ── Vercel Blob (produção) ─────────────────────────────────────────────
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
-    const { del } = await import("@vercel/blob");
-    await del(pathname);
+  // ── Cloudinary ─────────────────────────────────────────────────────────────
+  if (
+    process.env.CLOUDINARY_CLOUD_NAME &&
+    process.env.CLOUDINARY_API_KEY &&
+    process.env.CLOUDINARY_API_SECRET
+  ) {
+    const { v2: cloudinary } = await import("cloudinary");
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key:    process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+    });
+    if (!pathname.startsWith("/uploads/") && !pathname.startsWith("uploads/")) {
+      await cloudinary.uploader.destroy(pathname);
+    }
     return;
   }
 
-  // ── Fallback local ─────────────────────────────────────────────────────
+  // ── Local ──────────────────────────────────────────────────────────────────
   try {
-    const filepath = path.join(process.cwd(), "public", pathname);
-    await fs.unlink(filepath);
+    await fs.unlink(path.join(process.cwd(), "public", pathname));
   } catch {
-    // File may not exist
+    // arquivo pode não existir
   }
 }

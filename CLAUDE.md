@@ -1,10 +1,10 @@
-# CLAUDE.md — AltheiaSite v0.8.1
+# CLAUDE.md — AltheiaSite v1.0.0
 
 > **REGRA:** Sempre atualizar este arquivo após qualquer mudança significativa de arquitetura, features ou convenções.
 
 ## Visão Geral
 E-commerce de cosméticos para a empresa Althéia. Plataforma de luxo com tema Emerald + Gold.
-Versão atual: **0.9.0** (main — produção).
+Versão atual: **1.0.0** (main — produção).
 
 ## Stack
 | Tecnologia | Versão | Propósito |
@@ -20,6 +20,7 @@ Versão atual: **0.9.0** (main — produção).
 | framer-motion | ^12 | Animações |
 | Zod | ^3 | Validação |
 | nodemailer | ^8 | E-mail |
+| cloudinary | ^2 | Upload de imagens (banco de mídia) |
 
 > **Stripe foi removido** — gateway é Cielo. Stripe package pode estar instalado mas não é usado.
 
@@ -83,16 +84,17 @@ Via nvm — sempre rodar `source /home/sth/.nvm/nvm.sh` antes de npm/npx.
 - WhatsApp: flow manual `/checkout` → redirect WhatsApp
 - `/api/check-payment` — verifica status do pagamento
 
-## Guest Checkout (v0.9.0)
-- Qualquer pessoa compra sem conta — `/cart` e `/checkout` são rotas **públicas**
-- `GuestCartView` — client component em `src/components/cart/guest-cart-view.tsx` para usuários não autenticados
-- `CheckoutForm` aceita `isGuest` prop — lê localStorage, busca produtos via `getProductsByIds`, envia `guestItems` JSON
-- `createOrder` tem dois caminhos: guest (lê `guestItems` do form) e autenticado (lê cart do banco)
-- Pedidos guest têm `Order.userProfileId = null`, CPF em `Order.customerCpf`
-- `getOrder()` — auth users só veem próprios pedidos; guests só veem pedidos com `userProfileId=null`
-- **Emails desativados** — `sendOrderConfirmationToCustomer` e `sendNewOrderNotification` removidas do createOrder
-- `Order.customerCpf String?` — campo novo no schema
+## Guest Cart + Prompt de Conta (v0.9.2)
+- `/cart` é rota **pública** — visitantes podem adicionar produtos ao carrinho (localStorage via `use-guest-cart.ts`)
+- `/checkout` redireciona guests para `/sign-in?redirect_url=%2Fcheckout` (auth obrigatória para comprar)
+- `GuestCartView` — mostra carrinho guest; botão "Finalizar compra" abre **modal** `AccountPromptModal`
+  - Modal oferece "Criar conta gratuita" → `/sign-up?redirect_url=%2Fcheckout`
+  - Modal oferece "Já tenho conta" → `/sign-in?redirect_url=%2Fcheckout`
+- Após login/cadastro o `useGuestCartSync` sincroniza itens localStorage → banco automaticamente
+- `CheckoutForm` — **somente auth users**; sem `isGuest` prop; pré-preenche nome+email do Clerk via `useUser()`
+- `createOrder` ainda tem o caminho guest no código (fallback de segurança), mas nunca é atingido em produção
 - CPF exibido com máscara `000.000.000-00` no checkout
+- **Emails ativados** — `sendOrderConfirmationToCustomer` (cliente) e `sendNewOrderNotification` (admin) são disparadas fire-and-forget após createOrder bem-sucedido; sem SMTP configurado fazem log no console
 
 ## Logger de Erros (v0.8.1)
 - `src/lib/logger.ts` — `logError()`: console.error JSON estruturado + salva no DB em produção
@@ -133,6 +135,8 @@ src/
       categories/                    — CRUD categorias (hierárquico)
       media/page.tsx                 — Banco de mídia
       orders/                        — Listagem + detalhe + status
+      users/page.tsx                 — Lista clientes (busca por nome/email)
+      users/[id]/page.tsx            — Detalhe cliente + pedidos + role actions
       settings/page.tsx              — SiteSettings
       newsletter/page.tsx            — Inscritos
       logs/page.tsx                  — Logs de erro (ErrorLog)
@@ -167,8 +171,8 @@ src/
   lib/
     prisma.ts                        — Singleton Prisma
     auth.ts                          — getServerAuth() (Clerk apenas)
+    blob.ts                          — uploadImage() via Cloudinary (prod) ou local (dev)
     cielo.ts                         — Integração Cielo
-    blob.ts                          — Upload local public/uploads/ (Vercel Blob comentado)
     animations.ts                    — framer-motion variants
     utils.ts                         — cn(), formatPrice(), truncate(), parseImages()
     constants.ts                     — APP_NAME, ORDER_STATUS_LABEL, etc.
@@ -264,6 +268,14 @@ source /home/sth/.nvm/nvm.sh && cd /home/sth/AltheiaSite && npm run build:prod
 - `npm run build:prod` copia schema.production.prisma antes do build
 - **Após qualquer schema change:** rodar `prisma db push` com DIRECT_URL do Neon antes ou logo após o deploy
 
+## Clerk — Dashboard Settings (não há config em código)
+- Verificação de email no login/cadastro: **Clerk Dashboard → Configure → User & Authentication → Email, Phone, Username**
+  - `Authentication strategies`: trocar `Email verification code` → `Password` para remover OTP
+  - `Email address`: desmarcar `Require email address verification` para remover verificação no cadastro
+- Role admin: `{ "role": "admin" }` em Public metadata do usuário no Clerk dashboard
+- JWT template: Configure → Sessions → `{ "metadata": "{{user.public_metadata}}" }`
+- As páginas sign-in/sign-up usam apenas `<SignIn />` e `<SignUp />` — comportamento vem 100% do Dashboard
+
 ## Bugs corrigidos pós-deploy (não regredir)
 - `layout.tsx`: SEMPRE `<ClerkProvider><ClerkAuthBridge>{children}</ClerkAuthBridge></ClerkProvider>`
 - `context/auth.tsx`: `ClerkAuthBridge` usa import estático `import { useUser } from "@clerk/nextjs"` — NUNCA usar `require()` dinâmico
@@ -283,9 +295,30 @@ npm run test:e2e:ui
 ```
 
 ## Branches
-- `main` — produção (v0.9.0)
+- `main` — produção (v0.9.1)
+- `staging` — testes pré-deploy (branch dedicada para validar antes de ir pra main)
 - `Altheia-0.8.0` — estado v0.7.0 antes das correções v0.8.0
 - `Altheia-0.7.0` — gateway Cielo + account redesign
 - `Altheia-0.6.0` — categorias CRUD + checkout WhatsApp + WhyAltheia dinâmica
 - `Altheia-0.5.0` — admin completo + banco de mídia + lumina dinâmica + logo nav
 - `feature/luxury-redesign-complete` — redesign Emerald/Gold base
+
+## Fluxo de deploy recomendado
+1. Desenvolver em branch local → merge/push para `staging`
+2. Testar em staging (Vercel Preview ou npm run dev)
+3. Quando validado → PR/merge de `staging` para `main` → deploy automático Vercel
+
+---
+
+## Pro Workflow
+
+### Self-Correction
+When corrected, propose rule → add to LEARNED after approval.
+
+### Planning
+Multi-file: plan first, wait for "proceed".
+
+### Quality
+After edits: lint, typecheck, test.
+
+### LEARNED

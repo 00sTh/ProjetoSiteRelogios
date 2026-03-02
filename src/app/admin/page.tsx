@@ -53,7 +53,7 @@ export default async function AdminDashboard() {
       label: "Clientes cadastrados",
       value: totalUsers,
       icon: Users,
-      href: "/admin/orders",
+      href: "/admin/users",
     },
   ];
 

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { cache } from "react";
+import { createHash } from "crypto";
 import { prisma } from "@/lib/prisma";
 import { getServerAuth } from "@/lib/auth";
 import { uploadImage, deleteImage } from "@/lib/blob";
@@ -409,6 +410,7 @@ export async function createMediaAsset(formData: FormData) {
   const type = (formData.get("type") as string) || "IMAGE";
   const name = (formData.get("name") as string) || "";
 
+  // ── Vídeo (URL) ────────────────────────────────────────────────────────────
   if (type === "VIDEO") {
     const url = formData.get("url") as string;
     if (!url) return { success: false, error: "URL obrigatória para vídeo" };
@@ -419,32 +421,60 @@ export async function createMediaAsset(formData: FormData) {
     return { success: true, id: asset.id, url: asset.url };
   }
 
-  // IMAGE upload
-  const file = formData.get("file") as File | null;
-  if (!file || file.size === 0) return { success: false, error: "Arquivo obrigatório" };
-
-  const ext = file.name.split(".").pop() ?? "jpg";
-  const filename = `media-${Date.now()}.${ext}`;
-  let url: string;
-  try {
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const result = await uploadImage(buffer, filename);
-    url = result.url;
-  } catch (uploadErr) {
-    return { success: false, error: (uploadErr as Error).message };
+  // ── Imagem via URL ─────────────────────────────────────────────────────────
+  const imageMode = (formData.get("imageMode") as string) || "url";
+  if (imageMode === "url") {
+    const imageUrl = formData.get("imageUrl") as string;
+    if (!imageUrl) return { success: false, error: "URL da imagem obrigatória" };
+    if (!/^https?:\/\//i.test(imageUrl))
+      return { success: false, error: "URL inválida — deve começar com https://" };
+    const asset = await prisma.mediaAsset.create({
+      data: { name: name || imageUrl, url: imageUrl, type: "IMAGE" },
+    });
+    revalidatePath("/admin/media");
+    return { success: true, id: asset.id, url: asset.url };
   }
 
+  // ── Imagem via arquivo (URL já processada pelo browser → Cloudinary) ─────────
+  const uploadedUrl = formData.get("uploadedUrl") as string | null;
+  if (!uploadedUrl) return { success: false, error: "URL do arquivo obrigatória" };
+
+  console.log("[media] salvando asset de upload direto Cloudinary:", uploadedUrl);
+
   const asset = await prisma.mediaAsset.create({
-    data: {
-      name: name || file.name,
-      url,
-      type: "IMAGE",
-      size: file.size,
-    },
+    data: { name: name || "upload", url: uploadedUrl, type: "IMAGE" },
   });
 
   revalidatePath("/admin/media");
   return { success: true, id: asset.id, url: asset.url };
+}
+
+/** Gera assinatura para upload direto browser → Cloudinary (sem passar pelo Next.js) */
+export async function getCloudinarySignature() {
+  await requireAdmin();
+
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+  const apiKey = process.env.CLOUDINARY_API_KEY;
+  const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+  if (!cloudName || !apiKey || !apiSecret) {
+    console.error("[cloudinary] env vars ausentes:", {
+      CLOUDINARY_CLOUD_NAME: !!cloudName,
+      CLOUDINARY_API_KEY: !!apiKey,
+      CLOUDINARY_API_SECRET: !!apiSecret,
+    });
+    return { success: false as const, error: "Cloudinary não configurado no servidor. Verifique as env vars CLOUDINARY_* no Vercel." };
+  }
+
+  const timestamp = Math.round(Date.now() / 1000);
+  const paramsToSign = `folder=altheia&timestamp=${timestamp}`;
+  const signature = createHash("sha1")
+    .update(`${paramsToSign}${apiSecret}`)
+    .digest("hex");
+
+  console.log("[cloudinary] assinatura gerada para upload direto, timestamp:", timestamp);
+
+  return { success: true as const, cloudName, apiKey, timestamp, signature };
 }
 
 export async function deleteMediaAsset(id: string) {
