@@ -68,6 +68,7 @@ const REDE_CODE_MAP: Record<string, string> = {
   "58": "Transação não permitida.",
   "78": "Cartão bloqueado.",
   "99": "Erro interno. Tente novamente.",
+  "113": "Pagamento recusado por suspeita de risco. Contate seu banco ou tente outro cartão.",
 };
 
 export function getRedeFriendlyError(
@@ -124,7 +125,9 @@ export async function createRedeCreditPayment({
     signal: AbortSignal.timeout(30_000),
   });
 
-  if (!resp.ok) {
+  // Rede retorna HTTP 400 para transações recusadas (com returnCode != "00")
+  // Só lança erro para falhas técnicas reais (401, 422, 5xx, etc.)
+  if (!resp.ok && resp.status !== 400) {
     const body = await resp.text().catch(() => "");
     throw new Error(`Rede API ${resp.status}: ${body}`);
   }
