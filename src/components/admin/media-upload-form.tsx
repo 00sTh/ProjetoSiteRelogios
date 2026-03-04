@@ -162,9 +162,9 @@ export function MediaUploadForm() {
 
   const inputStyle = {
     backgroundColor: "#0F2E1E",
-    border: "1px solid rgba(201,162,39,0.2)",
+    border: "1px solid rgba(212,175,55,0.2)",
     borderRadius: "0.75rem",
-    color: "#F5F0E6",
+    color: "#F5F5F5",
     padding: "0.625rem 1rem",
     width: "100%",
     fontSize: "0.875rem",
@@ -188,18 +188,18 @@ export function MediaUploadForm() {
     letterSpacing: "0.05em",
     textTransform: "uppercase" as const,
     transition: "all 0.2s",
-    backgroundColor: active ? "#C9A227" : "rgba(201,162,39,0.08)",
-    color: active ? "#0A3D2F" : "#C8BBA8",
-    border: `1px solid ${active ? "#C9A227" : "rgba(201,162,39,0.2)"}`,
+    backgroundColor: active ? "#D4AF37" : "rgba(212,175,55,0.08)",
+    color: active ? "#0A0A0A" : "#9A9A9A",
+    border: `1px solid ${active ? "#D4AF37" : "rgba(212,175,55,0.2)"}`,
     cursor: "pointer" as const,
   });
 
   return (
     <div
       className="rounded-2xl p-6"
-      style={{ backgroundColor: "#0A2419", border: "1px solid rgba(201,162,39,0.15)" }}
+      style={{ backgroundColor: "#0A2419", border: "1px solid rgba(212,175,55,0.15)" }}
     >
-      <h2 className="font-serif text-lg font-semibold mb-4" style={{ color: "#C9A227" }}>
+      <h2 className="font-serif text-lg font-semibold mb-4" style={{ color: "#D4AF37" }}>
         Adicionar mídia
       </h2>
 
@@ -261,9 +261,9 @@ export function MediaUploadForm() {
                 onClick={() => setImageMode("url")}
                 className="text-xs px-3 py-1 rounded-lg transition-all"
                 style={{
-                  backgroundColor: imageMode === "url" ? "rgba(201,162,39,0.2)" : "transparent",
-                  color: imageMode === "url" ? "#C9A227" : "rgba(200,187,168,0.5)",
-                  border: `1px solid ${imageMode === "url" ? "rgba(201,162,39,0.4)" : "rgba(201,162,39,0.1)"}`,
+                  backgroundColor: imageMode === "url" ? "rgba(212,175,55,0.2)" : "transparent",
+                  color: imageMode === "url" ? "#D4AF37" : "rgba(200,187,168,0.5)",
+                  border: `1px solid ${imageMode === "url" ? "rgba(212,175,55,0.4)" : "rgba(212,175,55,0.1)"}`,
                 }}
               >
                 Colar URL
@@ -273,9 +273,9 @@ export function MediaUploadForm() {
                 onClick={() => setImageMode("file")}
                 className="text-xs px-3 py-1 rounded-lg transition-all"
                 style={{
-                  backgroundColor: imageMode === "file" ? "rgba(201,162,39,0.2)" : "transparent",
-                  color: imageMode === "file" ? "#C9A227" : "rgba(200,187,168,0.5)",
-                  border: `1px solid ${imageMode === "file" ? "rgba(201,162,39,0.4)" : "rgba(201,162,39,0.1)"}`,
+                  backgroundColor: imageMode === "file" ? "rgba(212,175,55,0.2)" : "transparent",
+                  color: imageMode === "file" ? "#D4AF37" : "rgba(200,187,168,0.5)",
+                  border: `1px solid ${imageMode === "file" ? "rgba(212,175,55,0.4)" : "rgba(212,175,55,0.1)"}`,
                 }}
               >
                 Upload arquivo
@@ -286,7 +286,7 @@ export function MediaUploadForm() {
               <div>
                 <label style={labelStyle}>URL da imagem</label>
                 <div className="flex items-center gap-2">
-                  <Link2 className="h-4 w-4 shrink-0" style={{ color: "rgba(201,162,39,0.5)" }} />
+                  <Link2 className="h-4 w-4 shrink-0" style={{ color: "rgba(212,175,55,0.5)" }} />
                   <input
                     ref={imageUrlRef}
                     type="url"
@@ -305,14 +305,14 @@ export function MediaUploadForm() {
                 <div
                   className="flex items-start gap-2 rounded-xl p-3 mb-3 text-xs"
                   style={{
-                    backgroundColor: "rgba(201,162,39,0.06)",
-                    border: "1px solid rgba(201,162,39,0.15)",
+                    backgroundColor: "rgba(212,175,55,0.06)",
+                    border: "1px solid rgba(212,175,55,0.15)",
                     color: "rgba(200,187,168,0.6)",
                   }}
                 >
-                  <Info className="h-3.5 w-3.5 shrink-0 mt-0.5" style={{ color: "#C9A227" }} />
+                  <Info className="h-3.5 w-3.5 shrink-0 mt-0.5" style={{ color: "#D4AF37" }} />
                   <span>
-                    Upload direto para o <strong style={{ color: "#C9A227" }}>Cloudinary</strong> — sem limite de tamanho pela plataforma. Suporta JPG, PNG, WebP.
+                    Upload direto para o <strong style={{ color: "#D4AF37" }}>Cloudinary</strong> — sem limite de tamanho pela plataforma. Suporta JPG, PNG, WebP.
                   </span>
                 </div>
 
@@ -321,11 +321,11 @@ export function MediaUploadForm() {
                   <div className="mb-3">
                     <div
                       className="h-1.5 rounded-full overflow-hidden"
-                      style={{ backgroundColor: "rgba(201,162,39,0.15)" }}
+                      style={{ backgroundColor: "rgba(212,175,55,0.15)" }}
                     >
                       <div
                         className="h-full rounded-full transition-all duration-300"
-                        style={{ width: `${progress}%`, backgroundColor: "#C9A227" }}
+                        style={{ width: `${progress}%`, backgroundColor: "#D4AF37" }}
                       />
                     </div>
                     <p className="text-xs mt-1" style={{ color: "rgba(200,187,168,0.5)" }}>
@@ -352,10 +352,10 @@ export function MediaUploadForm() {
                   </div>
                 )}
                 <label
-                  className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed cursor-pointer transition-all py-6 hover:border-[#C9A227]"
-                  style={{ borderColor: "rgba(201,162,39,0.3)" }}
+                  className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed cursor-pointer transition-all py-6 hover:border-[#D4AF37]"
+                  style={{ borderColor: "rgba(212,175,55,0.3)" }}
                 >
-                  <Upload className="h-5 w-5" style={{ color: "#C9A227" }} />
+                  <Upload className="h-5 w-5" style={{ color: "#D4AF37" }} />
                   <span className="text-xs" style={{ color: "rgba(200,187,168,0.6)" }}>
                     Clique para selecionar (JPG, PNG, WebP)
                   </span>
@@ -378,7 +378,7 @@ export function MediaUploadForm() {
           <div>
             <label style={labelStyle}>URL do vídeo</label>
             <div className="flex items-center gap-2">
-              <Link2 className="h-4 w-4 shrink-0" style={{ color: "rgba(201,162,39,0.5)" }} />
+              <Link2 className="h-4 w-4 shrink-0" style={{ color: "rgba(212,175,55,0.5)" }} />
               <input
                 ref={videoUrlRef}
                 type="url"
@@ -390,15 +390,15 @@ export function MediaUploadForm() {
             <div
               className="flex items-start gap-2 rounded-xl p-3 mt-3 text-xs"
               style={{
-                backgroundColor: "rgba(201,162,39,0.06)",
-                border: "1px solid rgba(201,162,39,0.15)",
+                backgroundColor: "rgba(212,175,55,0.06)",
+                border: "1px solid rgba(212,175,55,0.15)",
                 color: "rgba(200,187,168,0.6)",
               }}
             >
-              <Info className="h-3.5 w-3.5 shrink-0 mt-0.5" style={{ color: "#C9A227" }} />
+              <Info className="h-3.5 w-3.5 shrink-0 mt-0.5" style={{ color: "#D4AF37" }} />
               <span>
-                Recomendado usar <strong style={{ color: "#C8BBA8" }}>YouTube</strong> ou{" "}
-                <strong style={{ color: "#C8BBA8" }}>Vimeo</strong>. Upload direto de arquivo
+                Recomendado usar <strong style={{ color: "#9A9A9A" }}>YouTube</strong> ou{" "}
+                <strong style={{ color: "#9A9A9A" }}>Vimeo</strong>. Upload direto de arquivo
                 de vídeo não é suportado — vídeos pesam centenas de MB e prejudicam a performance
                 do site.
               </span>
@@ -409,8 +409,8 @@ export function MediaUploadForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-50 hover:shadow-[0_0_20px_rgba(201,162,39,0.3)]"
-          style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-50 hover:shadow-[0_0_20px_rgba(212,175,55,0.3)]"
+          style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
         >
           {isPending ? (
             <Loader2 className="h-4 w-4 animate-spin" />

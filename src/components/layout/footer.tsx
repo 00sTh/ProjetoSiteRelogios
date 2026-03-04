@@ -33,8 +33,8 @@ export async function Footer() {
     <footer
       className="relative"
       style={{
-        backgroundColor: "#051F18",
-        borderTop: "1px solid rgba(201,162,39,0.2)",
+        backgroundColor: "#050505",
+        borderTop: "1px solid rgba(212,175,55,0.2)",
       }}
     >
       {/* Gold top accent line */}
@@ -42,7 +42,7 @@ export async function Footer() {
         className="h-px w-full"
         style={{
           background:
-            "linear-gradient(to right, transparent 0%, #C9A227 30%, #E8C84A 50%, #C9A227 70%, transparent 100%)",
+            "linear-gradient(to right, transparent 0%, #D4AF37 30%, #F0D060 50%, #D4AF37 70%, transparent 100%)",
           opacity: 0.6,
         }}
       />
@@ -55,15 +55,15 @@ export async function Footer() {
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center"
                 style={{
-                  backgroundColor: "rgba(201,162,39,0.12)",
-                  border: "1px solid rgba(201,162,39,0.4)",
+                  backgroundColor: "rgba(212,175,55,0.12)",
+                  border: "1px solid rgba(212,175,55,0.4)",
                 }}
               >
-                <Sparkles className="h-4 w-4" style={{ color: "#C9A227" }} />
+                <Sparkles className="h-4 w-4" style={{ color: "#D4AF37" }} />
               </div>
               <span
                 className="font-serif font-bold text-2xl"
-                style={{ color: "#F5F0E6" }}
+                style={{ color: "#F5F5F5" }}
               >
                 {APP_NAME}
               </span>
@@ -71,15 +71,15 @@ export async function Footer() {
 
             <p
               className="text-sm leading-relaxed max-w-xs"
-              style={{ color: "#C8BBA8" }}
+              style={{ color: "#9A9A9A" }}
             >
               {settings.newsletterSubtitle ||
-                "Cosméticos de luxo formulados com os ingredientes mais raros da natureza. Ciência e beleza em perfeita harmonia."}
+                "Os melhores produtos importados com curadoria rigorosa e autenticidade garantida."}
             </p>
 
             {/* Newsletter */}
             <div className="space-y-3">
-              <p className="label-luxury text-xs" style={{ color: "#C9A227" }}>
+              <p className="label-luxury text-xs" style={{ color: "#D4AF37" }}>
                 {settings.newsletterTitle}
               </p>
               <NewsletterForm />
@@ -95,11 +95,11 @@ export async function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:shadow-[0_0_12px_rgba(201,162,39,0.3)]"
+                    className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:shadow-[0_0_12px_rgba(212,175,55,0.3)]"
                     style={{
-                      backgroundColor: "rgba(201,162,39,0.08)",
-                      border: "1px solid rgba(201,162,39,0.2)",
-                      color: "#C8BBA8",
+                      backgroundColor: "rgba(212,175,55,0.08)",
+                      border: "1px solid rgba(212,175,55,0.2)",
+                      color: "#9A9A9A",
                     }}
                   >
                     <Icon className="h-4 w-4" />
@@ -111,7 +111,7 @@ export async function Footer() {
 
           {/* Store links */}
           <div className="space-y-5">
-            <h3 className="label-luxury font-semibold" style={{ color: "#C9A227" }}>
+            <h3 className="label-luxury font-semibold" style={{ color: "#D4AF37" }}>
               Loja
             </h3>
             <ul className="space-y-3">
@@ -119,8 +119,8 @@ export async function Footer() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="text-sm transition-colors duration-200 hover:text-[#C9A227]"
-                    style={{ color: "#C8BBA8" }}
+                    className="text-sm transition-colors duration-200 hover:text-[#D4AF37]"
+                    style={{ color: "#9A9A9A" }}
                   >
                     {label}
                   </Link>
@@ -131,7 +131,7 @@ export async function Footer() {
 
           {/* Account links */}
           <div className="space-y-5">
-            <h3 className="label-luxury font-semibold" style={{ color: "#C9A227" }}>
+            <h3 className="label-luxury font-semibold" style={{ color: "#D4AF37" }}>
               Conta
             </h3>
             <ul className="space-y-3">
@@ -139,8 +139,8 @@ export async function Footer() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="text-sm transition-colors duration-200 hover:text-[#C9A227]"
-                    style={{ color: "#C8BBA8" }}
+                    className="text-sm transition-colors duration-200 hover:text-[#D4AF37]"
+                    style={{ color: "#9A9A9A" }}
                   >
                     {label}
                   </Link>
@@ -155,14 +155,14 @@ export async function Footer() {
           className="mt-16 mb-6 h-px"
           style={{
             background:
-              "linear-gradient(to right, transparent, rgba(201,162,39,0.2), transparent)",
+              "linear-gradient(to right, transparent, rgba(212,175,55,0.2), transparent)",
           }}
         />
 
         {/* Bottom */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs" style={{ color: "#C8BBA8" }}>
-            © {new Date().getFullYear()} {APP_NAME} — A Verdade da Beleza. Todos os direitos reservados.
+          <p className="text-xs" style={{ color: "#9A9A9A" }}>
+            © {new Date().getFullYear()} {APP_NAME} — Importados de Luxo. Todos os direitos reservados.
           </p>
           <p className="text-xs" style={{ color: "rgba(200,187,168,0.35)" }}>
             LGPD · Seus dados protegidos

@@ -9,7 +9,7 @@
  *   SMTP_PORT="587"
  *   SMTP_USER="seu@email.com"
  *   SMTP_PASS="sua-senha-ou-app-password"
- *   SMTP_FROM="Altheia <noreply@altheia.com>"
+ *   SMTP_FROM="LuxImport <noreply@luximport.com.br>"
  */
 
 interface MailOptions {
@@ -49,7 +49,7 @@ export async function sendMail(opts: MailOptions): Promise<void> {
   });
 
   const from =
-    process.env.SMTP_FROM ?? `Altheia <${user}>`;
+    process.env.SMTP_FROM ?? `LuxImport <${user}>`;
 
   await transporter.sendMail({ from, ...opts });
 }
@@ -79,20 +79,20 @@ export async function sendNewOrderNotification(
 
   await sendMail({
     to: adminEmail,
-    subject: `[Althéia] Novo pedido #${order.id.slice(0, 8).toUpperCase()}`,
+    subject: `[LuxImport] Novo pedido #${order.id.slice(0, 8).toUpperCase()}`,
     html: `
-      <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;background:#0A3D2F;color:#F5F0E6;border-radius:12px">
-        <h1 style="color:#C9A227;font-size:1.5rem;margin-bottom:8px">Novo Pedido Recebido</h1>
-        <p style="color:#C8BBA8;margin-bottom:20px">Um novo pedido foi criado na Althéia.</p>
+      <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;background:#0A0A0A;color:#F5F5F5;border-radius:12px">
+        <h1 style="color:#D4AF37;font-size:1.5rem;margin-bottom:8px">Novo Pedido Recebido</h1>
+        <p style="color:#9A9A9A;margin-bottom:20px">Um novo pedido foi criado na LuxImport.</p>
         <table style="width:100%;border-collapse:collapse;margin-bottom:20px">
-          <tr><td style="padding:6px 0;color:#C8BBA8">Pedido:</td><td style="padding:6px 0;font-weight:600">#${order.id.slice(0, 8).toUpperCase()}</td></tr>
-          <tr><td style="padding:6px 0;color:#C8BBA8">Cliente:</td><td style="padding:6px 0">${order.customerName ?? "—"}</td></tr>
-          <tr><td style="padding:6px 0;color:#C8BBA8">Email:</td><td style="padding:6px 0">${order.customerEmail ?? "—"}</td></tr>
-          <tr><td style="padding:6px 0;color:#C8BBA8">Total:</td><td style="padding:6px 0;color:#C9A227;font-weight:700">R$ ${Number(order.price).toFixed(2)}</td></tr>
-          <tr><td style="padding:6px 0;color:#C8BBA8">Pagamento:</td><td style="padding:6px 0">${methodLabel[order.paymentMethod] ?? order.paymentMethod}</td></tr>
-          <tr><td style="padding:6px 0;color:#C8BBA8">Itens:</td><td style="padding:6px 0">${order.itemCount}</td></tr>
+          <tr><td style="padding:6px 0;color:#9A9A9A">Pedido:</td><td style="padding:6px 0;font-weight:600">#${order.id.slice(0, 8).toUpperCase()}</td></tr>
+          <tr><td style="padding:6px 0;color:#9A9A9A">Cliente:</td><td style="padding:6px 0">${order.customerName ?? "—"}</td></tr>
+          <tr><td style="padding:6px 0;color:#9A9A9A">Email:</td><td style="padding:6px 0">${order.customerEmail ?? "—"}</td></tr>
+          <tr><td style="padding:6px 0;color:#9A9A9A">Total:</td><td style="padding:6px 0;color:#D4AF37;font-weight:700">R$ ${Number(order.price).toFixed(2)}</td></tr>
+          <tr><td style="padding:6px 0;color:#9A9A9A">Pagamento:</td><td style="padding:6px 0">${methodLabel[order.paymentMethod] ?? order.paymentMethod}</td></tr>
+          <tr><td style="padding:6px 0;color:#9A9A9A">Itens:</td><td style="padding:6px 0">${order.itemCount}</td></tr>
         </table>
-        <a href="${adminUrl}" style="display:inline-block;background:#C9A227;color:#0A3D2F;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700">Ver pedido no painel</a>
+        <a href="${adminUrl}" style="display:inline-block;background:#D4AF37;color:#0A0A0A;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700">Ver pedido no painel</a>
       </div>
     `,
   });
@@ -113,18 +113,18 @@ export async function sendOrderConfirmationToCustomer(
 
   await sendMail({
     to: order.customerEmail,
-    subject: `Pedido #${order.id.slice(0, 8).toUpperCase()} recebido — Althéia`,
+    subject: `Pedido #${order.id.slice(0, 8).toUpperCase()} recebido — LuxImport`,
     html: `
-      <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;background:#0A3D2F;color:#F5F0E6;border-radius:12px">
-        <h1 style="color:#C9A227;font-size:1.5rem;margin-bottom:8px">Obrigada pela sua compra!</h1>
-        <p style="color:#C8BBA8;margin-bottom:20px">Olá${order.customerName ? `, ${order.customerName}` : ""}! Recebemos seu pedido e estamos processando.</p>
+      <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;background:#0A0A0A;color:#F5F5F5;border-radius:12px">
+        <h1 style="color:#D4AF37;font-size:1.5rem;margin-bottom:8px">Obrigado pela sua compra!</h1>
+        <p style="color:#9A9A9A;margin-bottom:20px">Olá${order.customerName ? `, ${order.customerName}` : ""}! Recebemos seu pedido e estamos processando.</p>
         <table style="width:100%;border-collapse:collapse;margin-bottom:20px">
-          <tr><td style="padding:6px 0;color:#C8BBA8">Número do pedido:</td><td style="padding:6px 0;font-weight:600">#${order.id.slice(0, 8).toUpperCase()}</td></tr>
-          <tr><td style="padding:6px 0;color:#C8BBA8">Total:</td><td style="padding:6px 0;color:#C9A227;font-weight:700">R$ ${Number(order.price).toFixed(2)}</td></tr>
-          <tr><td style="padding:6px 0;color:#C8BBA8">Forma de pagamento:</td><td style="padding:6px 0">${methodLabel[order.paymentMethod] ?? order.paymentMethod}</td></tr>
+          <tr><td style="padding:6px 0;color:#9A9A9A">Número do pedido:</td><td style="padding:6px 0;font-weight:600">#${order.id.slice(0, 8).toUpperCase()}</td></tr>
+          <tr><td style="padding:6px 0;color:#9A9A9A">Total:</td><td style="padding:6px 0;color:#D4AF37;font-weight:700">R$ ${Number(order.price).toFixed(2)}</td></tr>
+          <tr><td style="padding:6px 0;color:#9A9A9A">Forma de pagamento:</td><td style="padding:6px 0">${methodLabel[order.paymentMethod] ?? order.paymentMethod}</td></tr>
         </table>
-        <p style="color:#C8BBA8;font-size:0.875rem">Você receberá atualizações sobre o status do seu pedido por email. Em caso de dúvidas, entre em contato conosco.</p>
-        <p style="margin-top:24px;color:rgba(200,187,168,0.5);font-size:0.75rem">Althéia — A Verdade da Beleza</p>
+        <p style="color:#9A9A9A;font-size:0.875rem">Você receberá atualizações sobre o status do seu pedido por email. Em caso de dúvidas, entre em contato conosco.</p>
+        <p style="margin-top:24px;color:rgba(200,200,200,0.4);font-size:0.75rem">LuxImport — Importados de Luxo</p>
       </div>
     `,
   });

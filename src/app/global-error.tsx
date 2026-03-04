@@ -22,7 +22,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
 
   return (
     <html lang="pt-BR">
-      <body style={{ margin: 0, backgroundColor: "#0A3D2F" }}>
+      <body style={{ margin: 0, backgroundColor: "#0A0A0A" }}>
         <div
           style={{
             display: "flex",
@@ -32,7 +32,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
             minHeight: "100vh",
             padding: "2rem",
             fontFamily: "sans-serif",
-            color: "#F5F0E6",
+            color: "#F5F5F5",
             textAlign: "center",
           }}
         >
@@ -41,8 +41,8 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
               width: 80,
               height: 80,
               borderRadius: "50%",
-              backgroundColor: "rgba(201,162,39,0.1)",
-              border: "1px solid rgba(201,162,39,0.25)",
+              backgroundColor: "rgba(212,175,55,0.1)",
+              border: "1px solid rgba(212,175,55,0.25)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -58,7 +58,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
               fontSize: "2rem",
               fontWeight: "bold",
               marginBottom: "0.75rem",
-              color: "#F5F0E6",
+              color: "#F5F5F5",
             }}
           >
             Erro crítico
@@ -68,7 +68,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
             style={{
               width: 64,
               height: 1,
-              backgroundColor: "rgba(201,162,39,0.4)",
+              backgroundColor: "rgba(212,175,55,0.4)",
               margin: "0 auto 1.5rem",
             }}
           />
@@ -87,8 +87,8 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
           <button
             onClick={reset}
             style={{
-              backgroundColor: "#C9A227",
-              color: "#0A3D2F",
+              backgroundColor: "#D4AF37",
+              color: "#0A0A0A",
               border: "none",
               borderRadius: "9999px",
               padding: "0.75rem 1.75rem",

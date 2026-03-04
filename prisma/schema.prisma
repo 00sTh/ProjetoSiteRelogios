@@ -1,15 +1,14 @@
 /**
- * SCHEMA DE PRODUÇÃO — PostgreSQL (Neon)
+ * SCHEMA DE DESENVOLVIMENTO — SQLite (local)
  *
- * Este arquivo é usado pelo build do Vercel via:
- *   cp prisma/schema.production.prisma prisma/schema.prisma
+ * Para produção (PostgreSQL Neon), use:
+ *   npm run build:prod   (copia schema.production.prisma → schema.prisma)
  *
- * Diferenças do schema.prisma (SQLite):
- *   - provider "postgresql" com directUrl
- *   - price/shippingFreeThreshold: Decimal @db.Decimal(10,2)
- *   - images: String[]
- *   - status: enum OrderStatus
- *   - paymentMethod: enum PaymentMethod
+ * Diferenças deste schema (SQLite) vs produção (PostgreSQL):
+ *   - provider "sqlite" sem directUrl
+ *   - price/shippingFreeThreshold: Decimal (sem @db.Decimal)
+ *   - images: String (JSON serializado) ao invés de String[]
+ *   - status/paymentMethod: String (SQLite não suporta enums)
  */
 
 generator client {
@@ -17,9 +16,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model UserProfile {
@@ -56,15 +54,16 @@ model Category {
 }
 
 model Product {
-  id          String          @id @default(uuid())
+  id          String  @id @default(uuid())
   name        String
-  slug        String          @unique
+  slug        String  @unique
   description String
-  price       Decimal         @db.Decimal(10, 2)
-  stock       Int             @default(0)
-  images      String[]        @default([])
-  featured    Boolean         @default(false)
-  active      Boolean         @default(true)
+  price       Decimal
+  stock       Int     @default(0)
+  /// JSON: ["url1","url2"] — parsear com parseImages() de utils.ts
+  images      String  @default("[]")
+  featured    Boolean @default(false)
+  active      Boolean @default(true)
   ingredients String?
   usage       String?
 
@@ -113,30 +112,18 @@ model CartItem {
   @@map("cart_items")
 }
 
-enum OrderStatus {
-  PENDING
-  PAID
-  SHIPPED
-  DELIVERED
-  CANCELLED
-}
-
-enum PaymentMethod {
-  WHATSAPP
-  CREDIT_CARD
-  PIX
-}
-
 model Order {
-  id              String        @id @default(uuid())
-  status          OrderStatus   @default(PENDING)
-  price           Decimal       @db.Decimal(10, 2)
+  id              String  @id @default(uuid())
+  /// PENDING | PAID | SHIPPED | DELIVERED | CANCELLED
+  status          String  @default("PENDING")
+  price           Decimal
   stripePaymentId String?
   stripeSessionId String?
   cieloPaymentId  String?
   redePaymentId   String?
   gateway         String?
-  paymentMethod   PaymentMethod @default(WHATSAPP)
+  /// WHATSAPP | CREDIT_CARD | PIX
+  paymentMethod   String  @default("WHATSAPP")
   pixQrCode       String?
   customerName    String?
   customerEmail   String?
@@ -145,8 +132,8 @@ model Order {
   /// JSON: { street, number, complement, city, state, zip }
   shippingAddress String?
   notes           String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   userProfileId String?
   userProfile   UserProfile? @relation(fields: [userProfileId], references: [id])
@@ -164,7 +151,7 @@ model OrderItem {
   id       String  @id @default(uuid())
   quantity Int
   /// Snapshot do preço no momento da compra
-  price    Decimal @db.Decimal(10, 2)
+  price    Decimal
 
   orderId   String
   productId String
@@ -176,51 +163,51 @@ model OrderItem {
 
 /// Configurações globais do site (singleton — id sempre = "default")
 model SiteSettings {
-  id                   String   @id @default("default")
-  siteLogoUrl          String?
-  whatsappNumber       String   @default("5511999999999")
-  heroTitle            String   @default("Descubra a Verdade da Beleza")
-  heroSubtitle         String   @default("Cosméticos de luxo formulados com a pureza da ciência e da natureza")
-  heroImageUrl         String?
-  heroVideoUrl         String?
-  leftVideoUrl         String?
-  rightVideoUrl        String?
-  heroLogoUrl          String?
-  luminaLabel          String   @default("Produto Estrela")
-  luminaTitle          String   @default("Descubra o Lumina Sérum")
-  luminaSubtitle       String   @default("O sérum que redefiniu o padrão de luminosidade na skincare brasileira. Formulado com Vitamina C estabilizada e extrato de algas douradas.")
-  luminaImageUrl       String?
-  luminaBadgeText      String   @default("Novo")
-  luminaProductLink    String   @default("/products")
-  aboutTitle           String   @default("Nossa História")
-  aboutText            String   @default("Nascemos da paixão por uma beleza autêntica, sustentável e eficaz. A Altheia foi criada para mulheres que buscam o melhor da natureza aliado à inovação científica.")
-  aboutImageUrl        String?
-  featuredVideoUrl     String?
-  featuredVideoTitle   String   @default("Nossa Jornada")
-  featuredVideoDesc    String   @default("Conheça a história por trás de cada produto Altheia")
-  instagramUrl         String?
-  youtubeUrl           String?
-  twitterUrl           String?
-  whyTitle             String   @default("Por que Althéia?")
-  whySubtitle          String   @default("Qualidade, luxo e eficácia em cada produto.")
-  benefit1Icon         String   @default("Truck")
-  benefit1Title        String   @default("Frete grátis acima de R$199")
-  benefit1Text         String   @default("Entrega em todo o Brasil sem custo adicional.")
-  benefit2Icon         String   @default("RotateCcw")
-  benefit2Title        String   @default("Devolução em 30 dias")
-  benefit2Text         String   @default("Satisfação garantida ou seu dinheiro de volta.")
-  benefit3Icon         String   @default("ShieldCheck")
-  benefit3Title        String   @default("Pagamento seguro")
-  benefit3Text         String   @default("Transações criptografadas e dados protegidos.")
-  newsletterTitle      String   @default("Receba Novidades Exclusivas")
-  newsletterSubtitle   String   @default("Cadastre-se e ganhe 10% de desconto na primeira compra")
-  metaTitle            String?
-  metaDescription      String?
-  shippingFreeThreshold Decimal @default(199) @db.Decimal(10, 2)
-  notificationEmail    String?
-  cepOrigem            String   @default("01310100")
-  pesoMedioProduto     Int      @default(300)
-  updatedAt            DateTime @updatedAt
+  id                    String   @id @default("default")
+  siteLogoUrl           String?
+  whatsappNumber        String   @default("5511999999999")
+  heroTitle             String   @default("Importados de Luxo Direto para Você")
+  heroSubtitle          String   @default("Os melhores produtos importados com entrega garantida em todo o Brasil")
+  heroImageUrl          String?
+  heroVideoUrl          String?
+  leftVideoUrl          String?
+  rightVideoUrl         String?
+  heroLogoUrl           String?
+  luminaLabel           String   @default("Produto em Destaque")
+  luminaTitle           String   @default("Descubra Nossa Seleção Premium")
+  luminaSubtitle        String   @default("Produtos importados selecionados com critério para garantir a mais alta qualidade e sofisticação.")
+  luminaImageUrl        String?
+  luminaBadgeText       String   @default("Novo")
+  luminaProductLink     String   @default("/products")
+  aboutTitle            String   @default("Nossa História")
+  aboutText             String   @default("A LuxImport nasceu da paixão por trazer ao Brasil o que há de melhor no mercado internacional. Curadoria rigorosa, autenticidade garantida.")
+  aboutImageUrl         String?
+  featuredVideoUrl      String?
+  featuredVideoTitle    String   @default("Nossa Missão")
+  featuredVideoDesc     String   @default("Conheça a história por trás de cada produto LuxImport")
+  instagramUrl          String?
+  youtubeUrl            String?
+  twitterUrl            String?
+  whyTitle              String   @default("Por que LuxImport?")
+  whySubtitle           String   @default("Qualidade, autenticidade e sofisticação em cada produto.")
+  benefit1Icon          String   @default("Truck")
+  benefit1Title         String   @default("Frete grátis acima de R$299")
+  benefit1Text          String   @default("Entrega em todo o Brasil sem custo adicional.")
+  benefit2Icon          String   @default("RotateCcw")
+  benefit2Title         String   @default("Devolução em 30 dias")
+  benefit2Text          String   @default("Satisfação garantida ou seu dinheiro de volta.")
+  benefit3Icon          String   @default("ShieldCheck")
+  benefit3Title         String   @default("Pagamento seguro")
+  benefit3Text          String   @default("Transações criptografadas e dados protegidos.")
+  newsletterTitle       String   @default("Ofertas Exclusivas")
+  newsletterSubtitle    String   @default("Cadastre-se e seja o primeiro a saber das novidades")
+  metaTitle             String?
+  metaDescription       String?
+  shippingFreeThreshold Decimal  @default(299)
+  notificationEmail     String?
+  cepOrigem             String   @default("01310100")
+  pesoMedioProduto      Int      @default(500)
+  updatedAt             DateTime @updatedAt
 
   @@map("site_settings")
 }

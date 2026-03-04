@@ -37,14 +37,14 @@ export function WishlistButton({
       aria-label={inWishlist ? "Remover da lista de desejos" : "Adicionar à lista de desejos"}
       className={`h-10 w-10 flex items-center justify-center rounded-full transition-all duration-200 disabled:opacity-50 ${className}`}
       style={{
-        backgroundColor: inWishlist ? "rgba(201,162,39,0.15)" : "rgba(201,162,39,0.08)",
-        border: `1px solid ${inWishlist ? "rgba(201,162,39,0.5)" : "rgba(201,162,39,0.2)"}`,
+        backgroundColor: inWishlist ? "rgba(212,175,55,0.15)" : "rgba(212,175,55,0.08)",
+        border: `1px solid ${inWishlist ? "rgba(212,175,55,0.5)" : "rgba(212,175,55,0.2)"}`,
       }}
     >
       <Heart
         className="h-4 w-4 transition-all duration-200"
-        style={{ color: "#C9A227" }}
-        fill={inWishlist ? "#C9A227" : "none"}
+        style={{ color: "#D4AF37" }}
+        fill={inWishlist ? "#D4AF37" : "none"}
       />
     </button>
   );

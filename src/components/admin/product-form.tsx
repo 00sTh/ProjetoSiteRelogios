@@ -85,9 +85,9 @@ export function ProductForm({ product, categories }: ProductFormProps) {
 
   const inputStyle = {
     backgroundColor: "#0F2E1E",
-    border: "1px solid rgba(201,162,39,0.2)",
+    border: "1px solid rgba(212,175,55,0.2)",
     borderRadius: "0.75rem",
-    color: "#F5F0E6",
+    color: "#F5F5F5",
     padding: "0.625rem 1rem",
     width: "100%",
     fontSize: "0.875rem",
@@ -239,7 +239,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
               defaultChecked={product?.featured}
               className="rounded"
             />
-            <span style={{ color: "#C8BBA8", fontSize: "0.875rem" }}>Produto em destaque</span>
+            <span style={{ color: "#9A9A9A", fontSize: "0.875rem" }}>Produto em destaque</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -249,7 +249,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
               defaultChecked={product?.active ?? true}
               className="rounded"
             />
-            <span style={{ color: "#C8BBA8", fontSize: "0.875rem" }}>Produto ativo</span>
+            <span style={{ color: "#9A9A9A", fontSize: "0.875rem" }}>Produto ativo</span>
           </label>
         </div>
       </div>
@@ -261,7 +261,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
         {/* File upload */}
         <div
           className="rounded-xl p-4"
-          style={{ border: "1px dashed rgba(201,162,39,0.3)", backgroundColor: "#0F2E1E" }}
+          style={{ border: "1px dashed rgba(212,175,55,0.3)", backgroundColor: "#0F2E1E" }}
         >
           <p className="text-xs mb-2" style={{ color: "rgba(200,187,168,0.6)" }}>
             Upload de arquivo (principal)
@@ -270,7 +270,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
             name="imageFile"
             type="file"
             accept="image/*"
-            style={{ color: "#C8BBA8", fontSize: "0.8rem" }}
+            style={{ color: "#9A9A9A", fontSize: "0.8rem" }}
           />
         </div>
 
@@ -293,7 +293,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
             type="button"
             onClick={addUrl}
             className="px-4 py-2 rounded-xl text-sm font-semibold shrink-0"
-            style={{ backgroundColor: "rgba(201,162,39,0.15)", color: "#C9A227", border: "1px solid rgba(201,162,39,0.3)" }}
+            style={{ backgroundColor: "rgba(212,175,55,0.15)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.3)" }}
           >
             + URL
           </button>
@@ -308,7 +308,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
                   src={url}
                   alt={`img ${idx + 1}`}
                   className="h-16 w-16 object-cover rounded-lg"
-                  style={{ border: "1px solid rgba(201,162,39,0.3)" }}
+                  style={{ border: "1px solid rgba(212,175,55,0.3)" }}
                 />
                 <button
                   type="button"
@@ -330,7 +330,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
           type="submit"
           disabled={isPending}
           className="px-6 py-2.5 rounded-xl text-sm font-semibold tracking-wider transition-all duration-200 disabled:opacity-50"
-          style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
+          style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
         >
           {isPending ? "Salvando..." : product ? "Salvar alterações" : "Criar produto"}
         </button>

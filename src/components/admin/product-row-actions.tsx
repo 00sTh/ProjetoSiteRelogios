@@ -40,12 +40,12 @@ export function ProductRowActions({ productId, featured, productName }: ProductR
         title={isFeatured ? "Remover dos destaques" : "Adicionar aos destaques"}
         className="flex items-center justify-center w-7 h-7 rounded-lg transition-all duration-200 disabled:opacity-50"
         style={{
-          backgroundColor: isFeatured ? "rgba(201,162,39,0.15)" : "transparent",
-          color: isFeatured ? "#C9A227" : "rgba(200,187,168,0.4)",
-          border: `1px solid ${isFeatured ? "rgba(201,162,39,0.4)" : "rgba(200,187,168,0.15)"}`,
+          backgroundColor: isFeatured ? "rgba(212,175,55,0.15)" : "transparent",
+          color: isFeatured ? "#D4AF37" : "rgba(200,187,168,0.4)",
+          border: `1px solid ${isFeatured ? "rgba(212,175,55,0.4)" : "rgba(200,187,168,0.15)"}`,
         }}
       >
-        <Star className="h-3.5 w-3.5" fill={isFeatured ? "#C9A227" : "none"} />
+        <Star className="h-3.5 w-3.5" fill={isFeatured ? "#D4AF37" : "none"} />
       </button>
 
       {/* Delete */}

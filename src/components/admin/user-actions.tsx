@@ -37,11 +37,11 @@ export function UserRoleButton({ userId: _userId, clerkId, isCurrentAdmin }: Use
         style={{
           backgroundColor: isCurrentAdmin
             ? "rgba(224,82,82,0.15)"
-            : "rgba(201,162,39,0.12)",
+            : "rgba(212,175,55,0.12)",
           border: isCurrentAdmin
             ? "1px solid rgba(224,82,82,0.3)"
-            : "1px solid rgba(201,162,39,0.3)",
-          color: isCurrentAdmin ? "#e05252" : "#C9A227",
+            : "1px solid rgba(212,175,55,0.3)",
+          color: isCurrentAdmin ? "#e05252" : "#D4AF37",
         }}
       >
         {isPending ? (

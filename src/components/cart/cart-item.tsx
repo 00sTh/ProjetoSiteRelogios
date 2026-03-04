@@ -36,7 +36,7 @@ export function CartItemCard({ item }: CartItemCardProps) {
       {/* Image */}
       <div
         className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl"
-        style={{ backgroundColor: "#145A43" }}
+        style={{ backgroundColor: "#1A1A1A" }}
       >
         <ProductImage
           src={mainImage}
@@ -50,13 +50,13 @@ export function CartItemCard({ item }: CartItemCardProps) {
       <div className="flex flex-1 flex-col gap-1">
         <p
           className="font-serif font-semibold text-sm leading-tight"
-          style={{ color: "#F5F0E6" }}
+          style={{ color: "#F5F5F5" }}
         >
           {item.product.name}
         </p>
         <p
           className="font-bold text-sm"
-          style={{ color: "#C9A227" }}
+          style={{ color: "#D4AF37" }}
         >
           {formatPrice(Number(item.product.price))}
         </p>
@@ -66,8 +66,8 @@ export function CartItemCard({ item }: CartItemCardProps) {
           <button
             className="h-7 w-7 flex items-center justify-center rounded-full transition-all duration-200 disabled:opacity-40"
             style={{
-              border: "1px solid rgba(201,162,39,0.3)",
-              color: "#C9A227",
+              border: "1px solid rgba(212,175,55,0.3)",
+              color: "#D4AF37",
             }}
             onClick={() => handleUpdate(item.quantity - 1)}
             disabled={isPending}
@@ -78,7 +78,7 @@ export function CartItemCard({ item }: CartItemCardProps) {
 
           <span
             className="w-6 text-center text-sm font-bold"
-            style={{ color: "#F5F0E6" }}
+            style={{ color: "#F5F5F5" }}
           >
             {item.quantity}
           </span>
@@ -86,8 +86,8 @@ export function CartItemCard({ item }: CartItemCardProps) {
           <button
             className="h-7 w-7 flex items-center justify-center rounded-full transition-all duration-200 disabled:opacity-40"
             style={{
-              border: "1px solid rgba(201,162,39,0.3)",
-              color: "#C9A227",
+              border: "1px solid rgba(212,175,55,0.3)",
+              color: "#D4AF37",
             }}
             onClick={() => handleUpdate(item.quantity + 1)}
             disabled={isPending || item.quantity >= item.product.stock}
@@ -111,7 +111,7 @@ export function CartItemCard({ item }: CartItemCardProps) {
       {/* Subtotal */}
       <p
         className="font-bold text-sm shrink-0 self-center"
-        style={{ color: "#C9A227" }}
+        style={{ color: "#D4AF37" }}
       >
         {formatPrice(Number(item.product.price) * item.quantity)}
       </p>

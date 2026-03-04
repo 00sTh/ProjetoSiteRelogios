@@ -68,7 +68,7 @@ export function MediaPickerInput({
             src={preview}
             alt="preview"
             className="h-16 w-16 object-cover rounded-lg"
-            style={{ border: "1px solid rgba(201,162,39,0.3)" }}
+            style={{ border: "1px solid rgba(212,175,55,0.3)" }}
             onError={() => setPreview(null)}
           />
           <button

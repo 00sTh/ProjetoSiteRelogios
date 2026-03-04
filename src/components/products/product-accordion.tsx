@@ -23,8 +23,8 @@ function AccordionItem({ title, icon, content, isOpen, onToggle }: AccordionItem
       style={{
         backgroundColor: "rgba(15,74,55,0.5)",
         border: isOpen
-          ? "1px solid rgba(201,162,39,0.35)"
-          : "1px solid rgba(201,162,39,0.15)",
+          ? "1px solid rgba(212,175,55,0.35)"
+          : "1px solid rgba(212,175,55,0.15)",
       }}
     >
       <button
@@ -33,10 +33,10 @@ function AccordionItem({ title, icon, content, isOpen, onToggle }: AccordionItem
         className="w-full flex items-center justify-between px-5 py-4 text-left"
       >
         <div className="flex items-center gap-3">
-          <span style={{ color: "#C9A227" }}>{icon}</span>
+          <span style={{ color: "#D4AF37" }}>{icon}</span>
           <span
             className="font-serif font-semibold text-base"
-            style={{ color: "#F5F0E6" }}
+            style={{ color: "#F5F5F5" }}
           >
             {title}
           </span>
@@ -44,7 +44,7 @@ function AccordionItem({ title, icon, content, isOpen, onToggle }: AccordionItem
         <ChevronDown
           className="h-4 w-4 shrink-0 transition-transform duration-300"
           style={{
-            color: "#C9A227",
+            color: "#D4AF37",
             transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
           }}
         />
@@ -59,23 +59,23 @@ function AccordionItem({ title, icon, content, isOpen, onToggle }: AccordionItem
             className="h-px mb-4"
             style={{
               background:
-                "linear-gradient(to right, rgba(201,162,39,0.3), transparent)",
+                "linear-gradient(to right, rgba(212,175,55,0.3), transparent)",
             }}
           />
           {lines.length > 1 ? (
             <ul className="space-y-2">
               {lines.map((line, i) => (
-                <li key={i} className="flex items-start gap-2.5 text-sm" style={{ color: "#C8BBA8" }}>
+                <li key={i} className="flex items-start gap-2.5 text-sm" style={{ color: "#9A9A9A" }}>
                   <span
                     className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
-                    style={{ backgroundColor: "#C9A227" }}
+                    style={{ backgroundColor: "#D4AF37" }}
                   />
                   {line}
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-sm leading-relaxed" style={{ color: "#C8BBA8" }}>
+            <p className="text-sm leading-relaxed" style={{ color: "#9A9A9A" }}>
               {content}
             </p>
           )}

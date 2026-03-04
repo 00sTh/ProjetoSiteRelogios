@@ -7,7 +7,7 @@ export const revalidate = 3600;
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
   return {
-    title: `${settings.aboutTitle} — Altheia`,
+    title: `${settings.aboutTitle} — LuxImport`,
     description: settings.aboutText.slice(0, 160),
   };
 }

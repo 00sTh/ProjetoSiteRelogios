@@ -47,7 +47,7 @@ export default async function AdminLayout({
         className="w-60 shrink-0 flex flex-col border-r py-8 px-4"
         style={{
           backgroundColor: "#0A2419",
-          borderColor: "rgba(201,162,39,0.15)",
+          borderColor: "rgba(212,175,55,0.15)",
         }}
       >
         {/* Logo */}
@@ -55,7 +55,7 @@ export default async function AdminLayout({
           <Link href="/" className="flex flex-col">
             <span
               className="font-serif text-xl font-bold tracking-[0.12em] uppercase"
-              style={{ color: "#C9A227" }}
+              style={{ color: "#D4AF37" }}
             >
               {APP_NAME}
             </span>
@@ -72,18 +72,18 @@ export default async function AdminLayout({
               key={href}
               href={href}
               className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group"
-              style={{ color: "#C8BBA8" }}
+              style={{ color: "#9A9A9A" }}
             >
               <Icon
                 className="h-4 w-4 shrink-0 transition-colors"
-                style={{ color: "rgba(201,162,39,0.6)" }}
+                style={{ color: "rgba(212,175,55,0.6)" }}
               />
-              <span className="group-hover:text-[#C9A227] transition-colors">
+              <span className="group-hover:text-[#D4AF37] transition-colors">
                 {label}
               </span>
               <ChevronRight
                 className="ml-auto h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ color: "#C9A227" }}
+                style={{ color: "#D4AF37" }}
               />
             </Link>
           ))}

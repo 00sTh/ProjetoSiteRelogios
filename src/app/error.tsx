@@ -24,23 +24,23 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
   return (
     <div
       className="flex min-h-screen flex-col items-center justify-center px-4"
-      style={{ backgroundColor: "#0A3D2F" }}
+      style={{ backgroundColor: "#0A0A0A" }}
     >
       {/* Ícone */}
       <div
         className="mb-8 flex h-20 w-20 items-center justify-center rounded-full"
         style={{
-          backgroundColor: "rgba(201,162,39,0.1)",
-          border: "1px solid rgba(201,162,39,0.25)",
+          backgroundColor: "rgba(212,175,55,0.1)",
+          border: "1px solid rgba(212,175,55,0.25)",
         }}
       >
-        <AlertTriangle className="h-9 w-9" style={{ color: "#C9A227" }} />
+        <AlertTriangle className="h-9 w-9" style={{ color: "#D4AF37" }} />
       </div>
 
       {/* Título */}
       <h1
         className="font-serif text-4xl font-bold mb-3 text-center"
-        style={{ color: "#F5F0E6" }}
+        style={{ color: "#F5F5F5" }}
       >
         Algo deu errado
       </h1>
@@ -48,7 +48,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
       {/* Separador dourado */}
       <div
         className="mb-6 h-px w-16"
-        style={{ backgroundColor: "rgba(201,162,39,0.4)" }}
+        style={{ backgroundColor: "rgba(212,175,55,0.4)" }}
       />
 
       {/* Mensagem */}
@@ -63,8 +63,8 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
       <div className="flex items-center gap-4">
         <button
           onClick={reset}
-          className="flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold tracking-wider uppercase transition-all duration-300 hover:shadow-[0_0_20px_rgba(201,162,39,0.4)]"
-          style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
+          className="flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold tracking-wider uppercase transition-all duration-300 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]"
+          style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
         >
           <RefreshCw className="h-4 w-4" />
           Tentar novamente
@@ -74,8 +74,8 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
           href="/"
           className="flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold tracking-wider uppercase transition-all duration-300"
           style={{
-            border: "1px solid rgba(201,162,39,0.3)",
-            color: "#C9A227",
+            border: "1px solid rgba(212,175,55,0.3)",
+            color: "#D4AF37",
           }}
         >
           <Home className="h-4 w-4" />

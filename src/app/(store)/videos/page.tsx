@@ -3,8 +3,8 @@ import { getSiteSettings } from "@/actions/admin";
 import { VideosContent } from "@/components/videos/videos-content";
 
 export const metadata: Metadata = {
-  title: "Vídeos & Histórias — Altheia",
-  description: "Mergulhe no universo Altheia — da pesquisa científica aos rituais de beleza que transformam.",
+  title: "Vídeos & Histórias — LuxImport",
+  description: "Mergulhe no universo LuxImport — da pesquisa científica aos rituais de beleza que transformam.",
 };
 
 export const revalidate = 3600;

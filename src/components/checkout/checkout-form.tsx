@@ -26,8 +26,8 @@ interface CheckoutFormProps {
 
 const inputStyle: React.CSSProperties = {
   backgroundColor: "rgba(15,74,55,0.6)",
-  border: "1px solid rgba(201,162,39,0.25)",
-  color: "#F5F0E6",
+  border: "1px solid rgba(212,175,55,0.25)",
+  color: "#F5F5F5",
   borderRadius: "0.75rem",
   padding: "0.75rem 1rem",
   fontSize: "0.875rem",
@@ -75,8 +75,8 @@ function FocusInput(
       style={{
         ...inputStyle,
         ...externalStyle,
-        borderColor: focused ? "rgba(201,162,39,0.6)" : "rgba(201,162,39,0.25)",
-        boxShadow: focused ? "0 0 10px rgba(201,162,39,0.1)" : "none",
+        borderColor: focused ? "rgba(212,175,55,0.6)" : "rgba(212,175,55,0.25)",
+        boxShadow: focused ? "0 0 10px rgba(212,175,55,0.1)" : "none",
       }}
       onFocus={(e) => { setFocused(true); props.onFocus?.(e); }}
       onBlur={(e) => { setFocused(false); props.onBlur?.(e); }}
@@ -149,7 +149,7 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
     name: i.product.name,
     quantity: i.quantity,
     price: Number(i.product.price),
-    images: i.product.images as string[],
+    images: Array.isArray(i.product.images) ? i.product.images as string[] : [],
   }));
 
   const total = cartLines.reduce((acc, i) => acc + i.price * i.quantity, 0);
@@ -246,26 +246,26 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
       onClick={() => setMethod(m)}
       className="flex items-start gap-3 rounded-xl p-4 text-left transition-all w-full"
       style={{
-        border: method === m ? "2px solid #C9A227" : "1px solid rgba(201,162,39,0.2)",
-        backgroundColor: method === m ? "rgba(201,162,39,0.08)" : "rgba(15,74,55,0.4)",
+        border: method === m ? "2px solid #D4AF37" : "1px solid rgba(212,175,55,0.2)",
+        backgroundColor: method === m ? "rgba(212,175,55,0.08)" : "rgba(15,74,55,0.4)",
       }}
     >
       <div
         className="h-9 w-9 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
-        style={{ backgroundColor: method === m ? "rgba(201,162,39,0.15)" : "rgba(201,162,39,0.07)" }}
+        style={{ backgroundColor: method === m ? "rgba(212,175,55,0.15)" : "rgba(212,175,55,0.07)" }}
       >
-        <Icon className="h-4.5 w-4.5" style={{ color: "#C9A227" }} />
+        <Icon className="h-4.5 w-4.5" style={{ color: "#D4AF37" }} />
       </div>
       <div>
-        <p className="font-semibold text-sm" style={{ color: "#F5F0E6" }}>{label}</p>
+        <p className="font-semibold text-sm" style={{ color: "#F5F5F5" }}>{label}</p>
         <p className="text-xs mt-0.5" style={{ color: "rgba(200,187,168,0.6)" }}>{desc}</p>
       </div>
       {method === m && (
         <div
           className="ml-auto h-4 w-4 rounded-full shrink-0 mt-1 flex items-center justify-center"
-          style={{ backgroundColor: "#C9A227" }}
+          style={{ backgroundColor: "#D4AF37" }}
         >
-          <div className="h-2 w-2 rounded-full" style={{ backgroundColor: "#0A3D2F" }} />
+          <div className="h-2 w-2 rounded-full" style={{ backgroundColor: "#0A0A0A" }} />
         </div>
       )}
     </button>
@@ -276,16 +276,16 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
     return (
       <div
         className="p-10 text-center space-y-4"
-        style={{ backgroundColor: "#0F4A37" }}
+        style={{ backgroundColor: "#111111" }}
       >
-        <ShoppingCart className="h-12 w-12 mx-auto" style={{ color: "rgba(201,162,39,0.3)" }} />
-        <p className="font-serif text-xl" style={{ color: "#F5F0E6" }}>
+        <ShoppingCart className="h-12 w-12 mx-auto" style={{ color: "rgba(212,175,55,0.3)" }} />
+        <p className="font-serif text-xl" style={{ color: "#F5F5F5" }}>
           Seu carrinho está vazio
         </p>
         <Link
           href="/products"
           className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold"
-          style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
+          style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
         >
           Explorar produtos <ArrowRight className="h-4 w-4" />
         </Link>
@@ -298,7 +298,7 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
       ref={formRef}
       onSubmit={handleSubmit}
       className="space-y-6 p-6"
-      style={{ backgroundColor: "#0F4A37" }}
+      style={{ backgroundColor: "#111111" }}
     >
       {error && (
         <div
@@ -317,11 +317,11 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
       <div
         className="rounded-2xl p-5 space-y-3"
         style={{
-          backgroundColor: "rgba(10,61,47,0.5)",
-          border: "1px solid rgba(201,162,39,0.15)",
+          backgroundColor: "rgba(10,10,10,0.5)",
+          border: "1px solid rgba(212,175,55,0.15)",
         }}
       >
-        <h3 className="font-serif font-semibold" style={{ color: "#F5F0E6" }}>
+        <h3 className="font-serif font-semibold" style={{ color: "#F5F5F5" }}>
           Resumo do Pedido
         </h3>
         {cartLines.map((item, idx) => {
@@ -331,14 +331,14 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
             <div key={idx} className="flex items-center gap-3">
               <div
                 className="relative h-10 w-10 shrink-0 rounded-lg overflow-hidden"
-                style={{ backgroundColor: "#145A43" }}
+                style={{ backgroundColor: "#1A1A1A" }}
               >
                 <ProductImage src={img} alt={item.name} fill className="object-cover" />
               </div>
-              <span className="flex-1 text-sm" style={{ color: "#C8BBA8" }}>
+              <span className="flex-1 text-sm" style={{ color: "#9A9A9A" }}>
                 {item.name} × {item.quantity}
               </span>
-              <span className="text-sm" style={{ color: "#F5F0E6" }}>
+              <span className="text-sm" style={{ color: "#F5F5F5" }}>
                 {formatPrice(item.price * item.quantity)}
               </span>
             </div>
@@ -346,16 +346,16 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
         })}
         <div
           className="pt-3 flex justify-between font-bold"
-          style={{ borderTop: "1px solid rgba(201,162,39,0.15)" }}
+          style={{ borderTop: "1px solid rgba(212,175,55,0.15)" }}
         >
-          <span style={{ color: "#F5F0E6" }}>Total</span>
-          <span style={{ color: "#C9A227" }}>{formatPrice(total)}</span>
+          <span style={{ color: "#F5F5F5" }}>Total</span>
+          <span style={{ color: "#D4AF37" }}>{formatPrice(total)}</span>
         </div>
       </div>
 
       {/* Personal data */}
       <div className="space-y-4">
-        <h3 className="label-luxury" style={{ color: "#C9A227" }}>Dados de Contato</h3>
+        <h3 className="label-luxury" style={{ color: "#D4AF37" }}>Dados de Contato</h3>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Field label="Nome completo *" className="sm:col-span-2">
             <FocusInput name="name" placeholder="Ana Silva" required defaultValue={defaultName} />
@@ -382,7 +382,7 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
 
       {/* Address */}
       <div className="space-y-4">
-        <h3 className="label-luxury" style={{ color: "#C9A227" }}>Endereço de Entrega</h3>
+        <h3 className="label-luxury" style={{ color: "#D4AF37" }}>Endereço de Entrega</h3>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Field label="CEP *" className="sm:col-span-2">
             <FocusInput name="zip" placeholder="01310-100" required maxLength={9} />
@@ -408,7 +408,7 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
       {/* Payment method */}
       <input type="hidden" name="paymentMethod" value={method} />
       <div className="space-y-3">
-        <h3 className="label-luxury" style={{ color: "#C9A227" }}>Forma de Pagamento</h3>
+        <h3 className="label-luxury" style={{ color: "#D4AF37" }}>Forma de Pagamento</h3>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           {methodButton("PIX", QrCode, "PIX", "Desconto e aprovação imediata")}
           {methodButton("CREDIT_CARD", CreditCard, "Cartão de Crédito", "Até 12× sem juros")}
@@ -421,11 +421,11 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
         <div
           className="rounded-2xl p-5 space-y-4"
           style={{
-            backgroundColor: "rgba(10,61,47,0.5)",
-            border: "1px solid rgba(201,162,39,0.2)",
+            backgroundColor: "rgba(10,10,10,0.5)",
+            border: "1px solid rgba(212,175,55,0.2)",
           }}
         >
-          <h3 className="label-luxury" style={{ color: "#C9A227" }}>Dados do Cartão</h3>
+          <h3 className="label-luxury" style={{ color: "#D4AF37" }}>Dados do Cartão</h3>
 
           {/* Gateway selector */}
           <div>
@@ -438,15 +438,15 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
                   onClick={() => setCreditGateway(gw)}
                   className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all"
                   style={{
-                    border: creditGateway === gw ? "2px solid #C9A227" : "1px solid rgba(201,162,39,0.2)",
-                    backgroundColor: creditGateway === gw ? "rgba(201,162,39,0.12)" : "rgba(15,74,55,0.4)",
-                    color: creditGateway === gw ? "#C9A227" : "rgba(200,187,168,0.6)",
+                    border: creditGateway === gw ? "2px solid #D4AF37" : "1px solid rgba(212,175,55,0.2)",
+                    backgroundColor: creditGateway === gw ? "rgba(212,175,55,0.12)" : "rgba(15,74,55,0.4)",
+                    color: creditGateway === gw ? "#D4AF37" : "rgba(200,187,168,0.6)",
                   }}
                 >
                   {creditGateway === gw && (
                     <div
                       className="h-3 w-3 rounded-full"
-                      style={{ backgroundColor: "#C9A227" }}
+                      style={{ backgroundColor: "#D4AF37" }}
                     />
                   )}
                   {gw === "CIELO" ? "Cielo" : "Rede"}
@@ -516,7 +516,7 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
               </select>
               <ChevronDown
                 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none"
-                style={{ color: "rgba(201,162,39,0.7)" }}
+                style={{ color: "rgba(212,175,55,0.7)" }}
               />
             </div>
           </Field>
@@ -532,13 +532,13 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
         <div
           className="rounded-2xl p-5 flex items-start gap-3"
           style={{
-            backgroundColor: "rgba(10,61,47,0.5)",
-            border: "1px solid rgba(201,162,39,0.2)",
+            backgroundColor: "rgba(10,10,10,0.5)",
+            border: "1px solid rgba(212,175,55,0.2)",
           }}
         >
-          <QrCode className="h-8 w-8 shrink-0" style={{ color: "#C9A227" }} />
+          <QrCode className="h-8 w-8 shrink-0" style={{ color: "#D4AF37" }} />
           <div>
-            <p className="font-semibold text-sm mb-1" style={{ color: "#F5F0E6" }}>
+            <p className="font-semibold text-sm mb-1" style={{ color: "#F5F5F5" }}>
               Pagamento instantâneo via PIX
             </p>
             <p className="text-xs" style={{ color: "rgba(200,187,168,0.65)" }}>
@@ -553,13 +553,13 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
         <div
           className="rounded-2xl p-5 flex items-start gap-3"
           style={{
-            backgroundColor: "rgba(10,61,47,0.5)",
-            border: "1px solid rgba(201,162,39,0.2)",
+            backgroundColor: "rgba(10,10,10,0.5)",
+            border: "1px solid rgba(212,175,55,0.2)",
           }}
         >
           <MessageCircle className="h-8 w-8 shrink-0" style={{ color: "#25D366" }} />
           <div>
-            <p className="font-semibold text-sm mb-1" style={{ color: "#F5F0E6" }}>
+            <p className="font-semibold text-sm mb-1" style={{ color: "#F5F5F5" }}>
               Finalizar via WhatsApp
             </p>
             <p className="text-xs" style={{ color: "rgba(200,187,168,0.65)" }}>
@@ -572,8 +572,8 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
       <button
         type="submit"
         disabled={isPending}
-        className="flex items-center justify-center gap-2 w-full py-4 rounded-full text-sm font-semibold tracking-widest uppercase transition-all disabled:opacity-60 hover:shadow-[0_0_25px_rgba(201,162,39,0.4)]"
-        style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
+        className="flex items-center justify-center gap-2 w-full py-4 rounded-full text-sm font-semibold tracking-widest uppercase transition-all disabled:opacity-60 hover:shadow-[0_0_25px_rgba(212,175,55,0.4)]"
+        style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
       >
         {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
         {isPending

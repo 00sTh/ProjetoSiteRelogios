@@ -47,3 +47,10 @@ prisma/prisma/
 # stray asset at root (usar public/ em vez disso)
 lumina-serum.png
 .env.production
+
+# yarn berry
+.yarn/install-state.gz
+.yarn/unplugged/
+.yarn/cache/
+test-results/
+package-lock.json

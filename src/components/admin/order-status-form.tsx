@@ -31,9 +31,9 @@ export function OrderStatusForm({
 
   const selectStyle = {
     backgroundColor: "#0F2E1E",
-    border: "1px solid rgba(201,162,39,0.2)",
+    border: "1px solid rgba(212,175,55,0.2)",
     borderRadius: "0.75rem",
-    color: "#F5F0E6",
+    color: "#F5F5F5",
     padding: "0.5rem 0.75rem",
     width: "100%",
     fontSize: "0.875rem",
@@ -53,7 +53,7 @@ export function OrderStatusForm({
         onClick={handleSave}
         disabled={isPending || status === currentStatus}
         className="py-2 rounded-xl text-sm font-semibold transition-all disabled:opacity-50"
-        style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
+        style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
       >
         {isPending ? "Salvando..." : "Salvar status"}
       </button>

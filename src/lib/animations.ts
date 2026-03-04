@@ -32,8 +32,8 @@ export const staggerFast: Variants = {
 };
 
 export const goldGlow = {
-  rest: { boxShadow: "0 0 0px rgba(201,162,39,0)" },
-  hover: { boxShadow: "0 0 25px rgba(201,162,39,0.4)" },
+  rest: { boxShadow: "0 0 0px rgba(212,175,55,0)" },
+  hover: { boxShadow: "0 0 25px rgba(212,175,55,0.4)" },
 };
 
 export const scaleIn: Variants = {

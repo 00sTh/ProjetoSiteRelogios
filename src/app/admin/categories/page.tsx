@@ -13,7 +13,7 @@ export default async function AdminCategoriesPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-serif text-2xl font-semibold" style={{ color: "#F5F0E6" }}>
+          <h1 className="font-serif text-2xl font-semibold" style={{ color: "#F5F5F5" }}>
             Categorias
           </h1>
           <p className="text-sm mt-1" style={{ color: "rgba(200,187,168,0.6)" }}>
@@ -23,7 +23,7 @@ export default async function AdminCategoriesPage() {
         <Link
           href="/admin/categories/new"
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold"
-          style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
+          style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
         >
           <Plus className="h-4 w-4" />
           Nova Categoria
@@ -32,16 +32,16 @@ export default async function AdminCategoriesPage() {
 
       <div
         className="rounded-2xl overflow-hidden"
-        style={{ border: "1px solid rgba(201,162,39,0.15)", backgroundColor: "#0A2419" }}
+        style={{ border: "1px solid rgba(212,175,55,0.15)", backgroundColor: "#0A2419" }}
       >
         {categories.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 gap-3">
-            <Tag className="h-10 w-10" style={{ color: "rgba(201,162,39,0.3)" }} />
+            <Tag className="h-10 w-10" style={{ color: "rgba(212,175,55,0.3)" }} />
             <p style={{ color: "rgba(200,187,168,0.5)" }}>Nenhuma categoria cadastrada.</p>
             <Link
               href="/admin/categories/new"
               className="text-sm font-medium"
-              style={{ color: "#C9A227" }}
+              style={{ color: "#D4AF37" }}
             >
               Criar primeira categoria →
             </Link>
@@ -49,7 +49,7 @@ export default async function AdminCategoriesPage() {
         ) : (
           <table className="w-full">
             <thead>
-              <tr style={{ borderBottom: "1px solid rgba(201,162,39,0.1)" }}>
+              <tr style={{ borderBottom: "1px solid rgba(212,175,55,0.1)" }}>
                 {["Nome", "Slug", "Categoria Pai", "Produtos", "Ações"].map((h) => (
                   <th
                     key={h}
@@ -65,7 +65,7 @@ export default async function AdminCategoriesPage() {
               {categories.map((cat) => (
                 <tr
                   key={cat.id}
-                  style={{ borderBottom: "1px solid rgba(201,162,39,0.06)" }}
+                  style={{ borderBottom: "1px solid rgba(212,175,55,0.06)" }}
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
@@ -76,24 +76,24 @@ export default async function AdminCategoriesPage() {
                           width={32}
                           height={32}
                           className="h-8 w-8 rounded-lg object-cover"
-                          style={{ border: "1px solid rgba(201,162,39,0.2)" }}
+                          style={{ border: "1px solid rgba(212,175,55,0.2)" }}
                           unoptimized
                         />
                       ) : (
                         <div
                           className="h-8 w-8 rounded-lg flex items-center justify-center"
-                          style={{ backgroundColor: "rgba(201,162,39,0.1)" }}
+                          style={{ backgroundColor: "rgba(212,175,55,0.1)" }}
                         >
-                          <Tag className="h-4 w-4" style={{ color: "rgba(201,162,39,0.6)" }} />
+                          <Tag className="h-4 w-4" style={{ color: "rgba(212,175,55,0.6)" }} />
                         </div>
                       )}
-                      <span className="font-medium text-sm" style={{ color: "#F5F0E6" }}>
+                      <span className="font-medium text-sm" style={{ color: "#F5F5F5" }}>
                         {cat.name}
                       </span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <code className="text-xs px-2 py-1 rounded" style={{ backgroundColor: "rgba(201,162,39,0.08)", color: "#C9A227" }}>
+                    <code className="text-xs px-2 py-1 rounded" style={{ backgroundColor: "rgba(212,175,55,0.08)", color: "#D4AF37" }}>
                       {cat.slug}
                     </code>
                   </td>
@@ -108,7 +108,7 @@ export default async function AdminCategoriesPage() {
                       <Link
                         href={`/admin/categories/${cat.id}/edit`}
                         className="h-8 w-8 flex items-center justify-center rounded-lg transition-colors"
-                        style={{ backgroundColor: "rgba(201,162,39,0.1)", color: "#C9A227" }}
+                        style={{ backgroundColor: "rgba(212,175,55,0.1)", color: "#D4AF37" }}
                         title="Editar"
                       >
                         <Pencil className="h-3.5 w-3.5" />

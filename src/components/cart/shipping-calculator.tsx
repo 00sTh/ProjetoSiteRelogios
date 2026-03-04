@@ -23,10 +23,10 @@ export function ShippingCalculator({ itemCount }: Props) {
   const [error, setError] = useState<string | null>(null);
 
   const inputStyle = {
-    backgroundColor: "rgba(10,61,47,0.6)",
-    border: "1px solid rgba(201,162,39,0.2)",
+    backgroundColor: "rgba(10,10,10,0.6)",
+    border: "1px solid rgba(212,175,55,0.2)",
     borderRadius: "0.75rem",
-    color: "#F5F0E6",
+    color: "#F5F5F5",
     padding: "0.625rem 1rem",
     fontSize: "0.875rem",
     flex: 1,
@@ -70,8 +70,8 @@ export function ShippingCalculator({ itemCount }: Props) {
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-2 text-sm" style={{ color: "#C8BBA8" }}>
-        <Truck className="h-4 w-4" style={{ color: "#C9A227" }} />
+      <div className="flex items-center gap-2 text-sm" style={{ color: "#9A9A9A" }}>
+        <Truck className="h-4 w-4" style={{ color: "#D4AF37" }} />
         <span>Calcular frete</span>
       </div>
 
@@ -88,8 +88,8 @@ export function ShippingCalculator({ itemCount }: Props) {
         <button
           onClick={handleCalcular}
           disabled={loading}
-          className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:bg-[#E8C84A] disabled:opacity-50"
-          style={{ backgroundColor: "#C9A227", color: "#0A3D2F", flexShrink: 0 }}
+          className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:bg-[#F0D060] disabled:opacity-50"
+          style={{ backgroundColor: "#D4AF37", color: "#0A0A0A", flexShrink: 0 }}
         >
           {loading ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -112,19 +112,19 @@ export function ShippingCalculator({ itemCount }: Props) {
             <div
               className="flex justify-between items-center px-3 py-2.5 rounded-xl text-sm"
               style={{
-                backgroundColor: "rgba(201,162,39,0.06)",
-                border: "1px solid rgba(201,162,39,0.15)",
+                backgroundColor: "rgba(212,175,55,0.06)",
+                border: "1px solid rgba(212,175,55,0.15)",
               }}
             >
               <div>
-                <span style={{ color: "#F5F0E6", fontWeight: 600 }}>PAC</span>
+                <span style={{ color: "#F5F5F5", fontWeight: 600 }}>PAC</span>
                 {result.prazoPac && (
-                  <span className="text-xs ml-2" style={{ color: "#C8BBA8" }}>
+                  <span className="text-xs ml-2" style={{ color: "#9A9A9A" }}>
                     até {result.prazoPac} dias úteis
                   </span>
                 )}
               </div>
-              <span style={{ color: "#C9A227", fontWeight: 700 }}>
+              <span style={{ color: "#D4AF37", fontWeight: 700 }}>
                 {formatPrice(result.pac)}
               </span>
             </div>
@@ -138,19 +138,19 @@ export function ShippingCalculator({ itemCount }: Props) {
             <div
               className="flex justify-between items-center px-3 py-2.5 rounded-xl text-sm"
               style={{
-                backgroundColor: "rgba(201,162,39,0.06)",
-                border: "1px solid rgba(201,162,39,0.15)",
+                backgroundColor: "rgba(212,175,55,0.06)",
+                border: "1px solid rgba(212,175,55,0.15)",
               }}
             >
               <div>
-                <span style={{ color: "#F5F0E6", fontWeight: 600 }}>SEDEX</span>
+                <span style={{ color: "#F5F5F5", fontWeight: 600 }}>SEDEX</span>
                 {result.prazoSedex && (
-                  <span className="text-xs ml-2" style={{ color: "#C8BBA8" }}>
+                  <span className="text-xs ml-2" style={{ color: "#9A9A9A" }}>
                     até {result.prazoSedex} dias úteis
                   </span>
                 )}
               </div>
-              <span style={{ color: "#C9A227", fontWeight: 700 }}>
+              <span style={{ color: "#D4AF37", fontWeight: 700 }}>
                 {formatPrice(result.sedex)}
               </span>
             </div>

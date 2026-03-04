@@ -1,27 +1,27 @@
 @import "tailwindcss";
 
 /* ============================================================
-   TEMA ALTHEIA — Emerald + Gold (Luxury Skincare)
+   TEMA LUXIMPORT — Dark + Gold (Ultra Premium)
    ============================================================ */
 @theme inline {
-  --color-background:        var(--emerald-deep);
-  --color-foreground:        var(--cream);
-  --color-card:              var(--emerald-card);
-  --color-card-foreground:   var(--cream);
-  --color-popover:           var(--emerald-card);
-  --color-popover-foreground: var(--cream);
+  --color-background:        var(--dark-bg);
+  --color-foreground:        var(--text-primary);
+  --color-card:              var(--dark-surface);
+  --color-card-foreground:   var(--text-primary);
+  --color-popover:           var(--dark-surface-2);
+  --color-popover-foreground: var(--text-primary);
   --color-primary:           var(--gold);
-  --color-primary-foreground: var(--emerald-deep);
-  --color-secondary:         var(--emerald-mid);
-  --color-secondary-foreground: var(--cream);
-  --color-muted:             var(--emerald-muted);
-  --color-muted-foreground:  var(--cream-dim);
-  --color-accent:            var(--emerald-mid);
-  --color-accent-foreground: var(--cream);
+  --color-primary-foreground: var(--dark-bg);
+  --color-secondary:         var(--dark-surface-2);
+  --color-secondary-foreground: var(--text-primary);
+  --color-muted:             var(--dark-surface-2);
+  --color-muted-foreground:  var(--text-muted);
+  --color-accent:            var(--dark-surface-2);
+  --color-accent-foreground: var(--text-primary);
   --color-destructive:       #e05252;
-  --color-destructive-foreground: var(--cream);
-  --color-border:            var(--border-gold);
-  --color-input:             var(--emerald-mid);
+  --color-destructive-foreground: var(--text-primary);
+  --color-border:            var(--border-subtle);
+  --color-input:             var(--dark-surface-2);
   --color-ring:              var(--gold);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -33,33 +33,32 @@
   --font-mono: var(--font-geist-mono), monospace;
 }
 
-/* ── Altheia Luxury Palette ── */
+/* ── LuxImport Dark + Gold Palette ── */
 @layer base {
   :root {
-    --emerald-deep:  #0A3D2F;
-    --emerald-mid:   #145A43;
-    --emerald-light: #1E7A5A;
-    --emerald-card:  #0F4A37;
-    --emerald-muted: #0D4233;
-    --gold:          #C9A227;
-    --gold-light:    #E8C84A;
-    --gold-dim:      #9E7B1E;
-    --cream:         #F5F0E6;
-    --cream-dim:     #C8BBA8;
-    --border-gold:   rgba(201,162,39,0.2);
+    --dark-bg:       #0A0A0A;
+    --dark-surface:  #111111;
+    --dark-surface-2:#1A1A1A;
+    --dark-surface-3:#222222;
+    --gold:          #D4AF37;
+    --gold-light:    #F0D060;
+    --gold-dim:      #A88B28;
+    --text-primary:  #F5F5F5;
+    --text-muted:    #9A9A9A;
+    --border-subtle: rgba(212,175,55,0.15);
     --radius: 0.5rem;
   }
 }
 
 @layer base {
   * {
-    border-color: var(--border-gold);
+    border-color: var(--border-subtle);
     box-sizing: border-box;
   }
 
   body {
-    background-color: var(--emerald-deep);
-    color: var(--cream);
+    background-color: var(--dark-bg);
+    color: var(--text-primary);
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -67,7 +66,7 @@
 
   /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--emerald-deep); }
+  ::-webkit-scrollbar-track { background: var(--dark-bg); }
   ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 }
@@ -96,17 +95,17 @@
     background: linear-gradient(
       90deg,
       transparent 0%,
-      rgba(201,162,39,0.3) 50%,
+      rgba(212,175,55,0.3) 50%,
       transparent 100%
     );
     background-size: 200% 100%;
     animation: shimmer 2s linear infinite;
   }
   .gold-glow {
-    box-shadow: 0 0 20px rgba(201,162,39,0.3);
+    box-shadow: 0 0 20px rgba(212,175,55,0.25);
   }
   .gold-glow-lg {
-    box-shadow: 0 0 40px rgba(201,162,39,0.25), 0 0 80px rgba(201,162,39,0.1);
+    box-shadow: 0 0 40px rgba(212,175,55,0.2), 0 0 80px rgba(212,175,55,0.08);
   }
   .text-gradient-gold {
     background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
@@ -115,10 +114,10 @@
     background-clip: text;
   }
   .border-gold-subtle {
-    border-color: rgba(201,162,39,0.2);
+    border-color: rgba(212,175,55,0.2);
   }
   .border-gold-medium {
-    border-color: rgba(201,162,39,0.5);
+    border-color: rgba(212,175,55,0.5);
   }
   .label-luxury {
     letter-spacing: 0.3em;

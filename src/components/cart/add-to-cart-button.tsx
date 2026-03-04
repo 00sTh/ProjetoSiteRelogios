@@ -64,7 +64,7 @@ export function AddToCartButton({
         added
           ? {
               backgroundColor: "#4ade80",
-              color: "#0A3D2F",
+              color: "#0A0A0A",
               boxShadow: "0 0 20px rgba(74,222,128,0.3)",
             }
           : error
@@ -75,23 +75,23 @@ export function AddToCartButton({
             }
           : isDisabled && !isPending
           ? {
-              backgroundColor: "rgba(201,162,39,0.3)",
+              backgroundColor: "rgba(212,175,55,0.3)",
               color: "rgba(245,240,230,0.5)",
             }
           : {
-              backgroundColor: "#C9A227",
-              color: "#0A3D2F",
+              backgroundColor: "#D4AF37",
+              color: "#0A0A0A",
             }
       }
       onMouseEnter={(e) => {
         if (!isDisabled && !added && !error) {
-          (e.currentTarget as HTMLElement).style.backgroundColor = "#E8C84A";
-          (e.currentTarget as HTMLElement).style.boxShadow = "0 0 20px rgba(201,162,39,0.4)";
+          (e.currentTarget as HTMLElement).style.backgroundColor = "#F0D060";
+          (e.currentTarget as HTMLElement).style.boxShadow = "0 0 20px rgba(212,175,55,0.4)";
         }
       }}
       onMouseLeave={(e) => {
         if (!isDisabled && !added && !error) {
-          (e.currentTarget as HTMLElement).style.backgroundColor = "#C9A227";
+          (e.currentTarget as HTMLElement).style.backgroundColor = "#D4AF37";
           (e.currentTarget as HTMLElement).style.boxShadow = "none";
         }
       }}

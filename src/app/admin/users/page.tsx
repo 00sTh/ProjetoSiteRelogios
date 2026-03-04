@@ -18,7 +18,7 @@ export default async function AdminUsersPage({
     <div>
       <div className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="font-serif text-3xl font-bold" style={{ color: "#F5F0E6" }}>
+          <h1 className="font-serif text-3xl font-bold" style={{ color: "#F5F5F5" }}>
             Usuários
           </h1>
           <p className="text-sm mt-1" style={{ color: "rgba(200,187,168,0.6)" }}>
@@ -33,16 +33,16 @@ export default async function AdminUsersPage({
           className="flex items-center gap-3 px-4 py-3 rounded-xl max-w-sm"
           style={{
             backgroundColor: "#0F2E1E",
-            border: "1px solid rgba(201,162,39,0.2)",
+            border: "1px solid rgba(212,175,55,0.2)",
           }}
         >
-          <Search className="h-4 w-4 shrink-0" style={{ color: "rgba(201,162,39,0.5)" }} />
+          <Search className="h-4 w-4 shrink-0" style={{ color: "rgba(212,175,55,0.5)" }} />
           <input
             name="q"
             defaultValue={q}
             placeholder="Buscar por nome ou email..."
             className="flex-1 bg-transparent text-sm outline-none placeholder:text-[rgba(200,187,168,0.3)]"
-            style={{ color: "#F5F0E6" }}
+            style={{ color: "#F5F5F5" }}
           />
         </div>
       </form>
@@ -50,14 +50,14 @@ export default async function AdminUsersPage({
       {/* Table */}
       <div
         className="rounded-2xl overflow-hidden"
-        style={{ border: "1px solid rgba(201,162,39,0.15)" }}
+        style={{ border: "1px solid rgba(212,175,55,0.15)" }}
       >
         {users.length === 0 ? (
           <div
             className="flex flex-col items-center justify-center py-16 gap-3"
             style={{ backgroundColor: "#0A2419" }}
           >
-            <Users className="h-10 w-10" style={{ color: "rgba(201,162,39,0.2)" }} />
+            <Users className="h-10 w-10" style={{ color: "rgba(212,175,55,0.2)" }} />
             <p className="text-sm" style={{ color: "rgba(200,187,168,0.4)" }}>
               {q ? "Nenhum usuário encontrado para essa busca." : "Nenhum usuário cadastrado."}
             </p>
@@ -65,7 +65,7 @@ export default async function AdminUsersPage({
               <Link
                 href="/admin/users"
                 className="text-xs"
-                style={{ color: "#C9A227" }}
+                style={{ color: "#D4AF37" }}
               >
                 Limpar busca
               </Link>
@@ -74,7 +74,7 @@ export default async function AdminUsersPage({
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr style={{ borderBottom: "1px solid rgba(201,162,39,0.08)", backgroundColor: "#0F2E1E" }}>
+              <tr style={{ borderBottom: "1px solid rgba(212,175,55,0.08)", backgroundColor: "#0F2E1E" }}>
                 {["Nome / Email", "Pedidos", "Total gasto", "Cadastro", ""].map((h) => (
                   <th
                     key={h}
@@ -90,8 +90,8 @@ export default async function AdminUsersPage({
               {users.map((user) => (
                 <tr
                   key={user.id}
-                  className="transition-colors hover:bg-[rgba(201,162,39,0.03)]"
-                  style={{ borderBottom: "1px solid rgba(201,162,39,0.06)" }}
+                  className="transition-colors hover:bg-[rgba(212,175,55,0.03)]"
+                  style={{ borderBottom: "1px solid rgba(212,175,55,0.06)" }}
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
@@ -105,13 +105,13 @@ export default async function AdminUsersPage({
                       ) : (
                         <div
                           className="h-8 w-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold"
-                          style={{ backgroundColor: "rgba(201,162,39,0.15)", color: "#C9A227" }}
+                          style={{ backgroundColor: "rgba(212,175,55,0.15)", color: "#D4AF37" }}
                         >
                           {(user.firstName?.[0] ?? user.email?.[0] ?? "?").toUpperCase()}
                         </div>
                       )}
                       <div>
-                        <p className="font-medium text-sm" style={{ color: "#F5F0E6" }}>
+                        <p className="font-medium text-sm" style={{ color: "#F5F5F5" }}>
                           {[user.firstName, user.lastName].filter(Boolean).join(" ") || "—"}
                         </p>
                         <p className="text-xs" style={{ color: "rgba(200,187,168,0.5)" }}>
@@ -123,8 +123,8 @@ export default async function AdminUsersPage({
 
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-1.5">
-                      <ShoppingBag className="h-3.5 w-3.5" style={{ color: "rgba(201,162,39,0.5)" }} />
-                      <span style={{ color: "#C8BBA8" }}>{user.orderCount}</span>
+                      <ShoppingBag className="h-3.5 w-3.5" style={{ color: "rgba(212,175,55,0.5)" }} />
+                      <span style={{ color: "#9A9A9A" }}>{user.orderCount}</span>
                       {user.paidOrderCount > 0 && (
                         <span className="text-xs" style={{ color: "rgba(200,187,168,0.4)" }}>
                           ({user.paidOrderCount} pago{user.paidOrderCount !== 1 ? "s" : ""})
@@ -133,7 +133,7 @@ export default async function AdminUsersPage({
                     </div>
                   </td>
 
-                  <td className="px-6 py-4 font-semibold" style={{ color: "#C9A227" }}>
+                  <td className="px-6 py-4 font-semibold" style={{ color: "#D4AF37" }}>
                     {user.totalSpent > 0 ? formatPrice(user.totalSpent) : "—"}
                   </td>
 
@@ -146,9 +146,9 @@ export default async function AdminUsersPage({
                       href={`/admin/users/${user.id}`}
                       className="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors"
                       style={{
-                        backgroundColor: "rgba(201,162,39,0.08)",
-                        color: "#C9A227",
-                        border: "1px solid rgba(201,162,39,0.2)",
+                        backgroundColor: "rgba(212,175,55,0.08)",
+                        color: "#D4AF37",
+                        border: "1px solid rgba(212,175,55,0.2)",
                       }}
                     >
                       Ver detalhes

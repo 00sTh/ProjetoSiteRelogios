@@ -16,10 +16,10 @@ export function ProductCard({ product }: ProductCardProps) {
   const inStock = product.stock > 0;
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl transition-all duration-300 border border-transparent hover:border-[rgba(201,162,39,0.4)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] bg-[#0F4A37]">
+    <div className="group relative overflow-hidden rounded-2xl transition-all duration-300 border border-transparent hover:border-[rgba(212,175,55,0.4)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] bg-[#111111]">
       {/* Image */}
       <Link href={`/products/${product.slug}`} className="block overflow-hidden">
-        <div className="relative aspect-square bg-[#145A43]">
+        <div className="relative aspect-square bg-[#1A1A1A]">
           <ProductImage
             src={mainImage}
             alt={product.name}
@@ -33,12 +33,12 @@ export function ProductCard({ product }: ProductCardProps) {
             className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4"
             style={{
               background:
-                "linear-gradient(to top, rgba(10,61,47,0.85) 0%, transparent 60%)",
+                "linear-gradient(to top, rgba(10,10,10,0.85) 0%, transparent 60%)",
             }}
           >
             <span
               className="flex items-center gap-1.5 text-[10px] font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full"
-              style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
+              style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
             >
               Ver produto <ArrowRight className="h-3 w-3" />
             </span>
@@ -54,7 +54,7 @@ export function ProductCard({ product }: ProductCardProps) {
             {product.featured && (
               <span
                 className="text-[10px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full"
-                style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
+                style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
               >
                 Destaque
               </span>
@@ -62,7 +62,7 @@ export function ProductCard({ product }: ProductCardProps) {
             {!inStock && (
               <span
                 className="text-[10px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full"
-                style={{ backgroundColor: "rgba(224,82,82,0.9)", color: "#F5F0E6" }}
+                style={{ backgroundColor: "rgba(224,82,82,0.9)", color: "#F5F5F5" }}
               >
                 Esgotado
               </span>
@@ -75,20 +75,20 @@ export function ProductCard({ product }: ProductCardProps) {
       <div className="p-4">
         <p
           className="label-luxury mb-1.5"
-          style={{ color: "#C9A227", fontSize: "0.65rem" }}
+          style={{ color: "#D4AF37", fontSize: "0.65rem" }}
         >
           {product.category.name}
         </p>
         <Link href={`/products/${product.slug}`}>
           <h3
-            className="font-serif font-semibold text-lg leading-snug line-clamp-2 mb-3 transition-colors duration-200 group-hover:text-[#C9A227]"
-            style={{ color: "#F5F0E6" }}
+            className="font-serif font-semibold text-lg leading-snug line-clamp-2 mb-3 transition-colors duration-200 group-hover:text-[#D4AF37]"
+            style={{ color: "#F5F5F5" }}
           >
             {product.name}
           </h3>
         </Link>
         <div className="flex items-center justify-between">
-          <span className="font-medium text-base" style={{ color: "#C9A227" }}>
+          <span className="font-medium text-base" style={{ color: "#D4AF37" }}>
             {formatPrice(Number(product.price))}
           </span>
           {inStock && (

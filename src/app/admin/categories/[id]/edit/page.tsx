@@ -29,10 +29,10 @@ export default async function EditCategoryPage({ params }: Props) {
           Categorias
         </Link>
         <span style={{ color: "rgba(200,187,168,0.3)" }}>/</span>
-        <span className="text-sm" style={{ color: "#F5F0E6" }}>Editar</span>
+        <span className="text-sm" style={{ color: "#F5F5F5" }}>Editar</span>
       </div>
 
-      <h1 className="font-serif text-2xl font-semibold" style={{ color: "#F5F0E6" }}>
+      <h1 className="font-serif text-2xl font-semibold" style={{ color: "#F5F5F5" }}>
         Editar: {category.name}
       </h1>
 

@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Termos de Uso — Altheia",
-  description: "Termos e condições de uso da plataforma Altheia.",
+  title: "Termos de Uso — LuxImport",
+  description: "Termos e condições de uso da plataforma LuxImport.",
 };
 
 export default function TermosDeUsoPage() {
   return (
-    <div style={{ backgroundColor: "#0A3D2F", minHeight: "100vh" }}>
+    <div style={{ backgroundColor: "#0A0A0A", minHeight: "100vh" }}>
       <div className="container mx-auto max-w-3xl px-4 py-16">
         {/* Header */}
         <div className="mb-12">
-          <p className="label-luxury mb-4" style={{ color: "#C9A227" }}>
+          <p className="label-luxury mb-4" style={{ color: "#D4AF37" }}>
             Legal
           </p>
           <h1
             className="font-serif text-4xl md:text-5xl font-bold mb-4"
-            style={{ color: "#F5F0E6" }}
+            style={{ color: "#F5F5F5" }}
           >
             Termos de Uso
           </h1>
@@ -26,12 +26,12 @@ export default function TermosDeUsoPage() {
           <div
             className="h-px mt-6"
             style={{
-              background: "linear-gradient(to right, rgba(201,162,39,0.4), transparent)",
+              background: "linear-gradient(to right, rgba(212,175,55,0.4), transparent)",
             }}
           />
         </div>
 
-        <div className="space-y-8 text-sm leading-relaxed" style={{ color: "#C8BBA8" }}>
+        <div className="space-y-8 text-sm leading-relaxed" style={{ color: "#9A9A9A" }}>
           <Section title="1. Aceitação dos Termos">
             <p>
               Ao acessar ou usar o site altheia.com.br ("Site") ou realizar uma compra, você
@@ -41,7 +41,7 @@ export default function TermosDeUsoPage() {
 
           <Section title="2. Sobre a Plataforma">
             <p>
-              O Site é operado pela Altheia Cosméticos Ltda. e destina-se à venda de produtos
+              O Site é operado pela LuxImport Comércio de Importados Ltda. e destina-se à venda de produtos
               cosméticos de uso pessoal no território brasileiro. O acesso a determinadas
               funcionalidades requer cadastro e autenticação.
             </p>
@@ -62,7 +62,7 @@ export default function TermosDeUsoPage() {
                 atividades realizadas em sua conta.
               </li>
               <li>
-                A Altheia reserva-se o direito de suspender ou encerrar contas que violem
+                A LuxImport reserva-se o direito de suspender ou encerrar contas que violem
                 estes Termos.
               </li>
             </ul>
@@ -75,7 +75,7 @@ export default function TermosDeUsoPage() {
                 frete.
               </li>
               <li>
-                A Altheia reserva-se o direito de alterar preços sem aviso prévio. O preço
+                A LuxImport reserva-se o direito de alterar preços sem aviso prévio. O preço
                 vinculante é o confirmado no momento da finalização do pedido.
               </li>
               <li>
@@ -108,7 +108,7 @@ export default function TermosDeUsoPage() {
                 Frete grátis para pedidos acima de R$ 199,00 (consulte condições vigentes).
               </li>
               <li>
-                A Altheia não se responsabiliza por atrasos causados por transportadoras ou
+                A LuxImport não se responsabiliza por atrasos causados por transportadoras ou
                 eventos de força maior.
               </li>
             </ul>
@@ -120,17 +120,17 @@ export default function TermosDeUsoPage() {
             </p>
             <ul className="list-disc pl-5 space-y-1 mt-3">
               <li>
-                <strong style={{ color: "#F5F0E6" }}>Direito de arrependimento:</strong> 7
+                <strong style={{ color: "#F5F5F5" }}>Direito de arrependimento:</strong> 7
                 dias corridos a partir do recebimento do produto para compras online.
               </li>
               <li>
-                <strong style={{ color: "#F5F0E6" }}>Produto com defeito:</strong> 30 dias
+                <strong style={{ color: "#F5F5F5" }}>Produto com defeito:</strong> 30 dias
                 para produtos não-duráveis; 90 dias para duráveis.
               </li>
               <li>O produto deve ser devolvido em sua embalagem original, sem uso.</li>
               <li>
                 Solicitações pelo e-mail:{" "}
-                <a href="mailto:trocas@altheia.com.br" style={{ color: "#C9A227" }}>
+                <a href="mailto:trocas@altheia.com.br" style={{ color: "#D4AF37" }}>
                   trocas@altheia.com.br
                 </a>
               </li>
@@ -140,14 +140,14 @@ export default function TermosDeUsoPage() {
           <Section title="8. Propriedade Intelectual">
             <p>
               Todo o conteúdo do Site — incluindo textos, imagens, logotipos, design e código
-              — é de propriedade da Altheia ou de seus licenciadores e protegido por direitos
+              — é de propriedade da LuxImport ou de seus licenciadores e protegido por direitos
               autorais. É proibida a reprodução sem autorização prévia por escrito.
             </p>
           </Section>
 
           <Section title="9. Limitação de Responsabilidade">
             <p>
-              A Altheia não se responsabiliza por danos indiretos, incidentais ou consequentes
+              A LuxImport não se responsabiliza por danos indiretos, incidentais ou consequentes
               decorrentes do uso do Site. Nossa responsabilidade total não excederá o valor
               pago pelo produto ou serviço em questão.
             </p>
@@ -164,7 +164,7 @@ export default function TermosDeUsoPage() {
           <Section title="11. Contato">
             <p>
               Dúvidas:{" "}
-              <a href="mailto:contato@altheia.com.br" style={{ color: "#C9A227" }}>
+              <a href="mailto:contato@altheia.com.br" style={{ color: "#D4AF37" }}>
                 contato@altheia.com.br
               </a>
             </p>
@@ -178,7 +178,7 @@ export default function TermosDeUsoPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h2 className="font-serif text-xl font-semibold mb-3" style={{ color: "#F5F0E6" }}>
+      <h2 className="font-serif text-xl font-semibold mb-3" style={{ color: "#F5F5F5" }}>
         {title}
       </h2>
       {children}

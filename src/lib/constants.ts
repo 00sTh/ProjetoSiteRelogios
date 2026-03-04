@@ -1,7 +1,7 @@
-export const APP_NAME = "Althéia";
-export const APP_TAGLINE = "A Verdade da Beleza";
+export const APP_NAME = "LuxImport";
+export const APP_TAGLINE = "Importados de Luxo";
 export const APP_DESCRIPTION =
-  "Cosméticos de luxo formulados com ingredientes raros para revelar a luminosidade natural da sua pele.";
+  "Os melhores produtos importados com curadoria rigorosa, autenticidade garantida e entrega em todo o Brasil.";
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
 /** Número de produtos por página na listagem */

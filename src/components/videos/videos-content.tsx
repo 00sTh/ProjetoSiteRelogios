@@ -22,7 +22,7 @@ const extraVideos = [
     id: "3",
     title: "Ciência por Trás da Fórmula",
     duration: "5:12",
-    description: "Nosso laboratório e o processo de criação dos cosméticos Altheia.",
+    description: "Nosso laboratório e o processo de criação dos produtos LuxImport.",
   },
 ];
 
@@ -43,29 +43,29 @@ export function VideosContent({
     : null;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#0A3D2F" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#0A0A0A" }}>
       {/* Hero */}
       <div
         className="relative py-20 px-4 text-center overflow-hidden"
-        style={{ backgroundColor: "#0F4A37", borderBottom: "1px solid rgba(201,162,39,0.2)" }}
+        style={{ backgroundColor: "#111111", borderBottom: "1px solid rgba(212,175,55,0.2)" }}
       >
         <div
           className="absolute inset-0"
           style={{
-            background: "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(201,162,39,0.07) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(212,175,55,0.07) 0%, transparent 70%)",
           }}
         />
         <div className="relative z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-flex items-center gap-2 label-luxury mb-4" style={{ color: "#C9A227" }}>
+            <span className="inline-flex items-center gap-2 label-luxury mb-4" style={{ color: "#D4AF37" }}>
               <Sparkles className="h-3 w-3" />
-              Altheia Stories
+              LuxImport Stories
             </span>
-            <h1 className="font-serif text-4xl md:text-6xl font-bold mb-4" style={{ color: "#F5F0E6" }}>
+            <h1 className="font-serif text-4xl md:text-6xl font-bold mb-4" style={{ color: "#F5F5F5" }}>
               Vídeos & Histórias
             </h1>
-            <p className="max-w-xl mx-auto text-base leading-relaxed" style={{ color: "#C8BBA8" }}>
-              Mergulhe no universo Altheia — da pesquisa científica aos rituais de beleza que transformam.
+            <p className="max-w-xl mx-auto text-base leading-relaxed" style={{ color: "#9A9A9A" }}>
+              Mergulhe no universo LuxImport — da pesquisa científica aos rituais de beleza que transformam.
             </p>
           </motion.div>
         </div>
@@ -83,8 +83,8 @@ export function VideosContent({
           <div
             className="relative rounded-3xl overflow-hidden cursor-pointer group"
             style={{
-              background: "linear-gradient(135deg, #0F4A37 0%, #145A43 100%)",
-              border: "1px solid rgba(201,162,39,0.25)",
+              background: "linear-gradient(135deg, #111111 0%, #1A1A1A 100%)",
+              border: "1px solid rgba(212,175,55,0.25)",
               aspectRatio: "16/9",
             }}
           >
@@ -102,29 +102,29 @@ export function VideosContent({
                   className="absolute inset-0 opacity-20"
                   style={{
                     backgroundImage:
-                      "radial-gradient(circle at 30% 40%, rgba(201,162,39,0.4) 0%, transparent 40%), radial-gradient(circle at 70% 60%, rgba(30,122,90,0.5) 0%, transparent 40%)",
+                      "radial-gradient(circle at 30% 40%, rgba(212,175,55,0.4) 0%, transparent 40%), radial-gradient(circle at 70% 60%, rgba(30,122,90,0.5) 0%, transparent 40%)",
                   }}
                 />
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-6">
                   <motion.div
-                    className="w-24 h-24 rounded-full flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_0_40px_rgba(201,162,39,0.5)]"
-                    style={{ backgroundColor: "rgba(201,162,39,0.15)", border: "2px solid rgba(201,162,39,0.6)" }}
+                    className="w-24 h-24 rounded-full flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_0_40px_rgba(212,175,55,0.5)]"
+                    style={{ backgroundColor: "rgba(212,175,55,0.15)", border: "2px solid rgba(212,175,55,0.6)" }}
                     whileHover={{ scale: 1.05 }}
                   >
-                    <Play className="h-10 w-10 ml-1" style={{ color: "#C9A227" }} />
+                    <Play className="h-10 w-10 ml-1" style={{ color: "#D4AF37" }} />
                   </motion.div>
                   <div className="text-center px-8">
-                    <h2 className="font-serif text-2xl md:text-3xl font-bold mb-2" style={{ color: "#F5F0E6" }}>
+                    <h2 className="font-serif text-2xl md:text-3xl font-bold mb-2" style={{ color: "#F5F5F5" }}>
                       {featuredVideoTitle}
                     </h2>
-                    <p className="text-base max-w-lg" style={{ color: "#C8BBA8" }}>
+                    <p className="text-base max-w-lg" style={{ color: "#9A9A9A" }}>
                       {featuredVideoDesc}
                     </p>
                   </div>
                 </div>
                 <div
                   className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold label-luxury"
-                  style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
+                  style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
                 >
                   Em destaque
                 </div>
@@ -147,40 +147,40 @@ export function VideosContent({
               key={video.id}
               variants={fadeInUp}
               className="group cursor-pointer rounded-2xl overflow-hidden"
-              style={{ backgroundColor: "#0F4A37", border: "1px solid rgba(201,162,39,0.15)" }}
-              whileHover={{ boxShadow: "0 0 25px rgba(201,162,39,0.1)" }}
+              style={{ backgroundColor: "#111111", border: "1px solid rgba(212,175,55,0.15)" }}
+              whileHover={{ boxShadow: "0 0 25px rgba(212,175,55,0.1)" }}
             >
               <div
                 className="relative overflow-hidden"
-                style={{ aspectRatio: "16/9", background: "linear-gradient(135deg, #145A43 0%, #0F4A37 100%)" }}
+                style={{ aspectRatio: "16/9", background: "linear-gradient(135deg, #1A1A1A 0%, #111111 100%)" }}
               >
                 <div
                   className="absolute inset-0 opacity-10"
-                  style={{ backgroundImage: "radial-gradient(circle at 50% 50%, rgba(201,162,39,0.5) 0%, transparent 60%)" }}
+                  style={{ backgroundImage: "radial-gradient(circle at 50% 50%, rgba(212,175,55,0.5) 0%, transparent 60%)" }}
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div
-                    className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(201,162,39,0.4)]"
-                    style={{ backgroundColor: "rgba(201,162,39,0.12)", border: "1px solid rgba(201,162,39,0.4)" }}
+                    className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]"
+                    style={{ backgroundColor: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.4)" }}
                   >
-                    <Play className="h-5 w-5 ml-0.5" style={{ color: "#C9A227" }} />
+                    <Play className="h-5 w-5 ml-0.5" style={{ color: "#D4AF37" }} />
                   </div>
                 </div>
                 <div
                   className="absolute bottom-2 right-2 px-2 py-0.5 rounded text-xs"
-                  style={{ backgroundColor: "rgba(0,0,0,0.6)", color: "#C8BBA8" }}
+                  style={{ backgroundColor: "rgba(0,0,0,0.6)", color: "#9A9A9A" }}
                 >
                   {video.duration}
                 </div>
               </div>
               <div className="p-5">
                 <h3
-                  className="font-serif font-semibold text-base mb-2 group-hover:text-[#C9A227] transition-colors"
-                  style={{ color: "#F5F0E6" }}
+                  className="font-serif font-semibold text-base mb-2 group-hover:text-[#D4AF37] transition-colors"
+                  style={{ color: "#F5F5F5" }}
                 >
                   {video.title}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "#C8BBA8" }}>
+                <p className="text-sm leading-relaxed" style={{ color: "#9A9A9A" }}>
                   {video.description}
                 </p>
               </div>

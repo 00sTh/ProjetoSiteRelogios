@@ -28,7 +28,7 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
       <button
         onClick={() => setOpen(true)}
         className="md:hidden flex items-center justify-center w-11 h-11 rounded-full transition-colors"
-        style={{ color: "#C9A227" }}
+        style={{ color: "#D4AF37" }}
         aria-label="Abrir menu"
       >
         <Menu className="h-5 w-5" />
@@ -57,26 +57,26 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
               className="fixed top-0 right-0 h-full w-72 z-50 flex flex-col"
               style={{
                 backgroundColor: "#072D21",
-                borderLeft: "1px solid rgba(201,162,39,0.2)",
+                borderLeft: "1px solid rgba(212,175,55,0.2)",
               }}
             >
               {/* Header */}
               <div
                 className="flex items-center justify-between px-6 py-5"
-                style={{ borderBottom: "1px solid rgba(201,162,39,0.12)" }}
+                style={{ borderBottom: "1px solid rgba(212,175,55,0.12)" }}
               >
                 <Link
                   href="/"
                   onClick={() => setOpen(false)}
                   className="font-serif font-bold tracking-[0.18em] uppercase text-lg"
-                  style={{ color: "#F5F0E6" }}
+                  style={{ color: "#F5F5F5" }}
                 >
                   {APP_NAME}
                 </Link>
                 <button
                   onClick={() => setOpen(false)}
-                  className="w-8 h-8 flex items-center justify-center rounded-full transition-colors hover:text-[#C9A227]"
-                  style={{ color: "#C8BBA8" }}
+                  className="w-8 h-8 flex items-center justify-center rounded-full transition-colors hover:text-[#D4AF37]"
+                  style={{ color: "#9A9A9A" }}
                   aria-label="Fechar menu"
                 >
                   <X className="h-4 w-4" />
@@ -96,8 +96,8 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
                       <Link
                         href={href}
                         onClick={() => setOpen(false)}
-                        className="flex items-center px-4 py-3.5 rounded-xl text-sm font-semibold tracking-wider uppercase transition-all duration-200 hover:text-[#C9A227] hover:bg-[rgba(201,162,39,0.06)]"
-                        style={{ color: "#C8BBA8", fontSize: "0.7rem", letterSpacing: "0.14em" }}
+                        className="flex items-center px-4 py-3.5 rounded-xl text-sm font-semibold tracking-wider uppercase transition-all duration-200 hover:text-[#D4AF37] hover:bg-[rgba(212,175,55,0.06)]"
+                        style={{ color: "#9A9A9A", fontSize: "0.7rem", letterSpacing: "0.14em" }}
                       >
                         {label}
                       </Link>
@@ -109,24 +109,24 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
               {/* Footer actions */}
               <div
                 className="px-4 pb-8 pt-4 space-y-3"
-                style={{ borderTop: "1px solid rgba(201,162,39,0.12)" }}
+                style={{ borderTop: "1px solid rgba(212,175,55,0.12)" }}
               >
                 <Link
                   href="/cart"
                   onClick={() => setOpen(false)}
                   className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all"
                   style={{
-                    backgroundColor: "rgba(201,162,39,0.08)",
-                    border: "1px solid rgba(201,162,39,0.2)",
-                    color: "#F5F0E6",
+                    backgroundColor: "rgba(212,175,55,0.08)",
+                    border: "1px solid rgba(212,175,55,0.2)",
+                    color: "#F5F5F5",
                   }}
                 >
-                  <ShoppingCart className="h-4 w-4" style={{ color: "#C9A227" }} />
+                  <ShoppingCart className="h-4 w-4" style={{ color: "#D4AF37" }} />
                   <span>Carrinho</span>
                   {cartCount > 0 && (
                     <span
                       className="ml-auto text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full"
-                      style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
+                      style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
                     >
                       {cartCount > 9 ? "9+" : cartCount}
                     </span>
@@ -140,9 +140,9 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
                     onClick={() => setOpen(false)}
                     className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all"
                     style={{
-                      border: "1px solid rgba(201,162,39,0.4)",
-                      color: "#C9A227",
-                      backgroundColor: "rgba(201,162,39,0.06)",
+                      border: "1px solid rgba(212,175,55,0.4)",
+                      color: "#D4AF37",
+                      backgroundColor: "rgba(212,175,55,0.06)",
                     }}
                   >
                     <LayoutDashboard className="h-4 w-4" />
@@ -154,10 +154,10 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
                   <Link
                     href="/wishlist"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all hover:text-[#C9A227]"
-                    style={{ color: "#C8BBA8" }}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all hover:text-[#D4AF37]"
+                    style={{ color: "#9A9A9A" }}
                   >
-                    <Heart className="h-4 w-4" style={{ color: "#C9A227" }} />
+                    <Heart className="h-4 w-4" style={{ color: "#D4AF37" }} />
                     <span>Lista de Desejos</span>
                   </Link>
                 )}
@@ -166,18 +166,18 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
                   <Link
                     href="/account"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all hover:text-[#C9A227]"
-                    style={{ color: "#C8BBA8" }}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all hover:text-[#D4AF37]"
+                    style={{ color: "#9A9A9A" }}
                   >
-                    <User className="h-4 w-4" style={{ color: "#C9A227" }} />
+                    <User className="h-4 w-4" style={{ color: "#D4AF37" }} />
                     <span>Minha Conta</span>
                   </Link>
                 ) : (
                   <Link
                     href="/sign-in"
                     onClick={() => setOpen(false)}
-                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold tracking-widest uppercase w-full transition-all hover:bg-[#E8C84A]"
-                    style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
+                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold tracking-widest uppercase w-full transition-all hover:bg-[#F0D060]"
+                    style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
                   >
                     Entrar
                   </Link>

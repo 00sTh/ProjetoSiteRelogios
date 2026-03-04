@@ -5,7 +5,7 @@ import { BestSellers } from "@/components/home/best-sellers";
 import { CategoryCards } from "@/components/home/category-cards";
 import { LuminaHighlight } from "@/components/home/lumina-highlight";
 import { NossaHistoriaTeaser } from "@/components/home/nossa-historia-teaser";
-import { WhyAltheia } from "@/components/home/why-altheia";
+import { WhyLuxImport } from "@/components/home/why-altheia";
 import { APP_DESCRIPTION, APP_NAME } from "@/lib/constants";
 import { getSiteSettings } from "@/actions/admin";
 
@@ -34,11 +34,11 @@ export default async function HomePage() {
         heroLogoUrl={settings.heroLogoUrl}
       />
 
-      <Suspense fallback={<div className="h-48 animate-pulse" style={{ backgroundColor: "#0A3D2F" }} />}>
+      <Suspense fallback={<div className="h-48 animate-pulse" style={{ backgroundColor: "#0A0A0A" }} />}>
         <CategoryCards />
       </Suspense>
 
-      <Suspense fallback={<div className="h-96 animate-pulse" style={{ backgroundColor: "#0A3D2F" }} />}>
+      <Suspense fallback={<div className="h-96 animate-pulse" style={{ backgroundColor: "#0A0A0A" }} />}>
         <BestSellers />
       </Suspense>
 
@@ -57,7 +57,7 @@ export default async function HomePage() {
         videoDesc={settings.featuredVideoDesc}
       />
 
-      <WhyAltheia
+      <WhyLuxImport
         benefit1Icon={settings.benefit1Icon}
         benefit1Title={settings.benefit1Title}
         benefit1Text={settings.benefit1Text}

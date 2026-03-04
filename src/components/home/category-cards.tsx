@@ -12,12 +12,12 @@ export async function CategoryCards() {
   return (
     <section
       className="py-12 px-4"
-      style={{ backgroundColor: "#0A3D2F" }}
+      style={{ backgroundColor: "#0A0A0A" }}
     >
       <div className="container mx-auto max-w-7xl">
         <p
           className="label-luxury text-center mb-6"
-          style={{ color: "#C9A227", letterSpacing: "0.2em", fontSize: "0.65rem" }}
+          style={{ color: "#D4AF37", letterSpacing: "0.2em", fontSize: "0.65rem" }}
         >
           Seleção feita para você
         </p>
@@ -45,12 +45,12 @@ export async function CategoryCards() {
                   className="absolute inset-0 flex items-center justify-center transition-transform duration-500 group-hover:scale-105"
                   style={{
                     background:
-                      "linear-gradient(135deg, #0F4A37 0%, #0A3D2F 50%, #072E23 100%)",
+                      "linear-gradient(135deg, #111111 0%, #0A0A0A 50%, #072E23 100%)",
                   }}
                 >
                   <Layers
                     className="h-12 w-12 opacity-20"
-                    style={{ color: "#C9A227" }}
+                    style={{ color: "#D4AF37" }}
                   />
                 </div>
               )}
@@ -68,12 +68,12 @@ export async function CategoryCards() {
               <div className="absolute bottom-0 left-0 right-0 p-5">
                 <h3
                   className="font-serif text-lg font-semibold mb-1"
-                  style={{ color: "#F5F0E6" }}
+                  style={{ color: "#F5F5F5" }}
                 >
                   {category.name}
                 </h3>
                 <span
-                  className="inline-flex items-center gap-1 text-xs font-medium transition-colors duration-200 group-hover:text-[#C9A227]"
+                  className="inline-flex items-center gap-1 text-xs font-medium transition-colors duration-200 group-hover:text-[#D4AF37]"
                   style={{ color: "rgba(200,187,168,0.8)" }}
                 >
                   Explorar <ArrowRight className="h-3 w-3" />
@@ -83,7 +83,7 @@ export async function CategoryCards() {
               {/* Hover border */}
               <div
                 className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                style={{ border: "1px solid rgba(201,162,39,0.4)" }}
+                style={{ border: "1px solid rgba(212,175,55,0.4)" }}
               />
             </Link>
           ))}

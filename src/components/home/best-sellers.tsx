@@ -15,8 +15,8 @@ export async function BestSellers() {
     <section
       className="py-24 px-4"
       style={{
-        backgroundColor: "#0A3D2F",
-        borderTop: "1px solid rgba(201,162,39,0.15)",
+        backgroundColor: "#0A0A0A",
+        borderTop: "1px solid rgba(212,175,55,0.15)",
       }}
     >
       <div className="container mx-auto max-w-7xl">
@@ -24,7 +24,7 @@ export async function BestSellers() {
           <SectionTitle
             label="Mais Vendidos"
             title="Nossos Best Sellers"
-            subtitle="Produtos escolhidos por milhares de mulheres que confiam na Altheia."
+            subtitle="Os produtos importados mais escolhidos pelos nossos clientes."
             align="left"
           />
         </div>

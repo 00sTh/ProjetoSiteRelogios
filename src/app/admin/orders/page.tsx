@@ -43,7 +43,7 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="font-serif text-3xl font-bold" style={{ color: "#F5F0E6" }}>
+        <h1 className="font-serif text-3xl font-bold" style={{ color: "#F5F5F5" }}>
           Pedidos
         </h1>
         <p className="text-sm mt-1" style={{ color: "rgba(200,187,168,0.6)" }}>
@@ -53,14 +53,14 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
 
       <div
         className="rounded-2xl overflow-hidden"
-        style={{ border: "1px solid rgba(201,162,39,0.15)" }}
+        style={{ border: "1px solid rgba(212,175,55,0.15)" }}
       >
         <table className="w-full text-sm">
           <thead>
             <tr
               style={{
                 backgroundColor: "#0F2E1E",
-                borderBottom: "1px solid rgba(201,162,39,0.1)",
+                borderBottom: "1px solid rgba(212,175,55,0.1)",
               }}
             >
               {["Pedido", "Cliente", "Gateway", "Itens", "Total", "Status", "Data", ""].map((h) => (
@@ -90,7 +90,7 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
                 const c =
                   statusColors[order.status] ?? {
                     bg: "rgba(200,187,168,0.1)",
-                    text: "#C8BBA8",
+                    text: "#9A9A9A",
                   };
                 const label =
                   ORDER_STATUS_LABEL[
@@ -103,18 +103,18 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
                 return (
                   <tr
                     key={order.id}
-                    style={{ borderBottom: "1px solid rgba(201,162,39,0.06)" }}
+                    style={{ borderBottom: "1px solid rgba(212,175,55,0.06)" }}
                   >
                     <td className="px-5 py-4">
                       <Link
                         href={`/admin/orders/${order.id}`}
-                        className="font-mono text-xs hover:text-[#C9A227] transition-colors"
+                        className="font-mono text-xs hover:text-[#D4AF37] transition-colors"
                         style={{ color: "rgba(200,187,168,0.7)" }}
                       >
                         #{order.id.slice(0, 8).toUpperCase()}
                       </Link>
                     </td>
-                    <td className="px-5 py-4" style={{ color: "#C8BBA8" }}>
+                    <td className="px-5 py-4" style={{ color: "#9A9A9A" }}>
                       <div>
                         <p className="text-sm">
                           {order.userProfile?.email ?? order.customerEmail ?? "Guest"}
@@ -141,10 +141,10 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
                         <span style={{ color: "rgba(200,187,168,0.3)" }}>—</span>
                       )}
                     </td>
-                    <td className="px-5 py-4 text-sm" style={{ color: "#C8BBA8" }}>
+                    <td className="px-5 py-4 text-sm" style={{ color: "#9A9A9A" }}>
                       {totalItems}
                     </td>
-                    <td className="px-5 py-4 font-semibold" style={{ color: "#C9A227" }}>
+                    <td className="px-5 py-4 font-semibold" style={{ color: "#D4AF37" }}>
                       {formatPrice(Number(order.price))}
                     </td>
                     <td className="px-5 py-4">
@@ -164,7 +164,7 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
                     <td className="px-5 py-4">
                       <Link
                         href={`/admin/orders/${order.id}`}
-                        className="text-xs font-medium transition-colors hover:text-[#C9A227]"
+                        className="text-xs font-medium transition-colors hover:text-[#D4AF37]"
                         style={{ color: "rgba(200,187,168,0.6)" }}
                       >
                         Detalhes →
@@ -188,11 +188,11 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
               className="h-8 w-8 flex items-center justify-center rounded-lg text-sm font-medium transition-all"
               style={
                 p === page
-                  ? { backgroundColor: "#C9A227", color: "#0A3D2F" }
+                  ? { backgroundColor: "#D4AF37", color: "#0A0A0A" }
                   : {
-                      backgroundColor: "rgba(201,162,39,0.1)",
-                      color: "#C8BBA8",
-                      border: "1px solid rgba(201,162,39,0.2)",
+                      backgroundColor: "rgba(212,175,55,0.1)",
+                      color: "#9A9A9A",
+                      border: "1px solid rgba(212,175,55,0.2)",
                     }
               }
             >

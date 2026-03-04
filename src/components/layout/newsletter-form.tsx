@@ -31,7 +31,7 @@ export function NewsletterForm() {
   if (state === "success") {
     return (
       <p className="text-sm" style={{ color: "#4ADE80" }}>
-        ✓ Inscrito! Bem-vindo(a) à família Altheia.
+        ✓ Inscrito! Bem-vindo(a) à família LuxImport.
       </p>
     );
   }
@@ -48,16 +48,16 @@ export function NewsletterForm() {
           disabled={state === "loading"}
           className="flex-1 px-4 py-2.5 rounded-full text-sm outline-none"
           style={{
-            backgroundColor: "rgba(201,162,39,0.08)",
-            border: "1px solid rgba(201,162,39,0.2)",
-            color: "#F5F0E6",
+            backgroundColor: "rgba(212,175,55,0.08)",
+            border: "1px solid rgba(212,175,55,0.2)",
+            color: "#F5F5F5",
           }}
         />
         <button
           type="submit"
           disabled={state === "loading"}
           className="px-5 py-2.5 rounded-full text-xs font-semibold tracking-widest uppercase transition-all disabled:opacity-50"
-          style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
+          style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
         >
           {state === "loading" ? "..." : "OK"}
         </button>

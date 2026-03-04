@@ -36,13 +36,13 @@ export function NavbarClient({ userId, isAdmin, cartCount, siteLogoUrl }: Navbar
       className="sticky top-0 z-50 w-full transition-all duration-500"
       style={{
         backgroundColor: scrolled
-          ? "rgba(10,61,47,0.97)"
-          : "rgba(10,61,47,0.18)",
+          ? "rgba(10,10,10,0.97)"
+          : "rgba(10,10,10,0.18)",
         backdropFilter: "blur(14px)",
         borderBottom: scrolled
-          ? "1px solid rgba(201,162,39,0.25)"
-          : "1px solid rgba(201,162,39,0.08)",
-        boxShadow: "0 4px 30px rgba(201,162,39,0.12)",
+          ? "1px solid rgba(212,175,55,0.25)"
+          : "1px solid rgba(212,175,55,0.08)",
+        boxShadow: "0 4px 30px rgba(212,175,55,0.12)",
       }}
     >
       <div className="relative container mx-auto flex h-20 items-center px-6 max-w-7xl">
@@ -54,14 +54,14 @@ export function NavbarClient({ userId, isAdmin, cartCount, siteLogoUrl }: Navbar
               key={href}
               href={href}
               className="relative text-base font-semibold tracking-wider uppercase transition-colors duration-200 group pb-0.5"
-              style={{ color: "#C8BBA8", fontSize: "0.72rem", letterSpacing: "0.14em" }}
+              style={{ color: "#9A9A9A", fontSize: "0.72rem", letterSpacing: "0.14em" }}
             >
-              <span className="group-hover:text-[#C9A227] transition-colors duration-200">
+              <span className="group-hover:text-[#D4AF37] transition-colors duration-200">
                 {label}
               </span>
               <span
                 className="absolute bottom-0 left-0 w-0 h-px group-hover:w-full transition-all duration-300"
-                style={{ backgroundColor: "#C9A227" }}
+                style={{ backgroundColor: "#D4AF37" }}
               />
             </Link>
           ))}
@@ -84,11 +84,11 @@ export function NavbarClient({ userId, isAdmin, cartCount, siteLogoUrl }: Navbar
             />
           ) : (
             <span
-              className="font-serif font-bold tracking-[0.22em] uppercase transition-colors duration-300 hover:text-[#C9A227]"
+              className="font-serif font-bold tracking-[0.22em] uppercase transition-colors duration-300 hover:text-[#D4AF37]"
               style={{
-                color: "#F5F0E6",
+                color: "#F5F5F5",
                 fontSize: "clamp(1.1rem, 2vw, 1.5rem)",
-                textShadow: "0 0 30px rgba(201,162,39,0.15)",
+                textShadow: "0 0 30px rgba(212,175,55,0.15)",
               }}
             >
               {APP_NAME}
@@ -104,10 +104,10 @@ export function NavbarClient({ userId, isAdmin, cartCount, siteLogoUrl }: Navbar
               href="/wishlist"
               aria-label="Lista de Desejos"
               className="group hidden sm:flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200"
-              style={{ color: "#C8BBA8" }}
+              style={{ color: "#9A9A9A" }}
             >
               <Heart
-                className="h-5 w-5 transition-all duration-200 group-hover:text-[#C9A227] group-hover:drop-shadow-[0_0_8px_rgba(201,162,39,0.6)]"
+                className="h-5 w-5 transition-all duration-200 group-hover:text-[#D4AF37] group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.6)]"
               />
             </Link>
           )}
@@ -117,15 +117,15 @@ export function NavbarClient({ userId, isAdmin, cartCount, siteLogoUrl }: Navbar
             href="/cart"
             aria-label="Carrinho"
             className="group relative flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200"
-            style={{ color: "#C8BBA8" }}
+            style={{ color: "#9A9A9A" }}
           >
             <ShoppingCart
-              className="h-5 w-5 transition-all duration-200 group-hover:text-[#C9A227] group-hover:drop-shadow-[0_0_8px_rgba(201,162,39,0.6)]"
+              className="h-5 w-5 transition-all duration-200 group-hover:text-[#D4AF37] group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.6)]"
             />
             {cartCount > 0 && (
               <span
                 className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold"
-                style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
+                style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
               >
                 {cartCount > 9 ? "9+" : cartCount}
               </span>
@@ -137,10 +137,10 @@ export function NavbarClient({ userId, isAdmin, cartCount, siteLogoUrl }: Navbar
             <Link
               href="/admin"
               aria-label="Painel Admin"
-              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase transition-all duration-200 hover:shadow-[0_0_14px_rgba(201,162,39,0.35)]"
+              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase transition-all duration-200 hover:shadow-[0_0_14px_rgba(212,175,55,0.35)]"
               style={{
-                border: "1px solid rgba(201,162,39,0.5)",
-                color: "#C9A227",
+                border: "1px solid rgba(212,175,55,0.5)",
+                color: "#D4AF37",
               }}
             >
               <LayoutDashboard className="h-3.5 w-3.5" />
@@ -153,10 +153,10 @@ export function NavbarClient({ userId, isAdmin, cartCount, siteLogoUrl }: Navbar
             href={userId ? "/account" : "/sign-in"}
             aria-label="Conta"
             className="group hidden md:flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200"
-            style={{ color: "#C8BBA8" }}
+            style={{ color: "#9A9A9A" }}
           >
             <User
-              className="h-5 w-5 transition-all duration-200 group-hover:text-[#C9A227] group-hover:drop-shadow-[0_0_8px_rgba(201,162,39,0.6)]"
+              className="h-5 w-5 transition-all duration-200 group-hover:text-[#D4AF37] group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.6)]"
             />
           </Link>
 

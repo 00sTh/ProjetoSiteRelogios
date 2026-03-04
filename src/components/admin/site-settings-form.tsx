@@ -36,9 +36,9 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
 
   const inputStyle = {
     backgroundColor: "#0F2E1E",
-    border: "1px solid rgba(201,162,39,0.2)",
+    border: "1px solid rgba(212,175,55,0.2)",
     borderRadius: "0.75rem",
-    color: "#F5F0E6",
+    color: "#F5F5F5",
     padding: "0.625rem 1rem",
     width: "100%",
     fontSize: "0.875rem",
@@ -51,9 +51,9 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
   const sectionTitle = (title: string) => (
     <div
       className="pb-3 mb-5 border-b"
-      style={{ borderColor: "rgba(201,162,39,0.15)" }}
+      style={{ borderColor: "rgba(212,175,55,0.15)" }}
     >
-      <h2 className="font-serif text-lg font-semibold" style={{ color: "#C9A227" }}>
+      <h2 className="font-serif text-lg font-semibold" style={{ color: "#D4AF37" }}>
         {title}
       </h2>
     </div>
@@ -85,7 +85,7 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
             style={inputStyle}
             placeholder="https://... (PNG com fundo transparente)"
           />
-          {hint("Se preenchido, substitui o texto 'Althéia' na navbar e no hero. Recomendado: PNG 400×120px.")}
+          {hint("Se preenchido, substitui o texto 'LuxImport' na navbar e no hero. Recomendado: PNG 400×120px.")}
         </div>
       </div>
 
@@ -153,7 +153,7 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
               style={inputStyle}
               placeholder="https://... (PNG com fundo transparente)"
             />
-            {hint("Se vazio, exibe o texto 'Althéia' em Playfair Display. Recomendado: PNG 680×240px.")}
+            {hint("Se vazio, exibe o texto 'LuxImport' em Playfair Display. Recomendado: PNG 680×240px.")}
           </div>
         </div>
       </div>
@@ -335,13 +335,13 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
         </div>
       </div>
 
-      {/* WhyAltheia */}
+      {/* WhyLuxImport */}
       <div>
-        {sectionTitle("Por que Althéia? (Barra de Benefícios)")}
+        {sectionTitle("Por que LuxImport? (Barra de Benefícios)")}
         <div className="space-y-6">
           {([1, 2, 3] as const).map((n) => (
-            <div key={n} className="rounded-xl p-4" style={{ border: "1px solid rgba(201,162,39,0.15)", backgroundColor: "rgba(15,74,55,0.3)" }}>
-              <p className="text-xs font-semibold mb-3" style={{ color: "#C9A227", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+            <div key={n} className="rounded-xl p-4" style={{ border: "1px solid rgba(212,175,55,0.15)", backgroundColor: "rgba(15,74,55,0.3)" }}>
+              <p className="text-xs font-semibold mb-3" style={{ color: "#D4AF37", textTransform: "uppercase", letterSpacing: "0.08em" }}>
                 Benefício {n}
               </p>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -413,7 +413,7 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
               maxLength={70}
               defaultValue={settings.metaTitle ?? ""}
               style={inputStyle}
-              placeholder="Althéia — A Verdade da Beleza"
+              placeholder="LuxImport — Importados de Luxo"
             />
           </div>
           <div>
@@ -492,8 +492,8 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
       <button
         type="submit"
         disabled={isPending}
-        className="px-8 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all duration-200 disabled:opacity-50 hover:shadow-[0_0_20px_rgba(201,162,39,0.3)]"
-        style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
+        className="px-8 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all duration-200 disabled:opacity-50 hover:shadow-[0_0_20px_rgba(212,175,55,0.3)]"
+        style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
       >
         {isPending ? "Salvando..." : "Salvar configurações"}
       </button>

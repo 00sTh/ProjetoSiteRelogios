@@ -34,7 +34,7 @@ export function LuminaHighlight({
   return (
     <section
       className="py-24 px-4 overflow-hidden"
-      style={{ backgroundColor: "#0F4A37" }}
+      style={{ backgroundColor: "#111111" }}
     >
       <div className="container mx-auto max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -50,8 +50,8 @@ export function LuminaHighlight({
               className="relative aspect-square max-w-md mx-auto rounded-3xl overflow-hidden"
               style={{
                 background:
-                  "linear-gradient(135deg, #0A3D2F 0%, #145A43 50%, #0F4A37 100%)",
-                border: "1px solid rgba(201,162,39,0.2)",
+                  "linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 50%, #111111 100%)",
+                border: "1px solid rgba(212,175,55,0.2)",
               }}
             >
               {/* Glow effect */}
@@ -59,7 +59,7 @@ export function LuminaHighlight({
                 className="absolute inset-0"
                 style={{
                   background:
-                    "radial-gradient(circle at 60% 40%, rgba(201,162,39,0.15) 0%, transparent 60%)",
+                    "radial-gradient(circle at 60% 40%, rgba(212,175,55,0.15) 0%, transparent 60%)",
                 }}
               />
 
@@ -79,13 +79,13 @@ export function LuminaHighlight({
                       className="w-24 h-40 mx-auto rounded-2xl mb-4"
                       style={{
                         background:
-                          "linear-gradient(160deg, rgba(201,162,39,0.3) 0%, rgba(201,162,39,0.1) 100%)",
-                        border: "1px solid rgba(201,162,39,0.4)",
+                          "linear-gradient(160deg, rgba(212,175,55,0.3) 0%, rgba(212,175,55,0.1) 100%)",
+                        border: "1px solid rgba(212,175,55,0.4)",
                       }}
                     />
                     <p
                       className="font-serif text-xl italic"
-                      style={{ color: "#C9A227" }}
+                      style={{ color: "#D4AF37" }}
                     >
                       {title}
                     </p>
@@ -98,8 +98,8 @@ export function LuminaHighlight({
                 <div
                   className="absolute top-6 right-6 px-3 py-1.5 rounded-full text-xs font-semibold"
                   style={{
-                    backgroundColor: "#C9A227",
-                    color: "#0A3D2F",
+                    backgroundColor: "#D4AF37",
+                    color: "#0A0A0A",
                   }}
                 >
                   {badgeText}
@@ -111,7 +111,7 @@ export function LuminaHighlight({
             <div
               className="absolute -bottom-8 -left-8 w-48 h-48 rounded-full opacity-10"
               style={{
-                background: "radial-gradient(circle, #C9A227 0%, transparent 70%)",
+                background: "radial-gradient(circle, #D4AF37 0%, transparent 70%)",
               }}
             />
           </motion.div>
@@ -139,20 +139,20 @@ export function LuminaHighlight({
                   <div
                     className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center"
                     style={{
-                      backgroundColor: "rgba(201,162,39,0.1)",
-                      border: "1px solid rgba(201,162,39,0.3)",
+                      backgroundColor: "rgba(212,175,55,0.1)",
+                      border: "1px solid rgba(212,175,55,0.3)",
                     }}
                   >
-                    <Icon className="h-4 w-4" style={{ color: "#C9A227" }} />
+                    <Icon className="h-4 w-4" style={{ color: "#D4AF37" }} />
                   </div>
                   <div>
                     <p
                       className="font-semibold text-sm"
-                      style={{ color: "#F5F0E6" }}
+                      style={{ color: "#F5F5F5" }}
                     >
                       {bl}
                     </p>
-                    <p className="text-sm" style={{ color: "#C8BBA8" }}>
+                    <p className="text-sm" style={{ color: "#9A9A9A" }}>
                       {desc}
                     </p>
                   </div>

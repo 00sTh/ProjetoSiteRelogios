@@ -8,7 +8,7 @@ import { prisma } from "@/lib/prisma";
 import { getServerAuth } from "@/lib/auth";
 import { uploadImage, deleteImage } from "@/lib/blob";
 import { z } from "zod";
-import { Prisma, OrderStatus } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 // ─── Auth guard ─────────────────────────────────────────────────────────────
 
@@ -72,7 +72,7 @@ const siteSettingsSchema = z.object({
   metaDescription: z.string().max(160).optional().or(z.literal("")),
   shippingFreeThreshold: z.coerce.number().min(0),
   whatsappNumber: z.string().max(20).optional().or(z.literal("")),
-  // WhyAltheia
+  // WhyLuxImport
   whyTitle: z.string().max(200).optional().or(z.literal("")),
   whySubtitle: z.string().max(500).optional().or(z.literal("")),
   benefit1Icon: z.string().max(50).optional().or(z.literal("")),
@@ -208,7 +208,7 @@ export async function createProduct(formData: FormData) {
     product = await prisma.product.create({
       data: {
         ...data,
-        images: images,
+        images: JSON.stringify(images),
         ingredients: ingredients || null,
         usage: usage || null,
       },
@@ -256,7 +256,7 @@ export async function updateProduct(id: string, formData: FormData) {
       where: { id },
       data: {
         ...data,
-        images: images,
+        images: JSON.stringify(images),
         ingredients: ingredients || null,
         usage: usage || null,
       },
@@ -352,7 +352,7 @@ export async function updateOrderStatus(orderId: string, status: string) {
 
   await prisma.order.update({
     where: { id: orderId },
-    data: { status: status as OrderStatus },
+    data: { status: status },
   });
 
   revalidatePath("/admin/orders");

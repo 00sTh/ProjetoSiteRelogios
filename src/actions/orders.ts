@@ -3,7 +3,6 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { PaymentMethod } from "@prisma/client";
 import { getServerAuth, getServerUser } from "@/lib/auth";
 import {
   createCreditCardPayment,
@@ -164,7 +163,7 @@ export async function createOrder(
         data: {
           status: "PENDING",
           price: total,
-          paymentMethod: paymentMethod as PaymentMethod,
+          paymentMethod: paymentMethod,
           customerName: d.name,
           customerEmail: d.email,
           customerPhone: d.phone || null,
@@ -247,7 +246,7 @@ export async function createOrder(
       data: {
         status: "PENDING",
         price: total,
-        paymentMethod: paymentMethod as PaymentMethod,
+        paymentMethod: paymentMethod,
         customerName: d.name,
         customerEmail: d.email,
         customerPhone: d.phone || null,

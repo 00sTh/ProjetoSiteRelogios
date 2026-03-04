@@ -12,13 +12,13 @@ const goldButtonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-[#C9A227] text-[#0A3D2F] hover:bg-[#E8C84A] hover:shadow-[0_0_20px_rgba(201,162,39,0.4)] focus-visible:ring-[#C9A227]",
+          "bg-[#D4AF37] text-[#0A0A0A] hover:bg-[#F0D060] hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] focus-visible:ring-[#D4AF37]",
         outline:
-          "border border-[#C9A227] text-[#C9A227] hover:bg-[rgba(201,162,39,0.1)] hover:shadow-[0_0_15px_rgba(201,162,39,0.25)] focus-visible:ring-[#C9A227]",
+          "border border-[#D4AF37] text-[#D4AF37] hover:bg-[rgba(212,175,55,0.1)] hover:shadow-[0_0_15px_rgba(212,175,55,0.25)] focus-visible:ring-[#D4AF37]",
         ghost:
-          "text-[#F5F0E6]/70 hover:text-[#C9A227] hover:bg-[rgba(201,162,39,0.08)] focus-visible:ring-[#C9A227]",
+          "text-[#F5F5F5]/70 hover:text-[#D4AF37] hover:bg-[rgba(212,175,55,0.08)] focus-visible:ring-[#D4AF37]",
         emerald:
-          "bg-[#145A43] text-[#F5F0E6] border border-[rgba(201,162,39,0.3)] hover:border-[rgba(201,162,39,0.6)] hover:bg-[#1E7A5A] focus-visible:ring-[#C9A227]",
+          "bg-[#1A1A1A] text-[#F5F5F5] border border-[rgba(212,175,55,0.3)] hover:border-[rgba(212,175,55,0.6)] hover:bg-[#222222] focus-visible:ring-[#D4AF37]",
       },
       size: {
         sm: "h-8 px-4 text-xs",

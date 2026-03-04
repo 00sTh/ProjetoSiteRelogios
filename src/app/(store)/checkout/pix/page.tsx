@@ -22,7 +22,7 @@ export default async function CheckoutPixPage({ searchParams }: Props) {
   return (
     <div
       className="min-h-screen py-12 px-4 flex items-start justify-center"
-      style={{ backgroundColor: "#0A3D2F" }}
+      style={{ backgroundColor: "#0A0A0A" }}
     >
       <PixPolling orderId={orderId} paymentId={paymentId} pixQrCode={qr} />
     </div>

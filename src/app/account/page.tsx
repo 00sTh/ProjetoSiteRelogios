@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 const statusConfig: Record<string, { label: string; color: string; icon: React.ElementType }> = {
-  PENDING: { label: "Aguardando pagamento", color: "#C9A227", icon: Clock },
+  PENDING: { label: "Aguardando pagamento", color: "#D4AF37", icon: Clock },
   PAID: { label: "Pago", color: "#4ADE80", icon: CheckCircle },
   SHIPPED: { label: "Enviado", color: "#60A5FA", icon: Truck },
   DELIVERED: { label: "Entregue", color: "#4ADE80", icon: CheckCircle },
@@ -53,16 +53,16 @@ export default async function AccountPage() {
   const firstName = clerkUser?.firstName ?? "Cliente";
 
   return (
-    <div className="min-h-screen py-10 px-4" style={{ backgroundColor: "#0A3D2F" }}>
+    <div className="min-h-screen py-10 px-4" style={{ backgroundColor: "#0A0A0A" }}>
       <div className="container mx-auto max-w-3xl">
         {/* Header */}
         <div
           className="rounded-2xl p-6 mb-8 flex items-center gap-4"
-          style={{ backgroundColor: "#0F4A37", border: "1px solid rgba(201,162,39,0.2)" }}
+          style={{ backgroundColor: "#111111", border: "1px solid rgba(212,175,55,0.2)" }}
         >
           <div
             className="h-14 w-14 rounded-full flex items-center justify-center shrink-0"
-            style={{ backgroundColor: "rgba(201,162,39,0.12)", border: "1px solid rgba(201,162,39,0.25)" }}
+            style={{ backgroundColor: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.25)" }}
           >
             {clerkUser?.imageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -72,11 +72,11 @@ export default async function AccountPage() {
                 className="h-14 w-14 rounded-full object-cover"
               />
             ) : (
-              <User className="h-7 w-7" style={{ color: "#C9A227" }} />
+              <User className="h-7 w-7" style={{ color: "#D4AF37" }} />
             )}
           </div>
           <div>
-            <h1 className="font-serif text-2xl font-bold" style={{ color: "#F5F0E6" }}>
+            <h1 className="font-serif text-2xl font-bold" style={{ color: "#F5F5F5" }}>
               Olá, {firstName}!
             </h1>
             <p className="text-sm" style={{ color: "rgba(200,187,168,0.6)" }}>
@@ -88,13 +88,13 @@ export default async function AccountPage() {
         {/* Orders */}
         <div>
           <div className="flex items-center gap-2 mb-6">
-            <Package className="h-5 w-5" style={{ color: "#C9A227" }} />
-            <h2 className="font-serif text-xl font-semibold" style={{ color: "#F5F0E6" }}>
+            <Package className="h-5 w-5" style={{ color: "#D4AF37" }} />
+            <h2 className="font-serif text-xl font-semibold" style={{ color: "#F5F5F5" }}>
               Meus Pedidos
             </h2>
             <span
               className="ml-1 px-2 py-0.5 rounded-full text-xs"
-              style={{ backgroundColor: "rgba(201,162,39,0.12)", color: "#C9A227" }}
+              style={{ backgroundColor: "rgba(212,175,55,0.12)", color: "#D4AF37" }}
             >
               {orders.length}
             </span>
@@ -103,16 +103,16 @@ export default async function AccountPage() {
           {orders.length === 0 ? (
             <div
               className="rounded-2xl p-10 text-center"
-              style={{ backgroundColor: "#0F4A37", border: "1px solid rgba(201,162,39,0.15)" }}
+              style={{ backgroundColor: "#111111", border: "1px solid rgba(212,175,55,0.15)" }}
             >
-              <Package className="h-10 w-10 mx-auto mb-3" style={{ color: "rgba(201,162,39,0.3)" }} />
-              <p className="font-medium" style={{ color: "#C8BBA8" }}>
+              <Package className="h-10 w-10 mx-auto mb-3" style={{ color: "rgba(212,175,55,0.3)" }} />
+              <p className="font-medium" style={{ color: "#9A9A9A" }}>
                 Você ainda não fez nenhum pedido.
               </p>
               <Link
                 href="/products"
                 className="inline-block mt-4 px-6 py-2.5 rounded-full text-sm font-semibold"
-                style={{ backgroundColor: "#C9A227", color: "#0A3D2F" }}
+                style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
               >
                 Explorar produtos
               </Link>
@@ -136,7 +136,7 @@ export default async function AccountPage() {
                     .map((i) => `• ${i.product.name} × ${i.quantity}`)
                     .join("\n");
                   const msg = encodeURIComponent(
-                    `Olá! Quero continuar meu pedido na Althéia.\n\n` +
+                    `Olá! Quero continuar meu pedido na LuxImport.\n\n` +
                     `📦 Pedido: #${order.id.slice(0, 8).toUpperCase()}\n\n` +
                     `Itens:\n${itemsList}\n\n` +
                     `Total: ${formatPrice(orderTotal)}\n\n` +
@@ -150,8 +150,8 @@ export default async function AccountPage() {
                     key={order.id}
                     className="rounded-2xl p-5 space-y-4"
                     style={{
-                      backgroundColor: "#0F4A37",
-                      border: "1px solid rgba(201,162,39,0.15)",
+                      backgroundColor: "#111111",
+                      border: "1px solid rgba(212,175,55,0.15)",
                     }}
                   >
                     {/* Top row */}
@@ -183,10 +183,10 @@ export default async function AccountPage() {
                     <div className="space-y-2">
                       {order.items.map((item) => (
                         <div key={item.id} className="flex justify-between text-sm">
-                          <span style={{ color: "#C8BBA8" }}>
+                          <span style={{ color: "#9A9A9A" }}>
                             {item.product.name} × {item.quantity}
                           </span>
-                          <span style={{ color: "#F5F0E6" }}>
+                          <span style={{ color: "#F5F5F5" }}>
                             {formatPrice(Number(item.price) * item.quantity)}
                           </span>
                         </div>
@@ -196,11 +196,11 @@ export default async function AccountPage() {
                     {/* Total + CTA */}
                     <div
                       className="flex items-center justify-between pt-3"
-                      style={{ borderTop: "1px solid rgba(201,162,39,0.1)" }}
+                      style={{ borderTop: "1px solid rgba(212,175,55,0.1)" }}
                     >
                       <div>
                         <p className="text-xs" style={{ color: "rgba(200,187,168,0.5)" }}>Total</p>
-                        <p className="font-bold" style={{ color: "#C9A227" }}>
+                        <p className="font-bold" style={{ color: "#D4AF37" }}>
                           {formatPrice(orderTotal)}
                         </p>
                       </div>
