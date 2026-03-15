@@ -7,7 +7,7 @@ import { getSiteSettings } from "@/actions/admin";
 import { formatPrice } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Pedido confirmado!",
+  title: "Order Confirmed!",
 };
 
 interface Props {
@@ -48,13 +48,13 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
     .join("\n");
 
   const whatsappMessage = encodeURIComponent(
-    `Olá! Fiz um pedido na LuxImport.\n\n` +
-    `📦 Pedido: #${order.id.slice(0, 8).toUpperCase()}\n\n` +
-    `Itens:\n${itemsList}\n\n` +
+    `Hello! I placed an order at LuxImport.\n\n` +
+    `📦 Order: #${order.id.slice(0, 8).toUpperCase()}\n\n` +
+    `Items:\n${itemsList}\n\n` +
     `Total: ${formatPrice(total)}\n\n` +
-    `Endereço de entrega:\n${address}\n\n` +
-    (order.notes ? `Observações: ${order.notes}\n\n` : "") +
-    `Quero combinar o pagamento e a entrega. Obrigado!`
+    `Shipping address:\n${address}\n\n` +
+    (order.notes ? `Notes: ${order.notes}\n\n` : "") +
+    `I'd like to arrange payment and delivery. Thank you!`
   );
 
   const whatsappUrl = `https://wa.me/${settings.whatsappNumber}?text=${whatsappMessage}`;
@@ -70,46 +70,46 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
           <div
             className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6"
             style={{
-              backgroundColor: isPaid ? "rgba(74,222,128,0.1)" : "rgba(212,175,55,0.1)",
-              border: `1px solid ${isPaid ? "rgba(74,222,128,0.3)" : "rgba(212,175,55,0.3)"}`,
+              backgroundColor: isPaid ? "rgba(74,222,128,0.1)" : "rgba(201,201,201,0.1)",
+              border: `1px solid ${isPaid ? "rgba(74,222,128,0.3)" : "rgba(201,201,201,0.3)"}`,
             }}
           >
             <CheckCircle
               className="h-10 w-10"
-              style={{ color: isPaid ? "#4ADE80" : "#D4AF37" }}
+              style={{ color: isPaid ? "#4ADE80" : "#C9C9C9" }}
             />
           </div>
 
           <h1 className="font-serif text-3xl md:text-4xl font-bold mb-3" style={{ color: "#F5F5F5" }}>
-            {isPaid ? "Pagamento confirmado!" : "Pedido registrado!"}
+            {isPaid ? "Payment Confirmed!" : "Order Registered!"}
           </h1>
           <p className="text-base" style={{ color: "#9A9A9A" }}>
-            {isPaid && isCard && "Seu cartão foi aprovado. Obrigada pela compra!"}
-            {isPaid && isPix && "Pagamento PIX confirmado. Obrigada pela compra!"}
-            {isWhatsApp && "Seu pedido foi criado. Finalize o pagamento pelo WhatsApp."}
+            {isPaid && isCard && "Your card was approved. Thank you for your purchase!"}
+            {isPaid && isPix && "PIX payment confirmed. Thank you for your purchase!"}
+            {isWhatsApp && "Your order has been created. Complete payment via WhatsApp."}
           </p>
           <div
             className="inline-flex items-center gap-2 mt-3 px-3 py-1.5 rounded-full text-xs"
             style={{
-              backgroundColor: "rgba(212,175,55,0.08)",
-              border: "1px solid rgba(212,175,55,0.2)",
+              backgroundColor: "rgba(201,201,201,0.08)",
+              border: "1px solid rgba(201,201,201,0.2)",
               color: "rgba(200,187,168,0.6)",
             }}
           >
             {isPaid ? <CreditCard className="h-3 w-3" /> : isWhatsApp ? <MessageCircle className="h-3 w-3" /> : <QrCode className="h-3 w-3" />}
-            Pedido #{order.id.slice(0, 8).toUpperCase()}
+            Order #{order.id.slice(0, 8).toUpperCase()}
           </div>
         </div>
 
         {/* Order summary */}
         <div
           className="rounded-2xl p-6 mb-6 space-y-4"
-          style={{ backgroundColor: "#111111", border: "1px solid rgba(212,175,55,0.2)" }}
+          style={{ backgroundColor: "#111111", border: "1px solid rgba(201,201,201,0.2)" }}
         >
           <div className="flex items-center gap-2">
-            <Package className="h-4 w-4" style={{ color: "#D4AF37" }} />
-            <h2 className="font-semibold text-sm uppercase tracking-widest" style={{ color: "#D4AF37" }}>
-              Resumo do Pedido
+            <Package className="h-4 w-4" style={{ color: "#C9C9C9" }} />
+            <h2 className="font-semibold text-sm uppercase tracking-widest" style={{ color: "#C9C9C9" }}>
+              Order Summary
             </h2>
           </div>
           {order.items.map((item) => (
@@ -122,13 +122,13 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
           ))}
           <div
             className="pt-3 flex justify-between font-bold"
-            style={{ borderTop: "1px solid rgba(212,175,55,0.15)" }}
+            style={{ borderTop: "1px solid rgba(201,201,201,0.15)" }}
           >
             <span style={{ color: "#F5F5F5" }}>Total</span>
-            <span style={{ color: "#D4AF37" }}>{formatPrice(total)}</span>
+            <span style={{ color: "#C9C9C9" }}>{formatPrice(total)}</span>
           </div>
           {address && (
-            <p className="text-xs pt-2" style={{ color: "rgba(200,187,168,0.6)", borderTop: "1px solid rgba(212,175,55,0.08)" }}>
+            <p className="text-xs pt-2" style={{ color: "rgba(200,187,168,0.6)", borderTop: "1px solid rgba(201,201,201,0.08)" }}>
               📍 {address}
             </p>
           )}
@@ -145,10 +145,10 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
               style={{ backgroundColor: "#25D366", color: "#fff" }}
             >
               <MessageCircle className="h-5 w-5" />
-              Finalizar pelo WhatsApp
+              Complete via WhatsApp
             </a>
             <p className="text-center text-xs mb-8" style={{ color: "rgba(200,187,168,0.5)" }}>
-              Clique para enviar os detalhes do pedido e combinar o pagamento com nossa equipe.
+              Click to send order details and arrange payment with our team.
             </p>
           </>
         )}
@@ -163,7 +163,7 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
           >
             <CheckCircle className="h-5 w-5 shrink-0" style={{ color: "#4ADE80" }} />
             <p className="text-sm" style={{ color: "#9A9A9A" }}>
-              Você receberá atualizações sobre o envio no e-mail{" "}
+              You will receive shipping updates at{" "}
               <strong style={{ color: "#F5F5F5" }}>{order.customerEmail}</strong>.
             </p>
           </div>
@@ -173,16 +173,16 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
           <Link
             href="/account"
             className="flex-1 flex items-center justify-center py-3 rounded-full text-sm font-medium"
-            style={{ border: "1px solid rgba(212,175,55,0.3)", color: "#D4AF37" }}
+            style={{ border: "1px solid rgba(201,201,201,0.3)", color: "#C9C9C9" }}
           >
-            Ver meus pedidos
+            View My Orders
           </Link>
           <Link
             href="/products"
             className="flex-1 flex items-center justify-center py-3 rounded-full text-sm font-medium"
             style={{ border: "1px solid rgba(200,187,168,0.2)", color: "rgba(200,187,168,0.7)" }}
           >
-            Continuar comprando
+            Continue Shopping
           </Link>
         </div>
       </div>

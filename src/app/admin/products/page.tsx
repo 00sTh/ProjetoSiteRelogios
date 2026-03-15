@@ -43,8 +43,8 @@ export default async function AdminProductsPage({
         </div>
         <Link
           href="/admin/products/new"
-          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 hover:shadow-[0_0_20px_rgba(212,175,55,0.3)]"
-          style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 hover:shadow-[0_0_20px_rgba(201,201,201,0.3)]"
+          style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
         >
           <Plus className="h-4 w-4" />
           Novo produto
@@ -53,11 +53,11 @@ export default async function AdminProductsPage({
 
       <div
         className="rounded-2xl overflow-hidden"
-        style={{ border: "1px solid rgba(212,175,55,0.15)" }}
+        style={{ border: "1px solid rgba(201,201,201,0.15)" }}
       >
         <table className="w-full text-sm">
           <thead>
-            <tr style={{ backgroundColor: "#0F2E1E", borderBottom: "1px solid rgba(212,175,55,0.1)" }}>
+            <tr style={{ backgroundColor: "#1A1A1A", borderBottom: "1px solid rgba(201,201,201,0.1)" }}>
               {["Produto", "Categoria", "Preço", "Estoque", "Status", "Ações"].map((h) => (
                 <th
                   key={h}
@@ -69,7 +69,7 @@ export default async function AdminProductsPage({
               ))}
             </tr>
           </thead>
-          <tbody style={{ backgroundColor: "#0A2419" }}>
+          <tbody style={{ backgroundColor: "#141414" }}>
             {products.length === 0 ? (
               <tr>
                 <td
@@ -78,7 +78,7 @@ export default async function AdminProductsPage({
                   style={{ color: "rgba(200,187,168,0.4)" }}
                 >
                   Nenhum produto cadastrado.{" "}
-                  <Link href="/admin/products/new" style={{ color: "#D4AF37" }}>
+                  <Link href="/admin/products/new" style={{ color: "#C9C9C9" }}>
                     Criar primeiro produto
                   </Link>
                 </td>
@@ -90,7 +90,7 @@ export default async function AdminProductsPage({
                 return (
                   <tr
                     key={product.id}
-                    style={{ borderBottom: "1px solid rgba(212,175,55,0.06)" }}
+                    style={{ borderBottom: "1px solid rgba(201,201,201,0.06)" }}
                   >
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
@@ -122,7 +122,7 @@ export default async function AdminProductsPage({
                     <td className="px-5 py-4 text-sm" style={{ color: "#9A9A9A" }}>
                       {product.category.name}
                     </td>
-                    <td className="px-5 py-4 font-semibold" style={{ color: "#D4AF37" }}>
+                    <td className="px-5 py-4 font-semibold" style={{ color: "#C9C9C9" }}>
                       {formatPrice(Number(product.price))}
                     </td>
                     <td className="px-5 py-4 text-sm" style={{ color: product.stock === 0 ? "#F87171" : "#9A9A9A" }}>
@@ -145,7 +145,7 @@ export default async function AdminProductsPage({
                       <div className="flex items-center gap-3">
                         <Link
                           href={`/admin/products/${product.id}/edit`}
-                          className="flex items-center gap-1.5 text-xs font-medium transition-colors hover:text-[#D4AF37]"
+                          className="flex items-center gap-1.5 text-xs font-medium transition-colors hover:text-[#C9C9C9]"
                           style={{ color: "rgba(200,187,168,0.6)" }}
                         >
                           <Pencil className="h-3 w-3" />
@@ -170,8 +170,8 @@ export default async function AdminProductsPage({
           <div
             className="flex items-center justify-between px-5 py-4"
             style={{
-              borderTop: "1px solid rgba(212,175,55,0.1)",
-              backgroundColor: "#0F2E1E",
+              borderTop: "1px solid rgba(201,201,201,0.1)",
+              backgroundColor: "#1A1A1A",
             }}
           >
             <p className="text-xs" style={{ color: "rgba(200,187,168,0.5)" }}>
@@ -181,8 +181,8 @@ export default async function AdminProductsPage({
               {page > 1 ? (
                 <Link
                   href={`/admin/products?page=${page - 1}`}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors hover:text-[#D4AF37]"
-                  style={{ color: "#9A9A9A", border: "1px solid rgba(212,175,55,0.2)" }}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors hover:text-[#C9C9C9]"
+                  style={{ color: "#9A9A9A", border: "1px solid rgba(201,201,201,0.2)" }}
                 >
                   <ChevronLeft className="h-3 w-3" />
                   Anterior
@@ -190,7 +190,7 @@ export default async function AdminProductsPage({
               ) : (
                 <span
                   className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium opacity-30 cursor-not-allowed"
-                  style={{ color: "#9A9A9A", border: "1px solid rgba(212,175,55,0.1)" }}
+                  style={{ color: "#9A9A9A", border: "1px solid rgba(201,201,201,0.1)" }}
                 >
                   <ChevronLeft className="h-3 w-3" />
                   Anterior
@@ -199,8 +199,8 @@ export default async function AdminProductsPage({
               {page < pages ? (
                 <Link
                   href={`/admin/products?page=${page + 1}`}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors hover:text-[#D4AF37]"
-                  style={{ color: "#9A9A9A", border: "1px solid rgba(212,175,55,0.2)" }}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors hover:text-[#C9C9C9]"
+                  style={{ color: "#9A9A9A", border: "1px solid rgba(201,201,201,0.2)" }}
                 >
                   Próxima
                   <ChevronRight className="h-3 w-3" />
@@ -208,7 +208,7 @@ export default async function AdminProductsPage({
               ) : (
                 <span
                   className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium opacity-30 cursor-not-allowed"
-                  style={{ color: "#9A9A9A", border: "1px solid rgba(212,175,55,0.1)" }}
+                  style={{ color: "#9A9A9A", border: "1px solid rgba(201,201,201,0.1)" }}
                 >
                   Próxima
                   <ChevronRight className="h-3 w-3" />

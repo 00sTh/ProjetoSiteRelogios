@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { PixPolling } from "@/components/checkout/pix-polling";
 
 export const metadata: Metadata = {
-  title: "Pagamento PIX",
+  title: "PIX Payment",
 };
 
 interface Props {

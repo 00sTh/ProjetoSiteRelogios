@@ -3,15 +3,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, Droplets, Leaf, Star } from "lucide-react";
+import { ArrowRight, Shield, Globe, Award } from "lucide-react";
 import { GoldButton } from "@/components/ui/gold-button";
 import { SectionTitle } from "@/components/ui/section-title";
 import { slideInLeft, slideInRight } from "@/lib/animations";
 
 const benefits = [
-  { icon: Droplets, label: "Hidratação Profunda", desc: "72h de hidratação comprovada" },
-  { icon: Leaf, label: "100% Natural", desc: "Ingredientes de origem vegetal" },
-  { icon: Star, label: "Premiado", desc: "Melhor sérum 2025 – Beauty Awards" },
+  { icon: Shield, label: "Authentic Guaranteed", desc: "Every piece verified for authenticity" },
+  { icon: Globe, label: "Direct Import", desc: "Sourced directly from global makers" },
+  { icon: Award, label: "Premium Selection", desc: "Curated by luxury goods experts" },
 ];
 
 interface LuminaHighlightProps {
@@ -24,11 +24,11 @@ interface LuminaHighlightProps {
 }
 
 export function LuminaHighlight({
-  label = "Produto Estrela",
-  title = "Descubra o Lumina Sérum",
-  subtitle = "O sérum que redefiniu o padrão de luminosidade na skincare brasileira. Formulado com Vitamina C estabilizada e extrato de algas douradas.",
+  label = "Featured Collection",
+  title = "Discover Our Selection",
+  subtitle = "Each piece in our collection is hand-selected for its craftsmanship, heritage, and timeless design. We import directly, ensuring authenticity and the finest quality.",
   imageUrl,
-  badgeText = "Novo",
+  badgeText = "New",
   productLink = "/products",
 }: LuminaHighlightProps) {
   return (
@@ -51,7 +51,7 @@ export function LuminaHighlight({
               style={{
                 background:
                   "linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 50%, #111111 100%)",
-                border: "1px solid rgba(212,175,55,0.2)",
+                border: "1px solid rgba(201,201,201,0.2)",
               }}
             >
               {/* Glow effect */}
@@ -59,7 +59,7 @@ export function LuminaHighlight({
                 className="absolute inset-0"
                 style={{
                   background:
-                    "radial-gradient(circle at 60% 40%, rgba(212,175,55,0.15) 0%, transparent 60%)",
+                    "radial-gradient(circle at 60% 40%, rgba(201,201,201,0.15) 0%, transparent 60%)",
                 }}
               />
 
@@ -79,13 +79,13 @@ export function LuminaHighlight({
                       className="w-24 h-40 mx-auto rounded-2xl mb-4"
                       style={{
                         background:
-                          "linear-gradient(160deg, rgba(212,175,55,0.3) 0%, rgba(212,175,55,0.1) 100%)",
-                        border: "1px solid rgba(212,175,55,0.4)",
+                          "linear-gradient(160deg, rgba(201,201,201,0.3) 0%, rgba(201,201,201,0.1) 100%)",
+                        border: "1px solid rgba(201,201,201,0.4)",
                       }}
                     />
                     <p
                       className="font-serif text-xl italic"
-                      style={{ color: "#D4AF37" }}
+                      style={{ color: "#C9C9C9" }}
                     >
                       {title}
                     </p>
@@ -98,7 +98,7 @@ export function LuminaHighlight({
                 <div
                   className="absolute top-6 right-6 px-3 py-1.5 rounded-full text-xs font-semibold"
                   style={{
-                    backgroundColor: "#D4AF37",
+                    backgroundColor: "#C9C9C9",
                     color: "#0A0A0A",
                   }}
                 >
@@ -111,7 +111,7 @@ export function LuminaHighlight({
             <div
               className="absolute -bottom-8 -left-8 w-48 h-48 rounded-full opacity-10"
               style={{
-                background: "radial-gradient(circle, #D4AF37 0%, transparent 70%)",
+                background: "radial-gradient(circle, #C9C9C9 0%, transparent 70%)",
               }}
             />
           </motion.div>
@@ -139,11 +139,11 @@ export function LuminaHighlight({
                   <div
                     className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center"
                     style={{
-                      backgroundColor: "rgba(212,175,55,0.1)",
-                      border: "1px solid rgba(212,175,55,0.3)",
+                      backgroundColor: "rgba(201,201,201,0.1)",
+                      border: "1px solid rgba(201,201,201,0.3)",
                     }}
                   >
-                    <Icon className="h-4 w-4" style={{ color: "#D4AF37" }} />
+                    <Icon className="h-4 w-4" style={{ color: "#C9C9C9" }} />
                   </div>
                   <div>
                     <p
@@ -162,7 +162,7 @@ export function LuminaHighlight({
 
             <GoldButton variant="primary" size="lg" asChild>
               <Link href={productLink}>
-                Conhecer o produto <ArrowRight className="h-4 w-4 ml-1" />
+                Explore Collection <ArrowRight className="h-4 w-4 ml-1" />
               </Link>
             </GoldButton>
           </motion.div>

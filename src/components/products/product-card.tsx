@@ -16,7 +16,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const inStock = product.stock > 0;
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl transition-all duration-300 border border-transparent hover:border-[rgba(212,175,55,0.4)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] bg-[#111111]">
+    <div className="group relative overflow-hidden rounded-2xl transition-all duration-300 border border-transparent hover:border-[rgba(201,201,201,0.4)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] bg-[#111111]">
       {/* Image */}
       <Link href={`/products/${product.slug}`} className="block overflow-hidden">
         <div className="relative aspect-square bg-[#1A1A1A]">
@@ -38,9 +38,9 @@ export function ProductCard({ product }: ProductCardProps) {
           >
             <span
               className="flex items-center gap-1.5 text-[10px] font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full"
-              style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
+              style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
             >
-              Ver produto <ArrowRight className="h-3 w-3" />
+              View Product <ArrowRight className="h-3 w-3" />
             </span>
           </div>
 
@@ -54,9 +54,9 @@ export function ProductCard({ product }: ProductCardProps) {
             {product.featured && (
               <span
                 className="text-[10px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full"
-                style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
+                style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
               >
-                Destaque
+                Featured
               </span>
             )}
             {!inStock && (
@@ -64,7 +64,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 className="text-[10px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full"
                 style={{ backgroundColor: "rgba(224,82,82,0.9)", color: "#F5F5F5" }}
               >
-                Esgotado
+                Sold Out
               </span>
             )}
           </div>
@@ -75,25 +75,25 @@ export function ProductCard({ product }: ProductCardProps) {
       <div className="p-4">
         <p
           className="label-luxury mb-1.5"
-          style={{ color: "#D4AF37", fontSize: "0.65rem" }}
+          style={{ color: "#C9C9C9", fontSize: "0.65rem" }}
         >
           {product.category.name}
         </p>
         <Link href={`/products/${product.slug}`}>
           <h3
-            className="font-serif font-semibold text-lg leading-snug line-clamp-2 mb-3 transition-colors duration-200 group-hover:text-[#D4AF37]"
+            className="font-serif font-semibold text-lg leading-snug line-clamp-2 mb-3 transition-colors duration-200 group-hover:text-[#C9C9C9]"
             style={{ color: "#F5F5F5" }}
           >
             {product.name}
           </h3>
         </Link>
         <div className="flex items-center justify-between">
-          <span className="font-medium text-base" style={{ color: "#D4AF37" }}>
+          <span className="font-medium text-base" style={{ color: "#C9C9C9" }}>
             {formatPrice(Number(product.price))}
           </span>
           {inStock && (
             <span className="text-xs" style={{ color: "rgba(200,187,168,0.6)" }}>
-              {product.stock} em estoque
+              {product.stock} in stock
             </span>
           )}
         </div>

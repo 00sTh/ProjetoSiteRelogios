@@ -79,22 +79,22 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <div className="container mx-auto max-w-7xl">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 mb-8 text-xs" style={{ color: "#9A9A9A" }}>
-          <Link href="/" className="hover:text-[#D4AF37] transition-colors">
-            Início
+          <Link href="/" className="hover:text-[#C9C9C9] transition-colors">
+            Home
           </Link>
           <span style={{ color: "rgba(200,187,168,0.4)" }}>/</span>
-          <Link href="/products" className="hover:text-[#D4AF37] transition-colors">
-            Produtos
+          <Link href="/products" className="hover:text-[#C9C9C9] transition-colors">
+            Products
           </Link>
           <span style={{ color: "rgba(200,187,168,0.4)" }}>/</span>
           <Link
             href={`/products?category=${product.category.slug}`}
-            className="hover:text-[#D4AF37] transition-colors"
+            className="hover:text-[#C9C9C9] transition-colors"
           >
             {product.category.name}
           </Link>
           <span style={{ color: "rgba(200,187,168,0.4)" }}>/</span>
-          <span style={{ color: "#D4AF37" }}>{product.name}</span>
+          <span style={{ color: "#C9C9C9" }}>{product.name}</span>
         </nav>
 
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
@@ -104,7 +104,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               className="relative aspect-square overflow-hidden rounded-3xl"
               style={{
                 backgroundColor: "#111111",
-                border: "1px solid rgba(212,175,55,0.2)",
+                border: "1px solid rgba(201,201,201,0.2)",
               }}
             >
               <ProductImage
@@ -119,7 +119,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <div
                 className="absolute top-4 right-4 w-8 h-8 rounded-full"
                 style={{
-                  background: "radial-gradient(circle, rgba(212,175,55,0.3) 0%, transparent 70%)",
+                  background: "radial-gradient(circle, rgba(201,201,201,0.3) 0%, transparent 70%)",
                 }}
               />
             </div>
@@ -129,13 +129,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 {images.map((img, idx) => (
                   <div
                     key={idx}
-                    className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl cursor-pointer transition-all duration-200 hover:shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+                    className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl cursor-pointer transition-all duration-200 hover:shadow-[0_0_15px_rgba(201,201,201,0.3)]"
                     style={{
                       backgroundColor: "#111111",
                       border:
                         idx === 0
-                          ? "2px solid #D4AF37"
-                          : "1px solid rgba(212,175,55,0.2)",
+                          ? "2px solid #C9C9C9"
+                          : "1px solid rgba(201,201,201,0.2)",
                     }}
                   >
                     <ProductImage
@@ -153,7 +153,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           {/* Product Info */}
           <div className="flex flex-col gap-6">
             {/* Category */}
-            <p className="label-luxury" style={{ color: "#D4AF37" }}>
+            <p className="label-luxury" style={{ color: "#C9C9C9" }}>
               {product.category.name}
             </p>
 
@@ -168,16 +168,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <div className="flex items-center gap-3 flex-wrap">
                 <span
                   className="font-serif text-4xl font-bold"
-                  style={{ color: "#D4AF37" }}
+                  style={{ color: "#C9C9C9" }}
                 >
                   {formatPrice(Number(product.price))}
                 </span>
                 {product.featured && (
                   <span
                     className="text-xs font-semibold tracking-widest uppercase px-3 py-1.5 rounded-full"
-                    style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
+                    style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
                   >
-                    Destaque
+                    Featured
                   </span>
                 )}
                 {!inStock && (
@@ -189,7 +189,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       border: "1px solid rgba(224,82,82,0.3)",
                     }}
                   >
-                    Esgotado
+                    Out of Stock
                   </span>
                 )}
               </div>
@@ -199,7 +199,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div
               className="h-px"
               style={{
-                background: "linear-gradient(to right, rgba(212,175,55,0.3), transparent)",
+                background: "linear-gradient(to right, rgba(201,201,201,0.3), transparent)",
               }}
             />
 
@@ -211,8 +211,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {/* Stock */}
             {inStock && (
               <p className="text-sm" style={{ color: "rgba(200,187,168,0.6)" }}>
-                {product.stock} unidade{product.stock !== 1 ? "s" : ""} disponíve
-                {product.stock !== 1 ? "is" : "l"}
+                {product.stock} {product.stock !== 1 ? "units" : "unit"} in stock
               </p>
             )}
 
@@ -233,17 +232,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div
               className="rounded-2xl p-5 space-y-3"
               style={{
-                backgroundColor: "rgba(15,74,55,0.5)",
-                border: "1px solid rgba(212,175,55,0.15)",
+                backgroundColor: "rgba(20,20,20,0.5)",
+                border: "1px solid rgba(201,201,201,0.15)",
               }}
             >
               {[
-                { icon: Truck, text: `Frete grátis acima de ${shippingThreshold}` },
-                { icon: RefreshCw, text: "Troca e devolução em até 30 dias" },
-                { icon: ShieldCheck, text: "Pagamento 100% seguro" },
+                { icon: Truck, text: "Worldwide Shipping" },
+                { icon: RefreshCw, text: "30-Day Returns" },
+                { icon: ShieldCheck, text: "Secure Checkout" },
               ].map(({ icon: Icon, text }) => (
                 <div key={text} className="flex items-center gap-3">
-                  <Icon className="h-4 w-4 shrink-0" style={{ color: "#D4AF37" }} />
+                  <Icon className="h-4 w-4 shrink-0" style={{ color: "#C9C9C9" }} />
                   <span className="text-sm" style={{ color: "#9A9A9A" }}>
                     {text}
                   </span>
@@ -263,14 +262,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {relatedProducts.length > 0 && (
           <section className="mt-20">
             <div className="mb-8">
-              <p className="label-luxury mb-2" style={{ color: "#D4AF37" }}>
-                Da mesma coleção
+              <p className="label-luxury mb-2" style={{ color: "#C9C9C9" }}>
+                From the same collection
               </p>
               <h2
                 className="font-serif text-2xl font-bold"
                 style={{ color: "#F5F5F5" }}
               >
-                Você também pode gostar
+                You May Also Like
               </h2>
             </div>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

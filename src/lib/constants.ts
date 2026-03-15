@@ -1,19 +1,19 @@
 export const APP_NAME = "LuxImport";
-export const APP_TAGLINE = "Importados de Luxo";
+export const APP_TAGLINE = "Timepieces & Eyewear of Distinction";
 export const APP_DESCRIPTION =
-  "Os melhores produtos importados com curadoria rigorosa, autenticidade garantida e entrega em todo o Brasil.";
+  "The finest timepieces and luxury eyewear, curated with precision, authenticated with pride.";
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
-/** Número de produtos por página na listagem */
+/** Number of products per page in the listing */
 export const PRODUCTS_PER_PAGE = 12;
 
-/** Mapeamento visual dos status de pedido */
+/** Visual mapping of order statuses */
 export const ORDER_STATUS_LABEL: Record<string, string> = {
-  PENDING: "Aguardando pagamento",
-  PAID: "Pago",
-  SHIPPED: "Enviado",
-  DELIVERED: "Entregue",
-  CANCELLED: "Cancelado",
+  PENDING: "Awaiting Payment",
+  PAID: "Paid",
+  SHIPPED: "Shipped",
+  DELIVERED: "Delivered",
+  CANCELLED: "Cancelled",
 };
 
 export const ORDER_STATUS_COLOR: Record<string, string> = {

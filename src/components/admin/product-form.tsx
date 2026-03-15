@@ -84,8 +84,8 @@ export function ProductForm({ product, categories }: ProductFormProps) {
   };
 
   const inputStyle = {
-    backgroundColor: "#0F2E1E",
-    border: "1px solid rgba(212,175,55,0.2)",
+    backgroundColor: "rgba(20,20,20,0.8)",
+    border: "1px solid rgba(201,201,201,0.2)",
     borderRadius: "0.75rem",
     color: "#F5F5F5",
     padding: "0.625rem 1rem",
@@ -261,7 +261,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
         {/* File upload */}
         <div
           className="rounded-xl p-4"
-          style={{ border: "1px dashed rgba(212,175,55,0.3)", backgroundColor: "#0F2E1E" }}
+          style={{ border: "1px dashed rgba(201,201,201,0.3)", backgroundColor: "rgba(20,20,20,0.8)" }}
         >
           <p className="text-xs mb-2" style={{ color: "rgba(200,187,168,0.6)" }}>
             Upload de arquivo (principal)
@@ -293,7 +293,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
             type="button"
             onClick={addUrl}
             className="px-4 py-2 rounded-xl text-sm font-semibold shrink-0"
-            style={{ backgroundColor: "rgba(212,175,55,0.15)", color: "#D4AF37", border: "1px solid rgba(212,175,55,0.3)" }}
+            style={{ backgroundColor: "rgba(201,201,201,0.15)", color: "#C9C9C9", border: "1px solid rgba(201,201,201,0.3)" }}
           >
             + URL
           </button>
@@ -308,7 +308,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
                   src={url}
                   alt={`img ${idx + 1}`}
                   className="h-16 w-16 object-cover rounded-lg"
-                  style={{ border: "1px solid rgba(212,175,55,0.3)" }}
+                  style={{ border: "1px solid rgba(201,201,201,0.3)" }}
                 />
                 <button
                   type="button"
@@ -330,7 +330,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
           type="submit"
           disabled={isPending}
           className="px-6 py-2.5 rounded-xl text-sm font-semibold tracking-wider transition-all duration-200 disabled:opacity-50"
-          style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
+          style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
         >
           {isPending ? "Salvando..." : product ? "Salvar alterações" : "Criar produto"}
         </button>

@@ -102,15 +102,15 @@ function VideoControls({
     "flex items-center justify-center w-8 h-8 rounded-full border transition-opacity opacity-60 hover:opacity-100";
   const bStyle = {
     backgroundColor: "rgba(5,5,5,0.72)",
-    borderColor: "rgba(212,175,55,0.45)",
-    color: "#D4AF37",
+    borderColor: "rgba(201,201,201,0.45)",
+    color: "#C9C9C9",
   };
   return (
     <div className="flex gap-2">
-      <button onClick={onPauseToggle} aria-label={isPaused ? "Reproduzir" : "Pausar"} className={btn} style={bStyle}>
+      <button onClick={onPauseToggle} aria-label={isPaused ? "Play" : "Pause"} className={btn} style={bStyle}>
         {isPaused ? <Play className="w-3.5 h-3.5 ml-0.5" /> : <Pause className="w-3.5 h-3.5" />}
       </button>
-      <button onClick={onMuteToggle} aria-label={isMuted ? "Ativar som" : "Silenciar"} className={btn} style={bStyle}>
+      <button onClick={onMuteToggle} aria-label={isMuted ? "Unmute" : "Mute"} className={btn} style={bStyle}>
         {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
       </button>
     </div>
@@ -321,7 +321,7 @@ function SplitHero({
   return (
     <section className="relative h-screen overflow-hidden">
 
-      {/* ── Mobile: painel único ── */}
+      {/* ── Mobile: single panel ── */}
       <div className="md:hidden absolute inset-0">
         {leftVideoUrl ? (
           <VideoBackground url={leftVideoUrl} playerRef={mobilePlayerRef} />
@@ -365,7 +365,7 @@ function SplitHero({
         </motion.div>
       </div>
 
-      {/* ── Linha divisória central (desktop) ── */}
+      {/* ── Central divider line (desktop) ── */}
       <motion.div
         className="hidden md:block absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-px z-10"
         variants={lineGrow}
@@ -373,12 +373,12 @@ function SplitHero({
         animate="visible"
         style={{
           background:
-            "linear-gradient(to bottom, transparent 0%, rgba(212,175,55,0.55) 20%, rgba(212,175,55,0.55) 80%, transparent 100%)",
+            "linear-gradient(to bottom, transparent 0%, rgba(201,201,201,0.55) 20%, rgba(201,201,201,0.55) 80%, transparent 100%)",
           transformOrigin: "top",
         }}
       />
 
-      {/* ── Conteúdo central ── */}
+      {/* ── Central content ── */}
       <motion.div
         className="absolute inset-0 z-20 flex flex-col items-center justify-center px-4"
         variants={containerVariants}
@@ -388,7 +388,7 @@ function SplitHero({
         <motion.div
           variants={lineGrow}
           className="h-14 w-px mb-5"
-          style={{ background: "linear-gradient(to bottom, transparent, rgba(212,175,55,0.7))", transformOrigin: "top" }}
+          style={{ background: "linear-gradient(to bottom, transparent, rgba(201,201,201,0.7))", transformOrigin: "top" }}
         />
 
         <motion.div variants={logoVariant} className="mb-4 text-center">
@@ -411,12 +411,12 @@ function SplitHero({
           )}
         </motion.div>
 
-        <motion.div variants={fadeUp} className="w-14 h-px mb-5" style={{ backgroundColor: "rgba(212,175,55,0.65)" }} />
+        <motion.div variants={fadeUp} className="w-14 h-px mb-5" style={{ backgroundColor: "rgba(201,201,201,0.65)" }} />
 
         <motion.p
           variants={fadeUp}
           className="text-center max-w-[260px] md:max-w-[340px] mb-8"
-          style={{ color: "#D4AF37", fontSize: "0.6rem", letterSpacing: "0.22em", lineHeight: 2, textTransform: "uppercase" }}
+          style={{ color: "#C9C9C9", fontSize: "0.6rem", letterSpacing: "0.22em", lineHeight: 2, textTransform: "uppercase" }}
         >
           {subtitle}
         </motion.p>
@@ -424,13 +424,13 @@ function SplitHero({
         <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center gap-3">
           <GoldButton variant="primary" size="lg" asChild>
             <Link href="/products">
-              Descubra a coleção <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
+              Explore Collection <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
             </Link>
           </GoldButton>
           <GoldButton variant="outline" size="lg" asChild>
-            <Link href="/videos">
+            <Link href="/about">
               <Play className="h-3.5 w-3.5 mr-1.5" />
-              Assista o filme
+              Our Story
             </Link>
           </GoldButton>
         </motion.div>
@@ -438,7 +438,7 @@ function SplitHero({
         <motion.div
           variants={lineGrow}
           className="h-14 w-px mt-5"
-          style={{ background: "linear-gradient(to top, transparent, rgba(212,175,55,0.7))", transformOrigin: "bottom" }}
+          style={{ background: "linear-gradient(to top, transparent, rgba(201,201,201,0.7))", transformOrigin: "bottom" }}
         />
       </motion.div>
 
@@ -468,16 +468,16 @@ function SplitHero({
       >
         <div
           className="w-5 h-9 rounded-full border flex items-start justify-center pt-1.5"
-          style={{ borderColor: "rgba(212,175,55,0.5)" }}
+          style={{ borderColor: "rgba(201,201,201,0.5)" }}
         >
-          <div className="w-0.5 h-1.5 rounded-full" style={{ backgroundColor: "#D4AF37" }} />
+          <div className="w-0.5 h-1.5 rounded-full" style={{ backgroundColor: "#C9C9C9" }} />
         </div>
       </motion.div>
     </section>
   );
 }
 
-// ─── Hero legado ──────────────────────────────────────────────────────────────
+// ─── Legacy Hero ──────────────────────────────────────────────────────────────
 
 function LegacyHero({
   title,
@@ -527,7 +527,7 @@ function LegacyHero({
 
       <div
         className="absolute inset-0"
-        style={{ background: "radial-gradient(ellipse 70% 50% at 50% 50%, rgba(212,175,55,0.05) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse 70% 50% at 50% 50%, rgba(201,201,201,0.05) 0%, transparent 70%)" }}
       />
 
       <motion.div
@@ -539,7 +539,7 @@ function LegacyHero({
         <motion.div variants={fadeUp} className="mb-6 flex flex-col items-center">
           <div
             className="h-12 w-px mb-6"
-            style={{ background: "linear-gradient(to bottom, transparent, rgba(212,175,55,0.6))" }}
+            style={{ background: "linear-gradient(to bottom, transparent, rgba(201,201,201,0.6))" }}
           />
           <span
             className="font-serif font-bold tracking-[0.2em] uppercase"
@@ -549,7 +549,7 @@ function LegacyHero({
           </span>
         </motion.div>
 
-        <motion.div variants={fadeUp} className="w-16 h-px mx-auto mb-5" style={{ backgroundColor: "rgba(212,175,55,0.5)" }} />
+        <motion.div variants={fadeUp} className="w-16 h-px mx-auto mb-5" style={{ backgroundColor: "rgba(201,201,201,0.5)" }} />
 
         <motion.h1
           variants={fadeUp}
@@ -570,18 +570,18 @@ function LegacyHero({
         <motion.div variants={fadeUp} className="flex flex-wrap items-center justify-center gap-4">
           <GoldButton variant="primary" size="lg" asChild>
             <Link href="/products">
-              Explorar Coleção <ArrowRight className="h-4 w-4 ml-1" />
+              Explore Collection <ArrowRight className="h-4 w-4 ml-1" />
             </Link>
           </GoldButton>
           <GoldButton variant="outline" size="lg" asChild>
-            <Link href="/sobre-nos">Sobre Nós</Link>
+            <Link href="/about">Our Story</Link>
           </GoldButton>
         </motion.div>
 
         <motion.div
           variants={fadeUp}
           className="mt-12 h-px max-w-xs mx-auto"
-          style={{ backgroundColor: "rgba(212,175,55,0.25)" }}
+          style={{ backgroundColor: "rgba(201,201,201,0.25)" }}
         />
       </motion.div>
 
@@ -608,9 +608,9 @@ function LegacyHero({
       >
         <div
           className="w-5 h-9 rounded-full border flex items-start justify-center pt-1.5"
-          style={{ borderColor: "rgba(212,175,55,0.4)" }}
+          style={{ borderColor: "rgba(201,201,201,0.4)" }}
         >
-          <div className="w-0.5 h-1.5 rounded-full" style={{ backgroundColor: "#D4AF37" }} />
+          <div className="w-0.5 h-1.5 rounded-full" style={{ backgroundColor: "#C9C9C9" }} />
         </div>
       </motion.div>
     </section>
@@ -620,8 +620,8 @@ function LegacyHero({
 // ─── Export ───────────────────────────────────────────────────────────────────
 
 export function HeroSection({
-  title = "Importados de Luxo",
-  subtitle = "Curadoria exclusiva dos melhores produtos do mundo.",
+  title = "Timepieces & Eyewear",
+  subtitle = "The finest timepieces and eyewear, curated with precision.",
   heroImageUrl,
   heroVideoUrl,
   leftVideoUrl,

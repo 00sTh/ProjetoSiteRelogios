@@ -56,7 +56,7 @@ export function CartItemCard({ item }: CartItemCardProps) {
         </p>
         <p
           className="font-bold text-sm"
-          style={{ color: "#D4AF37" }}
+          style={{ color: "#C9C9C9" }}
         >
           {formatPrice(Number(item.product.price))}
         </p>
@@ -66,12 +66,12 @@ export function CartItemCard({ item }: CartItemCardProps) {
           <button
             className="h-7 w-7 flex items-center justify-center rounded-full transition-all duration-200 disabled:opacity-40"
             style={{
-              border: "1px solid rgba(212,175,55,0.3)",
-              color: "#D4AF37",
+              border: "1px solid rgba(201,201,201,0.3)",
+              color: "#C9C9C9",
             }}
             onClick={() => handleUpdate(item.quantity - 1)}
             disabled={isPending}
-            aria-label="Diminuir quantidade"
+            aria-label="Decrease quantity"
           >
             <Minus className="h-3 w-3" />
           </button>
@@ -86,12 +86,12 @@ export function CartItemCard({ item }: CartItemCardProps) {
           <button
             className="h-7 w-7 flex items-center justify-center rounded-full transition-all duration-200 disabled:opacity-40"
             style={{
-              border: "1px solid rgba(212,175,55,0.3)",
-              color: "#D4AF37",
+              border: "1px solid rgba(201,201,201,0.3)",
+              color: "#C9C9C9",
             }}
             onClick={() => handleUpdate(item.quantity + 1)}
             disabled={isPending || item.quantity >= item.product.stock}
-            aria-label="Aumentar quantidade"
+            aria-label="Increase quantity"
           >
             <Plus className="h-3 w-3" />
           </button>
@@ -101,7 +101,7 @@ export function CartItemCard({ item }: CartItemCardProps) {
             style={{ color: "rgba(224,82,82,0.7)" }}
             onClick={handleRemove}
             disabled={isPending}
-            aria-label="Remover item"
+            aria-label="Remove item"
           >
             <Trash2 className="h-3 w-3" />
           </button>
@@ -111,7 +111,7 @@ export function CartItemCard({ item }: CartItemCardProps) {
       {/* Subtotal */}
       <p
         className="font-bold text-sm shrink-0 self-center"
-        style={{ color: "#D4AF37" }}
+        style={{ color: "#C9C9C9" }}
       >
         {formatPrice(Number(item.product.price) * item.quantity)}
       </p>

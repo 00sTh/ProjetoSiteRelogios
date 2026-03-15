@@ -20,7 +20,7 @@ export default async function AdminSettingsPage() {
 
       <div
         className="rounded-2xl p-6"
-        style={{ backgroundColor: "#0A2419", border: "1px solid rgba(212,175,55,0.15)" }}
+        style={{ backgroundColor: "#141414", border: "1px solid rgba(201,201,201,0.15)" }}
       >
         <SiteSettingsForm settings={settings} />
       </div>

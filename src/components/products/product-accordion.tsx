@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, Leaf, BookOpen } from "lucide-react";
+import { ChevronDown, Settings2, Shield } from "lucide-react";
 
 interface AccordionItemProps {
   title: string;
@@ -21,10 +21,10 @@ function AccordionItem({ title, icon, content, isOpen, onToggle }: AccordionItem
     <div
       className="rounded-2xl overflow-hidden transition-all duration-200"
       style={{
-        backgroundColor: "rgba(15,74,55,0.5)",
+        backgroundColor: "rgba(20,20,20,0.5)",
         border: isOpen
-          ? "1px solid rgba(212,175,55,0.35)"
-          : "1px solid rgba(212,175,55,0.15)",
+          ? "1px solid rgba(201,201,201,0.35)"
+          : "1px solid rgba(201,201,201,0.15)",
       }}
     >
       <button
@@ -33,7 +33,7 @@ function AccordionItem({ title, icon, content, isOpen, onToggle }: AccordionItem
         className="w-full flex items-center justify-between px-5 py-4 text-left"
       >
         <div className="flex items-center gap-3">
-          <span style={{ color: "#D4AF37" }}>{icon}</span>
+          <span style={{ color: "#C9C9C9" }}>{icon}</span>
           <span
             className="font-serif font-semibold text-base"
             style={{ color: "#F5F5F5" }}
@@ -44,7 +44,7 @@ function AccordionItem({ title, icon, content, isOpen, onToggle }: AccordionItem
         <ChevronDown
           className="h-4 w-4 shrink-0 transition-transform duration-300"
           style={{
-            color: "#D4AF37",
+            color: "#C9C9C9",
             transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
           }}
         />
@@ -59,7 +59,7 @@ function AccordionItem({ title, icon, content, isOpen, onToggle }: AccordionItem
             className="h-px mb-4"
             style={{
               background:
-                "linear-gradient(to right, rgba(212,175,55,0.3), transparent)",
+                "linear-gradient(to right, rgba(201,201,201,0.2), transparent)",
             }}
           />
           {lines.length > 1 ? (
@@ -68,7 +68,7 @@ function AccordionItem({ title, icon, content, isOpen, onToggle }: AccordionItem
                 <li key={i} className="flex items-start gap-2.5 text-sm" style={{ color: "#9A9A9A" }}>
                   <span
                     className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
-                    style={{ backgroundColor: "#D4AF37" }}
+                    style={{ backgroundColor: "#C9C9C9" }}
                   />
                   {line}
                 </li>
@@ -95,13 +95,13 @@ export function ProductAccordion({ ingredients, usage }: ProductAccordionProps) 
 
   const items = [
     {
-      title: "Ingredientes",
-      icon: <Leaf className="h-4 w-4" />,
+      title: "Specifications",
+      icon: <Settings2 className="h-4 w-4" />,
       content: ingredients,
     },
     {
-      title: "Modo de Uso",
-      icon: <BookOpen className="h-4 w-4" />,
+      title: "Care & Warranty",
+      icon: <Shield className="h-4 w-4" />,
       content: usage,
     },
   ].filter((item) => item.content);

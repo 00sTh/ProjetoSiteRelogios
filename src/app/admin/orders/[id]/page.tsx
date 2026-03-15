@@ -38,11 +38,11 @@ export default async function AdminOrderPage({ params }: Props) {
     <div>
       <div className="mb-8">
         <div className="flex items-center gap-2 text-xs mb-4" style={{ color: "rgba(200,187,168,0.5)" }}>
-          <Link href="/admin/orders" className="hover:text-[#D4AF37] transition-colors">
+          <Link href="/admin/orders" className="hover:text-[#C9C9C9] transition-colors">
             Pedidos
           </Link>
           <span>/</span>
-          <span style={{ color: "#D4AF37" }}>#{order.id.slice(0, 8).toUpperCase()}</span>
+          <span style={{ color: "#C9C9C9" }}>#{order.id.slice(0, 8).toUpperCase()}</span>
         </div>
         <div className="flex items-center gap-4">
           <h1 className="font-serif text-3xl font-bold" style={{ color: "#F5F5F5" }}>
@@ -67,22 +67,22 @@ export default async function AdminOrderPage({ params }: Props) {
         <div className="lg:col-span-2 space-y-4">
           <div
             className="rounded-2xl overflow-hidden"
-            style={{ border: "1px solid rgba(212,175,55,0.15)" }}
+            style={{ border: "1px solid rgba(201,201,201,0.15)" }}
           >
             <div
               className="px-5 py-4 border-b"
-              style={{ backgroundColor: "#0F2E1E", borderColor: "rgba(212,175,55,0.1)" }}
+              style={{ backgroundColor: "#1A1A1A", borderColor: "rgba(201,201,201,0.1)" }}
             >
               <h2 className="font-semibold text-sm" style={{ color: "#F5F5F5" }}>
                 Itens do pedido
               </h2>
             </div>
-            <div style={{ backgroundColor: "#0A2419" }}>
+            <div style={{ backgroundColor: "#141414" }}>
               {order.items.map((item) => (
                 <div
                   key={item.id}
                   className="flex items-center gap-4 px-5 py-4"
-                  style={{ borderBottom: "1px solid rgba(212,175,55,0.06)" }}
+                  style={{ borderBottom: "1px solid rgba(201,201,201,0.06)" }}
                 >
                   <div className="flex-1">
                     <p className="text-sm font-medium" style={{ color: "#F5F5F5" }}>
@@ -93,7 +93,7 @@ export default async function AdminOrderPage({ params }: Props) {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-semibold" style={{ color: "#D4AF37" }}>
+                    <p className="text-sm font-semibold" style={{ color: "#C9C9C9" }}>
                       {formatPrice(Number(item.price) * item.quantity)}
                     </p>
                     <p className="text-xs" style={{ color: "rgba(200,187,168,0.5)" }}>
@@ -104,10 +104,10 @@ export default async function AdminOrderPage({ params }: Props) {
               ))}
               <div
                 className="px-5 py-4 flex justify-between items-center"
-                style={{ borderTop: "1px solid rgba(212,175,55,0.15)" }}
+                style={{ borderTop: "1px solid rgba(201,201,201,0.15)" }}
               >
                 <span className="text-sm font-semibold" style={{ color: "#9A9A9A" }}>Total</span>
-                <span className="text-xl font-bold font-serif" style={{ color: "#D4AF37" }}>
+                <span className="text-xl font-bold font-serif" style={{ color: "#C9C9C9" }}>
                   {formatPrice(Number(order.price))}
                 </span>
               </div>
@@ -120,7 +120,7 @@ export default async function AdminOrderPage({ params }: Props) {
           {/* Customer info */}
           <div
             className="rounded-2xl p-5"
-            style={{ backgroundColor: "#0A2419", border: "1px solid rgba(212,175,55,0.15)" }}
+            style={{ backgroundColor: "#141414", border: "1px solid rgba(201,201,201,0.15)" }}
           >
             <h2 className="font-semibold text-sm mb-4" style={{ color: "#F5F5F5" }}>
               Cliente
@@ -140,7 +140,7 @@ export default async function AdminOrderPage({ params }: Props) {
           {(order.cieloPaymentId || order.redePaymentId || order.gateway) && (
             <div
               className="rounded-2xl p-5"
-              style={{ backgroundColor: "#0A2419", border: "1px solid rgba(212,175,55,0.15)" }}
+              style={{ backgroundColor: "#141414", border: "1px solid rgba(201,201,201,0.15)" }}
             >
               <h2 className="font-semibold text-sm mb-4" style={{ color: "#F5F5F5" }}>
                 Pagamento{order.gateway ? ` — ${order.gateway}` : ""}
@@ -165,7 +165,7 @@ export default async function AdminOrderPage({ params }: Props) {
           {/* Status update */}
           <div
             className="rounded-2xl p-5"
-            style={{ backgroundColor: "#0A2419", border: "1px solid rgba(212,175,55,0.15)" }}
+            style={{ backgroundColor: "#141414", border: "1px solid rgba(201,201,201,0.15)" }}
           >
             <h2 className="font-semibold text-sm mb-4" style={{ color: "#F5F5F5" }}>
               Atualizar status

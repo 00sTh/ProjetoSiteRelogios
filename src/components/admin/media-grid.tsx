@@ -39,9 +39,9 @@ export function MediaGrid({ assets }: MediaGridProps) {
     return (
       <div
         className="rounded-2xl p-12 text-center"
-        style={{ border: "1px dashed rgba(212,175,55,0.2)" }}
+        style={{ border: "1px dashed rgba(201,201,201,0.2)" }}
       >
-        <ImageIcon className="h-8 w-8 mx-auto mb-3" style={{ color: "rgba(212,175,55,0.3)" }} />
+        <ImageIcon className="h-8 w-8 mx-auto mb-3" style={{ color: "rgba(201,201,201,0.3)" }} />
         <p className="text-sm" style={{ color: "rgba(200,187,168,0.5)" }}>
           Nenhuma mídia adicionada ainda.
         </p>
@@ -55,10 +55,10 @@ export function MediaGrid({ assets }: MediaGridProps) {
         <div
           key={asset.id}
           className="group relative rounded-xl overflow-hidden"
-          style={{ backgroundColor: "#0A2419", border: "1px solid rgba(212,175,55,0.12)" }}
+          style={{ backgroundColor: "#141414", border: "1px solid rgba(201,201,201,0.12)" }}
         >
           {/* Thumbnail */}
-          <div className="aspect-square relative overflow-hidden" style={{ backgroundColor: "#0F2E1E" }}>
+          <div className="aspect-square relative overflow-hidden" style={{ backgroundColor: "#1A1A1A" }}>
             {asset.type === "IMAGE" ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -69,7 +69,7 @@ export function MediaGrid({ assets }: MediaGridProps) {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <Film className="h-8 w-8" style={{ color: "rgba(212,175,55,0.5)" }} />
+                <Film className="h-8 w-8" style={{ color: "rgba(201,201,201,0.5)" }} />
               </div>
             )}
 
@@ -79,7 +79,7 @@ export function MediaGrid({ assets }: MediaGridProps) {
                 onClick={() => handleCopy(asset.url, asset.id)}
                 title="Copiar URL"
                 className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110"
-                style={{ backgroundColor: copiedId === asset.id ? "#4ADE80" : "#D4AF37" }}
+                style={{ backgroundColor: copiedId === asset.id ? "#4ADE80" : "#C9C9C9" }}
               >
                 {copiedId === asset.id ? (
                   <Check className="h-4 w-4 text-[#0A0A0A]" />

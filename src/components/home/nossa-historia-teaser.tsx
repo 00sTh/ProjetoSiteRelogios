@@ -15,7 +15,7 @@ interface NossaHistoriaTeaserProps {
 
 export function NossaHistoriaTeaser({
   videoUrl,
-  videoTitle = "A História da LuxImport",
+  videoTitle = "The Story of LuxImport",
   videoDesc,
 }: NossaHistoriaTeaserProps) {
   return (
@@ -28,7 +28,7 @@ export function NossaHistoriaTeaser({
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(212,175,55,0.06) 0%, transparent 70%)",
+            "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(201,201,201,0.04) 0%, transparent 70%)",
         }}
       />
 
@@ -42,9 +42,9 @@ export function NossaHistoriaTeaser({
         >
           <motion.div variants={fadeInUp}>
             <SectionTitle
-              label="Nossa Jornada"
-              title="Importados com Propósito e Paixão"
-              subtitle="Nascemos da paixão por trazer ao Brasil os melhores produtos do mundo. Curadoria rigorosa, autenticidade garantida e experiência de compra premium."
+              label="The Craft"
+              title="The Art of Fine Timekeeping"
+              subtitle="Born from a passion for the world's finest timepieces and eyewear. Rigorous curation, guaranteed authenticity, and a premium experience in every detail."
               align="center"
               animate={false}
             />
@@ -56,7 +56,7 @@ export function NossaHistoriaTeaser({
               className="relative rounded-3xl overflow-hidden mx-auto max-w-2xl cursor-pointer group"
               style={{
                 background: "linear-gradient(135deg, #111111 0%, #1A1A1A 100%)",
-                border: "1px solid rgba(212,175,55,0.25)",
+                border: "1px solid rgba(201,201,201,0.25)",
                 aspectRatio: "16/9",
               }}
             >
@@ -65,7 +65,7 @@ export function NossaHistoriaTeaser({
                 className="absolute inset-0 opacity-20"
                 style={{
                   backgroundImage:
-                    "radial-gradient(circle at 30% 40%, rgba(212,175,55,0.4) 0%, transparent 40%), radial-gradient(circle at 70% 60%, rgba(212,175,55,0.15) 0%, transparent 40%)",
+                    "radial-gradient(circle at 30% 40%, rgba(201,201,201,0.4) 0%, transparent 40%), radial-gradient(circle at 70% 60%, rgba(201,201,201,0.15) 0%, transparent 40%)",
                 }}
               />
 
@@ -76,15 +76,15 @@ export function NossaHistoriaTeaser({
                   whileHover={{ scale: 1.05 }}
                 >
                   <div
-                    className="w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_0_30px_rgba(212,175,55,0.5)]"
+                    className="w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_0_30px_rgba(201,201,201,0.5)]"
                     style={{
-                      backgroundColor: "rgba(212,175,55,0.15)",
-                      border: "2px solid rgba(212,175,55,0.6)",
+                      backgroundColor: "rgba(201,201,201,0.15)",
+                      border: "2px solid rgba(201,201,201,0.6)",
                     }}
                   >
                     <Play
                       className="h-8 w-8 ml-1"
-                      style={{ color: "#D4AF37" }}
+                      style={{ color: "#C9C9C9" }}
                     />
                   </div>
                   <p
@@ -120,12 +120,12 @@ export function NossaHistoriaTeaser({
           <motion.div variants={fadeInUp} className="flex justify-center gap-4 flex-wrap">
             <GoldButton variant="primary" size="lg" asChild>
               <Link href="/videos">
-                Ver Todos os Vídeos <Play className="h-4 w-4 ml-1" />
+                Watch the Story <Play className="h-4 w-4 ml-1" />
               </Link>
             </GoldButton>
             <GoldButton variant="outline" size="lg" asChild>
-              <Link href="/sobre-nos">
-                Nossa Missão <ArrowRight className="h-4 w-4 ml-1" />
+              <Link href="/about">
+                Our Mission <ArrowRight className="h-4 w-4 ml-1" />
               </Link>
             </GoldButton>
           </motion.div>

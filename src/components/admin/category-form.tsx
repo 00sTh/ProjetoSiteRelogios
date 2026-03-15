@@ -38,8 +38,8 @@ export function CategoryForm({ category, allCategories }: CategoryFormProps) {
   };
 
   const inputStyle = {
-    backgroundColor: "#0F2E1E",
-    border: "1px solid rgba(212,175,55,0.2)",
+    backgroundColor: "rgba(20,20,20,0.8)",
+    border: "1px solid rgba(201,201,201,0.2)",
     borderRadius: "0.75rem",
     color: "#F5F5F5",
     padding: "0.625rem 1rem",
@@ -146,7 +146,7 @@ export function CategoryForm({ category, allCategories }: CategoryFormProps) {
           type="submit"
           disabled={isPending}
           className="px-6 py-2.5 rounded-xl text-sm font-semibold tracking-wider transition-all duration-200 disabled:opacity-50"
-          style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
+          style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
         >
           {isPending ? "Salvando..." : category ? "Salvar alterações" : "Criar categoria"}
         </button>

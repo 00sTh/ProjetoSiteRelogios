@@ -6,8 +6,8 @@ import { getProducts, getCategories } from "@/actions/products";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Produtos",
-  description: "Explore nossa linha completa de produtos importados de luxo LuxImport.",
+  title: "Products",
+  description: "Explore our complete collection of luxury timepieces and eyewear.",
 };
 
 export const revalidate = 1800;
@@ -36,10 +36,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   ]);
 
   const pageTitle = params.category
-    ? categories.find((c) => c.slug === params.category)?.name ?? "Produtos"
+    ? categories.find((c) => c.slug === params.category)?.name ?? "Products"
     : params.featured === "true"
-    ? "Destaques"
-    : "Todos os Produtos";
+    ? "Featured"
+    : "All Products";
 
   return (
     <div style={{ backgroundColor: "#0A0A0A", minHeight: "100vh" }}>
@@ -48,22 +48,22 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         className="relative py-16 px-4 text-center overflow-hidden"
         style={{
           backgroundColor: "#111111",
-          borderBottom: "1px solid rgba(212,175,55,0.2)",
+          borderBottom: "1px solid rgba(201,201,201,0.2)",
         }}
       >
         <div
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(212,175,55,0.06) 0%, transparent 70%)",
+              "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(201,201,201,0.04) 0%, transparent 70%)",
           }}
         />
         <div className="relative z-10">
           <p
             className="label-luxury mb-3"
-            style={{ color: "#D4AF37" }}
+            style={{ color: "#C9C9C9" }}
           >
-            Coleção LuxImport
+            LuxImport Collection
           </p>
           <h1
             className="font-serif text-4xl md:text-5xl font-bold"
@@ -72,7 +72,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             {pageTitle}
           </h1>
           <p className="mt-3 text-sm" style={{ color: "#9A9A9A" }}>
-            {total} produto{total !== 1 ? "s" : ""} encontrado{total !== 1 ? "s" : ""}
+            {total} product{total !== 1 ? "s" : ""} found
           </p>
         </div>
       </div>
@@ -87,7 +87,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                 className="animate-pulse rounded-2xl h-64"
                 style={{
                   backgroundColor: "#111111",
-                  border: "1px solid rgba(212,175,55,0.15)",
+                  border: "1px solid rgba(201,201,201,0.15)",
                 }}
               />
             }
@@ -102,21 +102,21 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                 className="flex flex-col items-center justify-center py-20 text-center rounded-2xl"
                 style={{
                   backgroundColor: "#111111",
-                  border: "1px solid rgba(212,175,55,0.15)",
+                  border: "1px solid rgba(201,201,201,0.15)",
                 }}
               >
                 <p className="text-lg font-serif mb-3" style={{ color: "#F5F5F5" }}>
-                  Nenhum produto encontrado
+                  No Products Found
                 </p>
                 <p className="text-sm mb-6" style={{ color: "#9A9A9A" }}>
-                  Tente ajustar os filtros de busca.
+                  Try adjusting your search filters.
                 </p>
                 <Link
                   href="/products"
-                  className="px-6 py-2.5 rounded-full text-xs font-semibold tracking-widest uppercase transition-all hover:bg-[#F0D060] hover:shadow-[0_0_15px_rgba(212,175,55,0.4)]"
-                  style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
+                  className="px-6 py-2.5 rounded-full text-xs font-semibold tracking-widest uppercase transition-all hover:bg-[#E8E8E8] hover:shadow-[0_0_15px_rgba(201,201,201,0.4)]"
+                  style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
                 >
-                  Limpar filtros
+                  Clear Filters
                 </Link>
               </div>
             ) : (
@@ -147,12 +147,12 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                           className="w-10 h-10 flex items-center justify-center rounded-full text-sm font-medium transition-all duration-200"
                           style={{
                             backgroundColor: isActive
-                              ? "#D4AF37"
-                              : "rgba(212,175,55,0.08)",
+                              ? "#C9C9C9"
+                              : "rgba(201,201,201,0.08)",
                             color: isActive ? "#0A0A0A" : "#9A9A9A",
                             border: isActive
-                              ? "1px solid #D4AF37"
-                              : "1px solid rgba(212,175,55,0.2)",
+                              ? "1px solid #C9C9C9"
+                              : "1px solid rgba(201,201,201,0.2)",
                           }}
                         >
                           {p}

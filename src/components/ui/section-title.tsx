@@ -32,7 +32,7 @@ export function SectionTitle({
   const content = (
     <div className={cn("flex flex-col gap-3", alignClass, className)}>
       {label && (
-        <span className="label-luxury text-[#D4AF37] font-medium tracking-[0.3em]">
+        <span className="label-luxury text-[#C9C9C9] font-medium tracking-[0.3em]">
           {label}
         </span>
       )}
@@ -51,7 +51,7 @@ export function SectionTitle({
       )}
       <div
         className={cn(
-          "mt-2 h-px w-16 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent",
+          "mt-2 h-px w-16 bg-gradient-to-r from-transparent via-[#C9C9C9] to-transparent",
           align === "center" && "mx-auto",
           align === "right" && "ml-auto"
         )}

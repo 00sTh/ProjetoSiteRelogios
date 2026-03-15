@@ -22,22 +22,22 @@ export default async function AdminNewsletterPage() {
       {/* Export hint */}
       <div
         className="rounded-xl p-4 mb-6 text-sm"
-        style={{ backgroundColor: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)", color: "#9A9A9A" }}
+        style={{ backgroundColor: "rgba(201,201,201,0.08)", border: "1px solid rgba(201,201,201,0.2)", color: "#9A9A9A" }}
       >
         💡 Para exportar a lista, use o Prisma Studio:{" "}
-        <code className="text-xs" style={{ color: "#D4AF37" }}>npx prisma studio</code>
+        <code className="text-xs" style={{ color: "#C9C9C9" }}>npx prisma studio</code>
       </div>
 
       <div
         className="rounded-2xl overflow-hidden"
-        style={{ border: "1px solid rgba(212,175,55,0.15)" }}
+        style={{ border: "1px solid rgba(201,201,201,0.15)" }}
       >
         <table className="w-full text-sm">
           <thead>
             <tr
               style={{
-                backgroundColor: "#0F2E1E",
-                borderBottom: "1px solid rgba(212,175,55,0.1)",
+                backgroundColor: "#1A1A1A",
+                borderBottom: "1px solid rgba(201,201,201,0.1)",
               }}
             >
               {["E-mail", "Confirmado em", "Inscrito em"].map((h) => (
@@ -51,7 +51,7 @@ export default async function AdminNewsletterPage() {
               ))}
             </tr>
           </thead>
-          <tbody style={{ backgroundColor: "#0A2419" }}>
+          <tbody style={{ backgroundColor: "#141414" }}>
             {subscribers.length === 0 ? (
               <tr>
                 <td
@@ -66,7 +66,7 @@ export default async function AdminNewsletterPage() {
               subscribers.map((sub) => (
                 <tr
                   key={sub.id}
-                  style={{ borderBottom: "1px solid rgba(212,175,55,0.06)" }}
+                  style={{ borderBottom: "1px solid rgba(201,201,201,0.06)" }}
                 >
                   <td className="px-5 py-4 text-sm" style={{ color: "#F5F5F5" }}>
                     {sub.email}

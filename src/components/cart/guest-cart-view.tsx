@@ -37,7 +37,7 @@ function AccountPromptModal({ onClose }: { onClose: () => void }) {
         className="relative w-full max-w-sm rounded-3xl p-8 text-center"
         style={{
           backgroundColor: "#111111",
-          border: "1px solid rgba(212,175,55,0.35)",
+          border: "1px solid rgba(201,201,201,0.35)",
           boxShadow: "0 25px 60px rgba(0,0,0,0.5)",
         }}
         onClick={(e) => e.stopPropagation()}
@@ -54,45 +54,45 @@ function AccountPromptModal({ onClose }: { onClose: () => void }) {
         <div
           className="mx-auto mb-5 w-16 h-16 rounded-full flex items-center justify-center"
           style={{
-            backgroundColor: "rgba(212,175,55,0.12)",
-            border: "1px solid rgba(212,175,55,0.3)",
+            backgroundColor: "rgba(201,201,201,0.12)",
+            border: "1px solid rgba(201,201,201,0.3)",
           }}
         >
-          <ShoppingCart className="h-7 w-7" style={{ color: "#D4AF37" }} />
+          <ShoppingCart className="h-7 w-7" style={{ color: "#C9C9C9" }} />
         </div>
 
         <h2 className="font-serif text-2xl font-bold mb-2" style={{ color: "#F5F5F5" }}>
-          Quase lá!
+          Almost There!
         </h2>
         <p className="text-sm mb-6" style={{ color: "rgba(200,187,168,0.75)" }}>
-          Crie uma conta gratuita para finalizar sua compra. Seus itens ficam salvos!
+          Create a free account to complete your purchase. Your items will be saved!
         </p>
 
         <div className="space-y-3">
           <Link
             href="/sign-up?redirect_url=%2Fcheckout"
-            className="flex items-center justify-center gap-2.5 w-full py-3.5 rounded-full text-sm font-semibold tracking-widest uppercase transition-all hover:bg-[#F0D060] hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]"
-            style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
+            className="flex items-center justify-center gap-2.5 w-full py-3.5 rounded-full text-sm font-semibold tracking-widest uppercase transition-all hover:bg-[#E8E8E8] hover:shadow-[0_0_20px_rgba(201,201,201,0.4)]"
+            style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
           >
             <UserPlus className="h-4 w-4" />
-            Criar conta gratuita
+            Create Free Account
           </Link>
 
           <Link
             href="/sign-in?redirect_url=%2Fcheckout"
             className="flex items-center justify-center gap-2.5 w-full py-3.5 rounded-full text-sm font-medium transition-all"
             style={{
-              border: "1px solid rgba(212,175,55,0.4)",
-              color: "#D4AF37",
+              border: "1px solid rgba(201,201,201,0.4)",
+              color: "#C9C9C9",
             }}
           >
             <LogIn className="h-4 w-4" />
-            Já tenho conta — Entrar
+            I have an account — Sign In
           </Link>
         </div>
 
         <p className="mt-4 text-xs" style={{ color: "rgba(200,187,168,0.4)" }}>
-          Cadastro rápido · Sem spam · Seus dados protegidos
+          Quick sign up · No spam · Data protected
         </p>
       </div>
     </div>
@@ -175,26 +175,26 @@ export function GuestCartView() {
         <div
           className="w-24 h-24 rounded-full flex items-center justify-center"
           style={{
-            backgroundColor: "rgba(212,175,55,0.08)",
-            border: "1px solid rgba(212,175,55,0.2)",
+            backgroundColor: "rgba(201,201,201,0.08)",
+            border: "1px solid rgba(201,201,201,0.2)",
           }}
         >
-          <ShoppingCart className="h-10 w-10" style={{ color: "rgba(212,175,55,0.4)" }} />
+          <ShoppingCart className="h-10 w-10" style={{ color: "rgba(201,201,201,0.4)" }} />
         </div>
         <div>
           <h1 className="font-serif text-3xl font-bold mb-2" style={{ color: "#F5F5F5" }}>
-            Carrinho vazio
+            Your Cart is Empty
           </h1>
           <p className="text-base" style={{ color: "#9A9A9A" }}>
-            Você ainda não adicionou nenhum produto.
+            You haven't added any products yet.
           </p>
         </div>
         <Link
           href="/products"
-          className="px-8 py-3 rounded-full text-sm font-semibold tracking-widest uppercase transition-all hover:bg-[#F0D060]"
-          style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
+          className="px-8 py-3 rounded-full text-sm font-semibold tracking-widest uppercase transition-all hover:bg-[#E8E8E8]"
+          style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
         >
-          Explorar produtos
+          Explore Products
         </Link>
       </div>
     );
@@ -207,11 +207,11 @@ export function GuestCartView() {
       <div className="min-h-screen py-10 px-4" style={{ backgroundColor: "#0A0A0A" }}>
         <div className="container mx-auto max-w-7xl">
           <div className="mb-8">
-            <p className="label-luxury mb-2" style={{ color: "#D4AF37" }}>
-              Meu Carrinho
+            <p className="label-luxury mb-2" style={{ color: "#C9C9C9" }}>
+              My Cart
             </p>
             <h1 className="font-serif text-3xl md:text-4xl font-bold" style={{ color: "#F5F5F5" }}>
-              {itemCount} {itemCount === 1 ? "item" : "itens"}
+              {itemCount === 1 ? "1 item" : `${itemCount} items`}
             </h1>
           </div>
 
@@ -227,7 +227,7 @@ export function GuestCartView() {
                     className="rounded-2xl overflow-hidden"
                     style={{
                       backgroundColor: "#111111",
-                      border: "1px solid rgba(212,175,55,0.15)",
+                      border: "1px solid rgba(201,201,201,0.15)",
                     }}
                   >
                     <div className="flex gap-4 p-4">
@@ -241,13 +241,13 @@ export function GuestCartView() {
                         <p className="font-serif font-semibold text-sm" style={{ color: "#F5F5F5" }}>
                           {item.product.name}
                         </p>
-                        <p className="font-bold text-sm" style={{ color: "#D4AF37" }}>
+                        <p className="font-bold text-sm" style={{ color: "#C9C9C9" }}>
                           {formatPrice(Number(item.product.price))}
                         </p>
                         <div className="flex items-center gap-2 mt-auto">
                           <button
                             className="h-7 w-7 flex items-center justify-center rounded-full"
-                            style={{ border: "1px solid rgba(212,175,55,0.3)", color: "#D4AF37" }}
+                            style={{ border: "1px solid rgba(201,201,201,0.3)", color: "#C9C9C9" }}
                             onClick={() => handleUpdate(item.productId, item.quantity - 1)}
                           >
                             <Minus className="h-3 w-3" />
@@ -257,7 +257,7 @@ export function GuestCartView() {
                           </span>
                           <button
                             className="h-7 w-7 flex items-center justify-center rounded-full"
-                            style={{ border: "1px solid rgba(212,175,55,0.3)", color: "#D4AF37" }}
+                            style={{ border: "1px solid rgba(201,201,201,0.3)", color: "#C9C9C9" }}
                             onClick={() => handleUpdate(item.productId, item.quantity + 1)}
                             disabled={item.quantity >= item.product.stock}
                           >
@@ -272,7 +272,7 @@ export function GuestCartView() {
                           </button>
                         </div>
                       </div>
-                      <p className="font-bold text-sm shrink-0 self-center" style={{ color: "#D4AF37" }}>
+                      <p className="font-bold text-sm shrink-0 self-center" style={{ color: "#C9C9C9" }}>
                         {formatPrice(Number(item.product.price) * item.quantity)}
                       </p>
                     </div>
@@ -286,46 +286,46 @@ export function GuestCartView() {
               className="h-fit rounded-2xl p-6 space-y-5 sticky top-24"
               style={{
                 backgroundColor: "#111111",
-                border: "1px solid rgba(212,175,55,0.2)",
+                border: "1px solid rgba(201,201,201,0.2)",
               }}
             >
               <h2 className="font-serif text-xl font-bold" style={{ color: "#F5F5F5" }}>
-                Resumo do Pedido
+                Order Summary
               </h2>
 
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between" style={{ color: "#9A9A9A" }}>
-                  <span>Subtotal ({itemCount} itens)</span>
+                  <span>Subtotal ({itemCount} items)</span>
                   <span style={{ color: "#F5F5F5" }}>{formatPrice(subtotal)}</span>
                 </div>
                 <div className="flex justify-between" style={{ color: "#9A9A9A" }}>
-                  <span>Frete</span>
-                  <span>A calcular</span>
+                  <span>Shipping</span>
+                  <span>To calculate</span>
                 </div>
               </div>
 
               <div
                 className="pt-4 flex justify-between font-bold text-xl"
-                style={{ borderTop: "1px solid rgba(212,175,55,0.2)" }}
+                style={{ borderTop: "1px solid rgba(201,201,201,0.2)" }}
               >
                 <span style={{ color: "#F5F5F5" }}>Total</span>
-                <span style={{ color: "#D4AF37" }}>{formatPrice(subtotal)}</span>
+                <span style={{ color: "#C9C9C9" }}>{formatPrice(subtotal)}</span>
               </div>
 
               <button
                 onClick={() => setShowModal(true)}
-                className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full text-sm font-semibold tracking-widest uppercase transition-all hover:bg-[#F0D060] hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]"
-                style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
+                className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full text-sm font-semibold tracking-widest uppercase transition-all hover:bg-[#E8E8E8] hover:shadow-[0_0_20px_rgba(201,201,201,0.4)]"
+                style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
               >
-                Finalizar compra <ArrowRight className="h-4 w-4" />
+                Proceed to Checkout <ArrowRight className="h-4 w-4" />
               </button>
 
               <Link
                 href="/products"
                 className="flex items-center justify-center w-full py-3 rounded-full text-sm font-medium"
-                style={{ border: "1px solid rgba(212,175,55,0.3)", color: "#D4AF37" }}
+                style={{ border: "1px solid rgba(201,201,201,0.3)", color: "#C9C9C9" }}
               >
-                Continuar comprando
+                Continue Shopping
               </Link>
             </div>
           </div>

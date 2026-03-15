@@ -5,19 +5,18 @@ import { NewsletterForm } from "@/components/layout/newsletter-form";
 import { getSiteSettings } from "@/actions/admin";
 
 const storeLinks = [
-  { href: "/products", label: "Todos os produtos" },
-  { href: "/products?featured=true", label: "Destaques" },
-  { href: "/wishlist", label: "Lista de Desejos" },
-  { href: "/sobre-nos", label: "Sobre Nós" },
-  { href: "/videos", label: "Vídeos" },
+  { href: "/products", label: "All Products" },
+  { href: "/products?category=watches", label: "Watches" },
+  { href: "/products?category=sunglasses", label: "Sunglasses" },
+  { href: "/about", label: "About Us" },
 ];
 
 const accountLinks = [
-  { href: "/account", label: "Minha conta" },
-  { href: "/cart", label: "Carrinho" },
-  { href: "/checkout", label: "Finalizar compra" },
-  { href: "/politica-de-privacidade", label: "Privacidade" },
-  { href: "/termos-de-uso", label: "Termos de Uso" },
+  { href: "/account", label: "My Account" },
+  { href: "/cart", label: "Cart" },
+  { href: "/checkout", label: "Checkout" },
+  { href: "/politica-de-privacidade", label: "Privacy Policy" },
+  { href: "/termos-de-uso", label: "Terms of Use" },
 ];
 
 export async function Footer() {
@@ -34,15 +33,15 @@ export async function Footer() {
       className="relative"
       style={{
         backgroundColor: "#050505",
-        borderTop: "1px solid rgba(212,175,55,0.2)",
+        borderTop: "1px solid rgba(201,201,201,0.2)",
       }}
     >
-      {/* Gold top accent line */}
+      {/* Silver top accent line */}
       <div
         className="h-px w-full"
         style={{
           background:
-            "linear-gradient(to right, transparent 0%, #D4AF37 30%, #F0D060 50%, #D4AF37 70%, transparent 100%)",
+            "linear-gradient(to right, transparent 0%, #C9C9C9 30%, #E8E8E8 50%, #C9C9C9 70%, transparent 100%)",
           opacity: 0.6,
         }}
       />
@@ -55,11 +54,11 @@ export async function Footer() {
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center"
                 style={{
-                  backgroundColor: "rgba(212,175,55,0.12)",
-                  border: "1px solid rgba(212,175,55,0.4)",
+                  backgroundColor: "rgba(201,201,201,0.12)",
+                  border: "1px solid rgba(201,201,201,0.4)",
                 }}
               >
-                <Sparkles className="h-4 w-4" style={{ color: "#D4AF37" }} />
+                <Sparkles className="h-4 w-4" style={{ color: "#C9C9C9" }} />
               </div>
               <span
                 className="font-serif font-bold text-2xl"
@@ -79,7 +78,7 @@ export async function Footer() {
 
             {/* Newsletter */}
             <div className="space-y-3">
-              <p className="label-luxury text-xs" style={{ color: "#D4AF37" }}>
+              <p className="label-luxury text-xs" style={{ color: "#C9C9C9" }}>
                 {settings.newsletterTitle}
               </p>
               <NewsletterForm />
@@ -95,10 +94,10 @@ export async function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:shadow-[0_0_12px_rgba(212,175,55,0.3)]"
+                    className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:shadow-[0_0_12px_rgba(201,201,201,0.3)]"
                     style={{
-                      backgroundColor: "rgba(212,175,55,0.08)",
-                      border: "1px solid rgba(212,175,55,0.2)",
+                      backgroundColor: "rgba(201,201,201,0.08)",
+                      border: "1px solid rgba(201,201,201,0.2)",
                       color: "#9A9A9A",
                     }}
                   >
@@ -111,15 +110,15 @@ export async function Footer() {
 
           {/* Store links */}
           <div className="space-y-5">
-            <h3 className="label-luxury font-semibold" style={{ color: "#D4AF37" }}>
-              Loja
+            <h3 className="label-luxury font-semibold" style={{ color: "#C9C9C9" }}>
+              Shop
             </h3>
             <ul className="space-y-3">
               {storeLinks.map(({ href, label }) => (
                 <li key={href}>
                   <Link
                     href={href}
-                    className="text-sm transition-colors duration-200 hover:text-[#D4AF37]"
+                    className="text-sm transition-colors duration-200 hover:text-[#C9C9C9]"
                     style={{ color: "#9A9A9A" }}
                   >
                     {label}
@@ -131,15 +130,15 @@ export async function Footer() {
 
           {/* Account links */}
           <div className="space-y-5">
-            <h3 className="label-luxury font-semibold" style={{ color: "#D4AF37" }}>
-              Conta
+            <h3 className="label-luxury font-semibold" style={{ color: "#C9C9C9" }}>
+              Account
             </h3>
             <ul className="space-y-3">
               {accountLinks.map(({ href, label }) => (
                 <li key={href}>
                   <Link
                     href={href}
-                    className="text-sm transition-colors duration-200 hover:text-[#D4AF37]"
+                    className="text-sm transition-colors duration-200 hover:text-[#C9C9C9]"
                     style={{ color: "#9A9A9A" }}
                   >
                     {label}
@@ -155,17 +154,17 @@ export async function Footer() {
           className="mt-16 mb-6 h-px"
           style={{
             background:
-              "linear-gradient(to right, transparent, rgba(212,175,55,0.2), transparent)",
+              "linear-gradient(to right, transparent, rgba(201,201,201,0.2), transparent)",
           }}
         />
 
         {/* Bottom */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs" style={{ color: "#9A9A9A" }}>
-            © {new Date().getFullYear()} {APP_NAME} — Importados de Luxo. Todos os direitos reservados.
+            © {new Date().getFullYear()} {APP_NAME} — Timepieces & Eyewear of Distinction. All rights reserved.
           </p>
           <p className="text-xs" style={{ color: "rgba(200,187,168,0.35)" }}>
-            LGPD · Seus dados protegidos
+            Privacy Protected
           </p>
         </div>
       </div>

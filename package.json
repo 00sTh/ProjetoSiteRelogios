@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "prisma generate && next dev",
+    "dev": "next dev --turbopack",
     "postinstall": "prisma generate",
     "build": "next build",
     "build:prod": "cp prisma/schema.production.prisma prisma/schema.prisma && prisma generate && next build",
@@ -48,7 +48,10 @@
     "tailwind-merge": "^3.0.2",
     "zod": "^3.24.1"
   },
-  "packageManager": "yarn@4.13.0",
+  "packageManager": "pnpm@10.30.3",
+  "pnpm": {
+    "onlyBuiltDependencies": ["@clerk/shared", "@prisma/client", "@prisma/engines", "esbuild", "prisma", "sharp"]
+  },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "@tailwindcss/postcss": "^4.0.9",

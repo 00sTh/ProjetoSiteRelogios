@@ -5,7 +5,7 @@ import { getCategories } from "@/actions/products";
 
 export async function CategoryCards() {
   const categories = await getCategories();
-  const display = categories.slice(0, 4);
+  const display = categories.slice(0, 3);
 
   if (display.length === 0) return null;
 
@@ -17,13 +17,13 @@ export async function CategoryCards() {
       <div className="container mx-auto max-w-7xl">
         <p
           className="label-luxury text-center mb-6"
-          style={{ color: "#D4AF37", letterSpacing: "0.2em", fontSize: "0.65rem" }}
+          style={{ color: "#C9C9C9", letterSpacing: "0.2em", fontSize: "0.65rem" }}
         >
-          Seleção feita para você
+          Curated for You
         </p>
 
-        {/* Mobile: horizontal scroll; Desktop: 4 columns */}
-        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 md:grid md:grid-cols-4 md:overflow-visible md:pb-0 scrollbar-hide">
+        {/* Mobile: horizontal scroll; Desktop: 3 columns */}
+        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 md:grid md:grid-cols-3 md:overflow-visible md:pb-0 scrollbar-hide">
           {display.map((category) => (
             <Link
               key={category.id}
@@ -37,7 +37,7 @@ export async function CategoryCards() {
                   src={(category as { imageUrl: string }).imageUrl}
                   alt={category.name}
                   fill
-                  sizes="(max-width: 768px) 256px, 25vw"
+                  sizes="(max-width: 768px) 256px, 33vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               ) : (
@@ -45,12 +45,12 @@ export async function CategoryCards() {
                   className="absolute inset-0 flex items-center justify-center transition-transform duration-500 group-hover:scale-105"
                   style={{
                     background:
-                      "linear-gradient(135deg, #111111 0%, #0A0A0A 50%, #072E23 100%)",
+                      "linear-gradient(135deg, #111111 0%, #0A0A0A 50%, #141414 100%)",
                   }}
                 >
                   <Layers
                     className="h-12 w-12 opacity-20"
-                    style={{ color: "#D4AF37" }}
+                    style={{ color: "#C9C9C9" }}
                   />
                 </div>
               )}
@@ -60,7 +60,7 @@ export async function CategoryCards() {
                 className="absolute inset-0"
                 style={{
                   background:
-                    "linear-gradient(to top, rgba(5,31,24,0.85) 0%, rgba(5,31,24,0.2) 50%, transparent 100%)",
+                    "linear-gradient(to top, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.2) 50%, transparent 100%)",
                 }}
               />
 
@@ -73,17 +73,17 @@ export async function CategoryCards() {
                   {category.name}
                 </h3>
                 <span
-                  className="inline-flex items-center gap-1 text-xs font-medium transition-colors duration-200 group-hover:text-[#D4AF37]"
+                  className="inline-flex items-center gap-1 text-xs font-medium transition-colors duration-200 group-hover:text-[#C9C9C9]"
                   style={{ color: "rgba(200,187,168,0.8)" }}
                 >
-                  Explorar <ArrowRight className="h-3 w-3" />
+                  Explore <ArrowRight className="h-3 w-3" />
                 </span>
               </div>
 
               {/* Hover border */}
               <div
                 className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                style={{ border: "1px solid rgba(212,175,55,0.4)" }}
+                style={{ border: "1px solid rgba(201,201,201,0.4)" }}
               />
             </Link>
           ))}

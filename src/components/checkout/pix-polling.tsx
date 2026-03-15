@@ -68,9 +68,9 @@ export function PixPolling({ orderId, paymentId, pixQrCode }: Props) {
           <CheckCircle className="h-10 w-10" style={{ color: "#4ADE80" }} />
         </div>
         <h1 className="font-serif text-3xl font-bold mb-2" style={{ color: "#F5F5F5" }}>
-          PIX confirmado!
+          PIX Confirmed!
         </h1>
-        <p style={{ color: "#9A9A9A" }}>Redirecionando...</p>
+        <p style={{ color: "#9A9A9A" }}>Redirecting...</p>
       </div>
     );
   }
@@ -85,17 +85,17 @@ export function PixPolling({ orderId, paymentId, pixQrCode }: Props) {
           <AlertCircle className="h-10 w-10" style={{ color: "#F87171" }} />
         </div>
         <h1 className="font-serif text-3xl font-bold mb-2" style={{ color: "#F5F5F5" }}>
-          PIX expirado
+          PIX Expired
         </h1>
         <p className="mb-6" style={{ color: "#9A9A9A" }}>
-          O prazo de 1 hora para pagamento via PIX foi encerrado. O pedido foi cancelado e o estoque restaurado.
+          The 1-hour PIX payment window has closed. The order was cancelled and stock restored.
         </p>
         <a
           href="/cart"
-          className="inline-flex items-center justify-center px-6 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all hover:shadow-[0_0_20px_rgba(212,175,55,0.3)]"
-          style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
+          className="inline-flex items-center justify-center px-6 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all hover:shadow-[0_0_20px_rgba(201,201,201,0.3)]"
+          style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
         >
-          Voltar ao carrinho
+          Back to Cart
         </a>
       </div>
     );
@@ -108,19 +108,19 @@ export function PixPolling({ orderId, paymentId, pixQrCode }: Props) {
         <div
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 text-xs"
           style={{
-            backgroundColor: "rgba(212,175,55,0.08)",
-            border: "1px solid rgba(212,175,55,0.2)",
-            color: "#D4AF37",
+            backgroundColor: "rgba(201,201,201,0.08)",
+            border: "1px solid rgba(201,201,201,0.2)",
+            color: "#C9C9C9",
           }}
         >
           <Clock className="h-3 w-3 animate-pulse" />
-          Aguardando pagamento
+          Awaiting Payment
         </div>
         <h1 className="font-serif text-3xl font-bold" style={{ color: "#F5F5F5" }}>
-          Pague via PIX
+          Pay via PIX
         </h1>
         <p className="text-sm mt-2" style={{ color: "#9A9A9A" }}>
-          Escaneie o QR code ou copie o código
+          Scan the QR code or copy the code
         </p>
       </div>
 
@@ -129,7 +129,7 @@ export function PixPolling({ orderId, paymentId, pixQrCode }: Props) {
         className="rounded-2xl p-6 text-center mb-5"
         style={{
           backgroundColor: "#111111",
-          border: "1px solid rgba(212,175,55,0.2)",
+          border: "1px solid rgba(201,201,201,0.2)",
         }}
       >
         <div className="inline-block p-4 rounded-xl bg-white mb-4">
@@ -144,7 +144,7 @@ export function PixPolling({ orderId, paymentId, pixQrCode }: Props) {
         {status === "pending" && (
           <div className="flex items-center justify-center gap-2 text-sm mb-4" style={{ color: "#9A9A9A" }}>
             <RefreshCw className="h-3 w-3 animate-spin" />
-            Verificando pagamento...{elapsed > 0 ? ` (${elapsed}s)` : ""}
+            Checking payment...{elapsed > 0 ? ` (${elapsed}s)` : ""}
           </div>
         )}
 
@@ -153,7 +153,7 @@ export function PixPolling({ orderId, paymentId, pixQrCode }: Props) {
           className="rounded-xl p-3 mb-3 text-left break-all text-xs font-mono"
           style={{
             backgroundColor: "rgba(10,10,10,0.6)",
-            border: "1px solid rgba(212,175,55,0.1)",
+            border: "1px solid rgba(201,201,201,0.1)",
             color: "rgba(200,187,168,0.7)",
           }}
         >
@@ -164,13 +164,13 @@ export function PixPolling({ orderId, paymentId, pixQrCode }: Props) {
           onClick={copyToClipboard}
           className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-semibold transition-all"
           style={{
-            backgroundColor: copied ? "rgba(74,222,128,0.1)" : "rgba(212,175,55,0.1)",
-            border: `1px solid ${copied ? "rgba(74,222,128,0.3)" : "rgba(212,175,55,0.3)"}`,
-            color: copied ? "#4ADE80" : "#D4AF37",
+            backgroundColor: copied ? "rgba(74,222,128,0.1)" : "rgba(201,201,201,0.1)",
+            border: `1px solid ${copied ? "rgba(74,222,128,0.3)" : "rgba(201,201,201,0.3)"}`,
+            color: copied ? "#4ADE80" : "#C9C9C9",
           }}
         >
           {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-          {copied ? "Copiado!" : "Copiar código PIX (copia e cola)"}
+          {copied ? "Copied!" : "Copy PIX Code"}
         </button>
       </div>
 
@@ -178,20 +178,20 @@ export function PixPolling({ orderId, paymentId, pixQrCode }: Props) {
       <div
         className="rounded-2xl p-5 space-y-2 mb-5"
         style={{
-          backgroundColor: "rgba(15,74,55,0.4)",
-          border: "1px solid rgba(212,175,55,0.1)",
+          backgroundColor: "rgba(20,20,20,0.6)",
+          border: "1px solid rgba(201,201,201,0.1)",
         }}
       >
         {[
-          "Abra o app do seu banco",
-          "Escolha Pix → Pagar com QR Code",
-          "Escaneie o código acima ou use Pix copia e cola",
-          "Confirme o pagamento",
+          "Open your bank app",
+          "Choose PIX → Pay with QR Code",
+          "Scan the code above or use PIX copy & paste",
+          "Confirm the payment",
         ].map((step, i) => (
           <div key={i} className="flex items-start gap-3 text-sm">
             <span
               className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5"
-              style={{ backgroundColor: "rgba(212,175,55,0.15)", color: "#D4AF37" }}
+              style={{ backgroundColor: "rgba(201,201,201,0.15)", color: "#C9C9C9" }}
             >
               {i + 1}
             </span>
@@ -205,12 +205,12 @@ export function PixPolling({ orderId, paymentId, pixQrCode }: Props) {
           className="rounded-xl px-4 py-3 text-sm mb-4"
           style={{ backgroundColor: "rgba(239,68,68,0.1)", color: "#F87171", border: "1px solid rgba(239,68,68,0.2)" }}
         >
-          Pagamento não confirmado. Por favor, tente novamente ou escolha outra forma de pagamento.
+          Payment not confirmed. Please try again or choose another payment method.
         </div>
       )}
 
       <p className="text-center text-xs" style={{ color: "rgba(200,187,168,0.4)" }}>
-        Pedido #{orderId.slice(0, 8).toUpperCase()} · Esta página é atualizada automaticamente
+        Order #{orderId.slice(0, 8).toUpperCase()} · This page updates automatically
       </p>
     </div>
   );

@@ -75,23 +75,23 @@ export function AddToCartButton({
             }
           : isDisabled && !isPending
           ? {
-              backgroundColor: "rgba(212,175,55,0.3)",
+              backgroundColor: "rgba(201,201,201,0.3)",
               color: "rgba(245,240,230,0.5)",
             }
           : {
-              backgroundColor: "#D4AF37",
+              backgroundColor: "#C9C9C9",
               color: "#0A0A0A",
             }
       }
       onMouseEnter={(e) => {
         if (!isDisabled && !added && !error) {
-          (e.currentTarget as HTMLElement).style.backgroundColor = "#F0D060";
-          (e.currentTarget as HTMLElement).style.boxShadow = "0 0 20px rgba(212,175,55,0.4)";
+          (e.currentTarget as HTMLElement).style.backgroundColor = "#E8E8E8";
+          (e.currentTarget as HTMLElement).style.boxShadow = "0 0 20px rgba(201,201,201,0.4)";
         }
       }}
       onMouseLeave={(e) => {
         if (!isDisabled && !added && !error) {
-          (e.currentTarget as HTMLElement).style.backgroundColor = "#D4AF37";
+          (e.currentTarget as HTMLElement).style.backgroundColor = "#C9C9C9";
           (e.currentTarget as HTMLElement).style.boxShadow = "none";
         }
       }}
@@ -105,7 +105,7 @@ export function AddToCartButton({
       ) : (
         <ShoppingCart className="h-4 w-4" />
       )}
-      {isPending ? "Adicionando..." : added ? "Adicionado!" : error ? "Erro" : "Adicionar ao Carrinho"}
+      {isPending ? "Adding..." : added ? "Added!" : error ? "Error" : "Add to Cart"}
     </button>
   );
 }

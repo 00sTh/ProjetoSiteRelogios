@@ -22,9 +22,9 @@ export default async function AdminLogsPage() {
         <div className="flex items-center gap-3">
           <div
             className="flex h-10 w-10 items-center justify-center rounded-xl"
-            style={{ backgroundColor: "rgba(212,175,55,0.1)" }}
+            style={{ backgroundColor: "rgba(201,201,201,0.1)" }}
           >
-            <AlertTriangle className="h-5 w-5" style={{ color: "#D4AF37" }} />
+            <AlertTriangle className="h-5 w-5" style={{ color: "#C9C9C9" }} />
           </div>
           <div>
             <h1 className="font-serif text-2xl font-bold" style={{ color: "#F5F5F5" }}>
@@ -41,9 +41,9 @@ export default async function AdminLogsPage() {
             type="submit"
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
             style={{
-              border: "1px solid rgba(212,175,55,0.2)",
+              border: "1px solid rgba(201,201,201,0.2)",
               color: "rgba(200,187,168,0.7)",
-              backgroundColor: "rgba(212,175,55,0.05)",
+              backgroundColor: "rgba(201,201,201,0.05)",
             }}
           >
             <Trash2 className="h-4 w-4" />
@@ -57,7 +57,7 @@ export default async function AdminLogsPage() {
           className="rounded-2xl p-12 text-center"
           style={{
             backgroundColor: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(212,175,55,0.1)",
+            border: "1px solid rgba(201,201,201,0.1)",
           }}
         >
           <p style={{ color: "rgba(200,187,168,0.5)" }}>
@@ -67,32 +67,32 @@ export default async function AdminLogsPage() {
       ) : (
         <div
           className="rounded-2xl overflow-hidden"
-          style={{ border: "1px solid rgba(212,175,55,0.15)" }}
+          style={{ border: "1px solid rgba(201,201,201,0.15)" }}
         >
           <table className="w-full text-sm">
             <thead>
-              <tr style={{ backgroundColor: "rgba(212,175,55,0.08)" }}>
+              <tr style={{ backgroundColor: "rgba(201,201,201,0.08)" }}>
                 <th
                   className="px-4 py-3 text-left font-semibold tracking-wider text-xs uppercase"
-                  style={{ color: "rgba(212,175,55,0.8)" }}
+                  style={{ color: "rgba(201,201,201,0.8)" }}
                 >
                   Data
                 </th>
                 <th
                   className="px-4 py-3 text-left font-semibold tracking-wider text-xs uppercase"
-                  style={{ color: "rgba(212,175,55,0.8)" }}
+                  style={{ color: "rgba(201,201,201,0.8)" }}
                 >
                   Digest
                 </th>
                 <th
                   className="px-4 py-3 text-left font-semibold tracking-wider text-xs uppercase"
-                  style={{ color: "rgba(212,175,55,0.8)" }}
+                  style={{ color: "rgba(201,201,201,0.8)" }}
                 >
                   Mensagem
                 </th>
                 <th
                   className="px-4 py-3 text-left font-semibold tracking-wider text-xs uppercase"
-                  style={{ color: "rgba(212,175,55,0.8)" }}
+                  style={{ color: "rgba(201,201,201,0.8)" }}
                 >
                   Path
                 </th>
@@ -107,7 +107,7 @@ export default async function AdminLogsPage() {
                       i % 2 === 0
                         ? "rgba(255,255,255,0.02)"
                         : "rgba(255,255,255,0.01)",
-                    borderTop: "1px solid rgba(212,175,55,0.06)",
+                    borderTop: "1px solid rgba(201,201,201,0.06)",
                   }}
                 >
                   <td
@@ -118,7 +118,7 @@ export default async function AdminLogsPage() {
                   </td>
                   <td
                     className="px-4 py-3 font-mono"
-                    style={{ color: "#D4AF37", fontSize: "0.75rem" }}
+                    style={{ color: "#C9C9C9", fontSize: "0.75rem" }}
                   >
                     {log.digest ?? "—"}
                   </td>

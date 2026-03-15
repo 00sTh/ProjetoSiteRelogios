@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ============================================================
-   TEMA LUXIMPORT — Dark + Gold (Ultra Premium)
+   TEMA LUXIMPORT — Dark + Silver/Platinum (Ultra Premium)
    ============================================================ */
 @theme inline {
   --color-background:        var(--dark-bg);
@@ -10,7 +10,7 @@
   --color-card-foreground:   var(--text-primary);
   --color-popover:           var(--dark-surface-2);
   --color-popover-foreground: var(--text-primary);
-  --color-primary:           var(--gold);
+  --color-primary:           var(--silver);
   --color-primary-foreground: var(--dark-bg);
   --color-secondary:         var(--dark-surface-2);
   --color-secondary-foreground: var(--text-primary);
@@ -22,30 +22,30 @@
   --color-destructive-foreground: var(--text-primary);
   --color-border:            var(--border-subtle);
   --color-input:             var(--dark-surface-2);
-  --color-ring:              var(--gold);
+  --color-ring:              var(--silver);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   /* Font families */
-  --font-serif: var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-serif: var(--font-cormorant), Georgia, "Times New Roman", serif;
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
 }
 
-/* ── LuxImport Dark + Gold Palette ── */
+/* ── LuxImport Dark + Silver/Platinum Palette ── */
 @layer base {
   :root {
     --dark-bg:       #0A0A0A;
     --dark-surface:  #111111;
     --dark-surface-2:#1A1A1A;
     --dark-surface-3:#222222;
-    --gold:          #D4AF37;
-    --gold-light:    #F0D060;
-    --gold-dim:      #A88B28;
+    --silver:        #C9C9C9;
+    --platinum:      #E8E8E8;
+    --silver-dim:    #8A8A8A;
     --text-primary:  #F5F5F5;
     --text-muted:    #9A9A9A;
-    --border-subtle: rgba(212,175,55,0.15);
+    --border-subtle: rgba(201,201,201,0.15);
     --radius: 0.5rem;
   }
 }
@@ -67,8 +67,8 @@
   /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: var(--dark-bg); }
-  ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+  ::-webkit-scrollbar-thumb { background: var(--silver-dim); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--silver); }
 }
 
 /* ── Custom animations ── */
@@ -95,29 +95,29 @@
     background: linear-gradient(
       90deg,
       transparent 0%,
-      rgba(212,175,55,0.3) 50%,
+      rgba(201,201,201,0.3) 50%,
       transparent 100%
     );
     background-size: 200% 100%;
     animation: shimmer 2s linear infinite;
   }
-  .gold-glow {
-    box-shadow: 0 0 20px rgba(212,175,55,0.25);
+  .silver-glow {
+    box-shadow: 0 0 20px rgba(201,201,201,0.25);
   }
-  .gold-glow-lg {
-    box-shadow: 0 0 40px rgba(212,175,55,0.2), 0 0 80px rgba(212,175,55,0.08);
+  .silver-glow-lg {
+    box-shadow: 0 0 40px rgba(201,201,201,0.2), 0 0 80px rgba(201,201,201,0.08);
   }
-  .text-gradient-gold {
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+  .text-gradient-silver {
+    background: linear-gradient(135deg, var(--silver) 0%, var(--platinum) 50%, var(--silver) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  .border-gold-subtle {
-    border-color: rgba(212,175,55,0.2);
+  .border-silver-subtle {
+    border-color: rgba(201,201,201,0.2);
   }
-  .border-gold-medium {
-    border-color: rgba(212,175,55,0.5);
+  .border-silver-medium {
+    border-color: rgba(201,201,201,0.5);
   }
   .label-luxury {
     letter-spacing: 0.3em;

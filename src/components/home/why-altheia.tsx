@@ -23,14 +23,14 @@ interface WhyLuxImportProps {
 
 export function WhyLuxImport({
   benefit1Icon = "Truck",
-  benefit1Title = "Frete grátis acima de R$199",
-  benefit1Text = "Entrega em todo o Brasil sem custo adicional.",
+  benefit1Title = "Worldwide Shipping",
+  benefit1Text = "Premium delivery to your door, wherever you are.",
   benefit2Icon = "RotateCcw",
-  benefit2Title = "Devolução em 30 dias",
-  benefit2Text = "Satisfação garantida ou seu dinheiro de volta.",
+  benefit2Title = "30-Day Returns",
+  benefit2Text = "Satisfaction guaranteed or full refund.",
   benefit3Icon = "ShieldCheck",
-  benefit3Title = "Pagamento seguro",
-  benefit3Text = "Transações criptografadas e dados protegidos.",
+  benefit3Title = "Secure Checkout",
+  benefit3Text = "End-to-end encrypted transactions, always.",
 }: WhyLuxImportProps) {
   const benefits = [
     { icon: getIcon(benefit1Icon), title: benefit1Title, description: benefit1Text },
@@ -43,14 +43,14 @@ export function WhyLuxImport({
       className="py-8 px-4"
       style={{
         backgroundColor: "#111111",
-        borderTop: "1px solid rgba(212,175,55,0.15)",
+        borderTop: "1px solid rgba(201,201,201,0.15)",
       }}
     >
       <div className="container mx-auto max-w-7xl">
-        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[rgba(212,175,55,0.2)]">
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[rgba(201,201,201,0.15)]">
           {benefits.map(({ icon: Icon, title, description }, idx) => (
             <div key={idx} className="flex items-start gap-4 px-8 py-6">
-              <Icon className="h-5 w-5 mt-0.5 flex-shrink-0" style={{ color: "#D4AF37" }} />
+              <Icon className="h-5 w-5 mt-0.5 flex-shrink-0" style={{ color: "#C9C9C9" }} />
               <div>
                 <p className="font-medium text-sm mb-1" style={{ color: "#F5F5F5" }}>
                   {title}

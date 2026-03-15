@@ -7,10 +7,11 @@ import { Menu, X, ShoppingCart, User, LayoutDashboard, Heart } from "lucide-reac
 import { APP_NAME } from "@/lib/constants";
 
 const navLinks = [
-  { href: "/", label: "Início" },
-  { href: "/products", label: "Loja" },
-  { href: "/sobre-nos", label: "Sobre Nós" },
-  { href: "/videos", label: "Vídeos" },
+  { href: "/", label: "Home" },
+  { href: "/products", label: "Collections" },
+  { href: "/products?category=watches", label: "Watches" },
+  { href: "/products?category=sunglasses", label: "Sunglasses" },
+  { href: "/about", label: "About" },
 ];
 
 interface MobileNavProps {
@@ -28,8 +29,8 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
       <button
         onClick={() => setOpen(true)}
         className="md:hidden flex items-center justify-center w-11 h-11 rounded-full transition-colors"
-        style={{ color: "#D4AF37" }}
-        aria-label="Abrir menu"
+        style={{ color: "#C9C9C9" }}
+        aria-label="Open menu"
       >
         <Menu className="h-5 w-5" />
       </button>
@@ -56,14 +57,14 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
               transition={{ type: "spring", damping: 28, stiffness: 220 }}
               className="fixed top-0 right-0 h-full w-72 z-50 flex flex-col"
               style={{
-                backgroundColor: "#072D21",
-                borderLeft: "1px solid rgba(212,175,55,0.2)",
+                backgroundColor: "#141414",
+                borderLeft: "1px solid rgba(201,201,201,0.2)",
               }}
             >
               {/* Header */}
               <div
                 className="flex items-center justify-between px-6 py-5"
-                style={{ borderBottom: "1px solid rgba(212,175,55,0.12)" }}
+                style={{ borderBottom: "1px solid rgba(201,201,201,0.12)" }}
               >
                 <Link
                   href="/"
@@ -75,9 +76,9 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
                 </Link>
                 <button
                   onClick={() => setOpen(false)}
-                  className="w-8 h-8 flex items-center justify-center rounded-full transition-colors hover:text-[#D4AF37]"
+                  className="w-8 h-8 flex items-center justify-center rounded-full transition-colors hover:text-[#C9C9C9]"
                   style={{ color: "#9A9A9A" }}
-                  aria-label="Fechar menu"
+                  aria-label="Close menu"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -96,7 +97,7 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
                       <Link
                         href={href}
                         onClick={() => setOpen(false)}
-                        className="flex items-center px-4 py-3.5 rounded-xl text-sm font-semibold tracking-wider uppercase transition-all duration-200 hover:text-[#D4AF37] hover:bg-[rgba(212,175,55,0.06)]"
+                        className="flex items-center px-4 py-3.5 rounded-xl text-sm font-semibold tracking-wider uppercase transition-all duration-200 hover:text-[#C9C9C9] hover:bg-[rgba(201,201,201,0.06)]"
                         style={{ color: "#9A9A9A", fontSize: "0.7rem", letterSpacing: "0.14em" }}
                       >
                         {label}
@@ -109,44 +110,44 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
               {/* Footer actions */}
               <div
                 className="px-4 pb-8 pt-4 space-y-3"
-                style={{ borderTop: "1px solid rgba(212,175,55,0.12)" }}
+                style={{ borderTop: "1px solid rgba(201,201,201,0.12)" }}
               >
                 <Link
                   href="/cart"
                   onClick={() => setOpen(false)}
                   className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all"
                   style={{
-                    backgroundColor: "rgba(212,175,55,0.08)",
-                    border: "1px solid rgba(212,175,55,0.2)",
+                    backgroundColor: "rgba(201,201,201,0.08)",
+                    border: "1px solid rgba(201,201,201,0.2)",
                     color: "#F5F5F5",
                   }}
                 >
-                  <ShoppingCart className="h-4 w-4" style={{ color: "#D4AF37" }} />
-                  <span>Carrinho</span>
+                  <ShoppingCart className="h-4 w-4" style={{ color: "#C9C9C9" }} />
+                  <span>Cart</span>
                   {cartCount > 0 && (
                     <span
                       className="ml-auto text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full"
-                      style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
+                      style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
                     >
                       {cartCount > 9 ? "9+" : cartCount}
                     </span>
                   )}
                 </Link>
 
-                {/* Painel Admin (só para admins) */}
+                {/* Admin Panel (admins only) */}
                 {isAdmin && (
                   <Link
                     href="/admin"
                     onClick={() => setOpen(false)}
                     className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all"
                     style={{
-                      border: "1px solid rgba(212,175,55,0.4)",
-                      color: "#D4AF37",
-                      backgroundColor: "rgba(212,175,55,0.06)",
+                      border: "1px solid rgba(201,201,201,0.4)",
+                      color: "#C9C9C9",
+                      backgroundColor: "rgba(201,201,201,0.06)",
                     }}
                   >
                     <LayoutDashboard className="h-4 w-4" />
-                    <span>Painel Admin</span>
+                    <span>Admin Panel</span>
                   </Link>
                 )}
 
@@ -154,11 +155,11 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
                   <Link
                     href="/wishlist"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all hover:text-[#D4AF37]"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all hover:text-[#C9C9C9]"
                     style={{ color: "#9A9A9A" }}
                   >
-                    <Heart className="h-4 w-4" style={{ color: "#D4AF37" }} />
-                    <span>Lista de Desejos</span>
+                    <Heart className="h-4 w-4" style={{ color: "#C9C9C9" }} />
+                    <span>Wishlist</span>
                   </Link>
                 )}
 
@@ -166,20 +167,20 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
                   <Link
                     href="/account"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all hover:text-[#D4AF37]"
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all hover:text-[#C9C9C9]"
                     style={{ color: "#9A9A9A" }}
                   >
-                    <User className="h-4 w-4" style={{ color: "#D4AF37" }} />
-                    <span>Minha Conta</span>
+                    <User className="h-4 w-4" style={{ color: "#C9C9C9" }} />
+                    <span>My Account</span>
                   </Link>
                 ) : (
                   <Link
                     href="/sign-in"
                     onClick={() => setOpen(false)}
-                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold tracking-widest uppercase w-full transition-all hover:bg-[#F0D060]"
-                    style={{ backgroundColor: "#D4AF37", color: "#0A0A0A" }}
+                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold tracking-widest uppercase w-full transition-all hover:bg-[#E8E8E8]"
+                    style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
                   >
-                    Entrar
+                    Sign In
                   </Link>
                 )}
               </div>

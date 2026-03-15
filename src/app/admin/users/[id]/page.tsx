@@ -55,7 +55,7 @@ export default async function AdminUserDetailPage({
           ) : (
             <div
               className="h-16 w-16 rounded-full flex items-center justify-center shrink-0 text-xl font-bold"
-              style={{ backgroundColor: "rgba(212,175,55,0.15)", color: "#D4AF37" }}
+              style={{ backgroundColor: "rgba(201,201,201,0.15)", color: "#C9C9C9" }}
             >
               {(user.firstName?.[0] ?? user.email?.[0] ?? "?").toUpperCase()}
             </div>
@@ -65,14 +65,14 @@ export default async function AdminUserDetailPage({
               {fullName}
             </h1>
             <div className="flex items-center gap-2 mt-1">
-              <Mail className="h-3.5 w-3.5" style={{ color: "rgba(212,175,55,0.5)" }} />
+              <Mail className="h-3.5 w-3.5" style={{ color: "rgba(201,201,201,0.5)" }} />
               <span className="text-sm" style={{ color: "rgba(200,187,168,0.7)" }}>
                 {user.email}
               </span>
               {isAdmin && (
                 <span
                   className="text-xs px-2 py-0.5 rounded-full font-medium"
-                  style={{ backgroundColor: "rgba(212,175,55,0.15)", color: "#D4AF37" }}
+                  style={{ backgroundColor: "rgba(201,201,201,0.15)", color: "#C9C9C9" }}
                 >
                   Admin
                 </span>
@@ -89,8 +89,8 @@ export default async function AdminUserDetailPage({
           <div
             className="rounded-2xl p-5"
             style={{
-              backgroundColor: "#0F2E1E",
-              border: "1px solid rgba(212,175,55,0.15)",
+              backgroundColor: "#1A1A1A",
+              border: "1px solid rgba(201,201,201,0.15)",
             }}
           >
             <h2 className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: "rgba(200,187,168,0.4)" }}>
@@ -99,7 +99,7 @@ export default async function AdminUserDetailPage({
             <div className="flex flex-col gap-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" style={{ color: "rgba(212,175,55,0.5)" }} />
+                  <Calendar className="h-4 w-4" style={{ color: "rgba(201,201,201,0.5)" }} />
                   <span className="text-sm" style={{ color: "rgba(200,187,168,0.7)" }}>Cadastro</span>
                 </div>
                 <span className="text-sm font-medium" style={{ color: "#F5F5F5" }}>
@@ -108,7 +108,7 @@ export default async function AdminUserDetailPage({
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <ShoppingBag className="h-4 w-4" style={{ color: "rgba(212,175,55,0.5)" }} />
+                  <ShoppingBag className="h-4 w-4" style={{ color: "rgba(201,201,201,0.5)" }} />
                   <span className="text-sm" style={{ color: "rgba(200,187,168,0.7)" }}>Total pedidos</span>
                 </div>
                 <span className="text-sm font-medium" style={{ color: "#F5F5F5" }}>
@@ -117,10 +117,10 @@ export default async function AdminUserDetailPage({
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <DollarSign className="h-4 w-4" style={{ color: "rgba(212,175,55,0.5)" }} />
+                  <DollarSign className="h-4 w-4" style={{ color: "rgba(201,201,201,0.5)" }} />
                   <span className="text-sm" style={{ color: "rgba(200,187,168,0.7)" }}>Total gasto</span>
                 </div>
-                <span className="text-sm font-semibold" style={{ color: "#D4AF37" }}>
+                <span className="text-sm font-semibold" style={{ color: "#C9C9C9" }}>
                   {totalSpent > 0 ? formatPrice(totalSpent) : "—"}
                 </span>
               </div>
@@ -137,8 +137,8 @@ export default async function AdminUserDetailPage({
           <div
             className="rounded-2xl p-5"
             style={{
-              backgroundColor: "#0F2E1E",
-              border: "1px solid rgba(212,175,55,0.15)",
+              backgroundColor: "#1A1A1A",
+              border: "1px solid rgba(201,201,201,0.15)",
             }}
           >
             <h2 className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: "rgba(200,187,168,0.4)" }}>
@@ -159,11 +159,11 @@ export default async function AdminUserDetailPage({
         <div className="lg:col-span-2">
           <div
             className="rounded-2xl overflow-hidden"
-            style={{ border: "1px solid rgba(212,175,55,0.15)" }}
+            style={{ border: "1px solid rgba(201,201,201,0.15)" }}
           >
             <div
               className="px-6 py-4 border-b"
-              style={{ backgroundColor: "#0F2E1E", borderColor: "rgba(212,175,55,0.1)" }}
+              style={{ backgroundColor: "#1A1A1A", borderColor: "rgba(201,201,201,0.1)" }}
             >
               <h2 className="font-semibold text-sm" style={{ color: "#F5F5F5" }}>
                 Histórico de pedidos
@@ -173,16 +173,16 @@ export default async function AdminUserDetailPage({
             {user.orders.length === 0 ? (
               <div
                 className="flex items-center justify-center py-12"
-                style={{ backgroundColor: "#0A2419" }}
+                style={{ backgroundColor: "#141414" }}
               >
                 <p className="text-sm" style={{ color: "rgba(200,187,168,0.4)" }}>
                   Nenhum pedido ainda.
                 </p>
               </div>
             ) : (
-              <table className="w-full text-sm" style={{ backgroundColor: "#0A2419" }}>
+              <table className="w-full text-sm" style={{ backgroundColor: "#141414" }}>
                 <thead>
-                  <tr style={{ borderBottom: "1px solid rgba(212,175,55,0.08)" }}>
+                  <tr style={{ borderBottom: "1px solid rgba(201,201,201,0.08)" }}>
                     {["Pedido", "Itens", "Total", "Status"].map((h) => (
                       <th
                         key={h}
@@ -203,12 +203,12 @@ export default async function AdminUserDetailPage({
                       <tr
                         key={order.id}
                         className="transition-colors"
-                        style={{ borderBottom: "1px solid rgba(212,175,55,0.06)" }}
+                        style={{ borderBottom: "1px solid rgba(201,201,201,0.06)" }}
                       >
                         <td className="px-6 py-4">
                           <Link
                             href={`/admin/orders/${order.id}`}
-                            className="font-mono text-xs hover:text-[#D4AF37] transition-colors"
+                            className="font-mono text-xs hover:text-[#C9C9C9] transition-colors"
                             style={{ color: "rgba(200,187,168,0.7)" }}
                           >
                             #{order.id.slice(0, 8).toUpperCase()}
@@ -220,7 +220,7 @@ export default async function AdminUserDetailPage({
                         <td className="px-6 py-4" style={{ color: "#9A9A9A" }}>
                           {itemCount} item{itemCount !== 1 ? "s" : ""}
                         </td>
-                        <td className="px-6 py-4 font-semibold" style={{ color: "#D4AF37" }}>
+                        <td className="px-6 py-4 font-semibold" style={{ color: "#C9C9C9" }}>
                           {formatPrice(Number(order.price))}
                         </td>
                         <td className="px-6 py-4">
