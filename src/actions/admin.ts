@@ -352,7 +352,7 @@ export async function updateOrderStatus(orderId: string, status: string) {
 
   await prisma.order.update({
     where: { id: orderId },
-    data: { status: status },
+    data: { status: status as "PENDING" | "PAID" | "SHIPPED" | "DELIVERED" | "CANCELLED" },
   });
 
   revalidatePath("/admin/orders");
