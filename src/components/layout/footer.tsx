@@ -3,9 +3,10 @@ import { APP_NAME } from "@/lib/constants";
 
 const navLinks = [
   { href: "/products", label: "Collections" },
-  { href: "/products?category=watches", label: "Watches" },
-  { href: "/products?category=sunglasses", label: "Sunglasses" },
-  { href: "/about", label: "About" },
+  { href: "/products?category=relogios", label: "Watches" },
+  { href: "/products?category=oculos", label: "Sunglasses" },
+  { href: "/products?category=bolsas", label: "Bags" },
+  { href: "/sobre-nos", label: "About" },
   { href: "/politica-de-privacidade", label: "Privacy" },
 ];
 

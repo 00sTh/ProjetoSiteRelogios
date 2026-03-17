@@ -57,7 +57,7 @@ export function HeroSection({ imageUrl }: HeroSectionProps) {
               textTransform: "uppercase",
             }}
           >
-            S Luxury Collection
+            Luxury Collection
           </h1>
 
           <hr
