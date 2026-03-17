@@ -8,7 +8,7 @@ import { Package, ShoppingCart, DollarSign, Users, ArrowRight, CreditCard } from
 export const metadata: Metadata = { title: "Admin — Dashboard" };
 
 export default async function AdminDashboard() {
-  const PAID_STATUSES = ["PAID", "SHIPPED", "DELIVERED"] as const;
+  const PAID_STATUSES = ["PAID", "SHIPPED", "DELIVERED"] as ("PAID" | "SHIPPED" | "DELIVERED")[];
 
   const [totalProducts, totalOrders, totalRevenue, recentOrders, totalUsers, cieloStats, redeStats] =
     await Promise.all([
