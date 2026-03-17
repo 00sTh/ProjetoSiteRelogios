@@ -96,7 +96,7 @@ async function main() {
       slug: `${slug}-${Date.now()}`,
       description: `Imported from WeShop. Original price: ¥${priceNum}`,
       price: priceNum * 0.8, // rough CNY→BRL conversion placeholder
-      images: JSON.stringify(finalImages),
+      images: finalImages,
       categoryId: category.id,
       stock: 5,
       active: true,
