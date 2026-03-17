@@ -62,11 +62,12 @@ npx tsc --noEmit
 - JWT template: `{ "metadata": "{{user.public_metadata}}" }` em Configure → Sessions
 
 ## Categorias de Produto
-1. **Relógios** — slug: `relogios`
-2. **Acessórios** — slug: `acessorios`
-3. **Eletrônicos** — slug: `eletronicos`
-4. **Moda** — slug: `moda`
-5. **Bolsas & Carteiras** — slug: `bolsas`
+1. **Relógios** — slug: `relogios` (~507 produtos)
+2. **Acessórios** — slug: `acessorios` (joias, perfumes, cintos — óculos foram separados)
+3. **Eletrônicos** — slug: `eletronicos` (desativados)
+4. **Sapatos** — slug: `sapatos` (~515 produtos, antes era `moda`)
+5. **Bolsas & Carteiras** — slug: `bolsas` (~387 produtos)
+6. **Óculos** — slug: `oculos` (~576 produtos, migrados de acessorios)
 
 ## Convenções
 - Server Components por padrão; `"use client"` somente quando necessário

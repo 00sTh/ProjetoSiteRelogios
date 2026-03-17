@@ -22,7 +22,7 @@ export default async function CheckoutPage() {
   return (
     <div
       className="min-h-screen py-10 px-4"
-      style={{ backgroundColor: "#0A0A0A" }}
+      style={{ backgroundColor: "#FAFAFA" }}
     >
       <div className="container mx-auto max-w-2xl">
         {/* Header */}
@@ -30,9 +30,9 @@ export default async function CheckoutPage() {
           <div
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 text-xs"
             style={{
-              backgroundColor: "rgba(201,201,201,0.08)",
-              border: "1px solid rgba(201,201,201,0.2)",
-              color: "#C9C9C9",
+              backgroundColor: "rgba(0,0,0,0.05)",
+              border: "1px solid rgba(0,0,0,0.1)",
+              color: "#6A6A6A",
             }}
           >
             <Lock className="h-3 w-3" />
@@ -40,7 +40,7 @@ export default async function CheckoutPage() {
           </div>
           <h1
             className="font-serif text-3xl md:text-4xl font-bold"
-            style={{ color: "#F5F5F5" }}
+            style={{ color: "#0A0A0A" }}
           >
             Complete Your Order
           </h1>
@@ -50,14 +50,14 @@ export default async function CheckoutPage() {
         <div
           className="flex items-center justify-center gap-6 mb-8 py-4 rounded-2xl"
           style={{
-            backgroundColor: "rgba(20,20,20,0.5)",
-            border: "1px solid rgba(201,201,201,0.1)",
+            backgroundColor: "rgba(0,0,0,0.04)",
+            border: "1px solid rgba(0,0,0,0.08)",
           }}
         >
           {["SSL Encrypted", "Secure Payment", "Data Protected"].map((badge) => (
             <div key={badge} className="flex items-center gap-1.5">
-              <ShieldCheck className="h-3.5 w-3.5 shrink-0" style={{ color: "#C9C9C9" }} />
-              <span className="text-xs hidden sm:inline" style={{ color: "#9A9A9A" }}>
+              <ShieldCheck className="h-3.5 w-3.5 shrink-0" style={{ color: "#6A6A6A" }} />
+              <span className="text-xs hidden sm:inline" style={{ color: "#6A6A6A" }}>
                 {badge}
               </span>
             </div>

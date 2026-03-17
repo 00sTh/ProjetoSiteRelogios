@@ -6,7 +6,7 @@ import { GoldButton } from "@/components/ui/gold-button";
 
 export const metadata: Metadata = {
   title: "About Us",
-  description: "The story behind LuxImport — curating the world's finest timepieces and eyewear.",
+  description: "The story behind Imports — curating the world's finest timepieces and eyewear.",
 };
 
 const values = [
@@ -32,37 +32,37 @@ const values = [
 
 export default function AboutPage() {
   return (
-    <div style={{ backgroundColor: "#0A0A0A", minHeight: "100vh" }}>
+    <div style={{ backgroundColor: "#FAFAFA", minHeight: "100vh" }}>
       {/* Hero */}
       <div
         className="relative py-24 px-4 text-center overflow-hidden"
         style={{
-          backgroundColor: "#111111",
-          borderBottom: "1px solid rgba(201,201,201,0.15)",
+          backgroundColor: "#F2F2F2",
+          borderBottom: "1px solid rgba(0,0,0,0.08)",
         }}
       >
         <div
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(201,201,201,0.04) 0%, transparent 70%)",
+              "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(0,0,0,0.02) 0%, transparent 70%)",
           }}
         />
         <div className="relative z-10 max-w-3xl mx-auto">
           <p
             className="label-luxury mb-4"
-            style={{ color: "#C9C9C9", letterSpacing: "0.25em", fontSize: "0.65rem" }}
+            style={{ color: "#6A6A6A", letterSpacing: "0.25em", fontSize: "0.65rem" }}
           >
             Our Story
           </p>
           <h1
             className="font-serif text-4xl md:text-6xl font-bold leading-tight mb-6"
-            style={{ color: "#F5F5F5" }}
+            style={{ color: "#0A0A0A" }}
           >
             Precision. Heritage.{" "}
             <span
               style={{
-                background: "linear-gradient(135deg, #C9C9C9 0%, #E8E8E8 50%, #C9C9C9 100%)",
+                background: "linear-gradient(135deg, #0A0A0A 0%, #4A4A4A 50%, #0A0A0A 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -73,9 +73,9 @@ export default function AboutPage() {
           </h1>
           <p
             className="text-lg leading-relaxed"
-            style={{ color: "#9A9A9A" }}
+            style={{ color: "#6A6A6A" }}
           >
-            LuxImport was founded on the belief that the world's finest timepieces and eyewear
+            Imports was founded on the belief that the world's finest timepieces and eyewear
             should be accessible — with guaranteed authenticity, expert curation, and a purchasing
             experience worthy of the pieces themselves.
           </p>
@@ -93,7 +93,7 @@ export default function AboutPage() {
                 align="left"
                 animate={false}
               />
-              <div className="mt-6 space-y-4 text-base leading-relaxed" style={{ color: "#9A9A9A" }}>
+              <div className="mt-6 space-y-4 text-base leading-relaxed" style={{ color: "#6A6A6A" }}>
                 <p>
                   What began as a personal obsession with the art of watchmaking has grown into
                   a curated marketplace for those who appreciate the finest in horological and
@@ -116,39 +116,39 @@ export default function AboutPage() {
             <div
               className="relative rounded-3xl overflow-hidden aspect-square"
               style={{
-                background: "linear-gradient(135deg, #111111 0%, #1A1A1A 50%, #141414 100%)",
-                border: "1px solid rgba(201,201,201,0.15)",
+                background: "linear-gradient(135deg, #EAEAEA 0%, #F2F2F2 50%, #E8E8E8 100%)",
+                border: "1px solid rgba(0,0,0,0.1)",
               }}
             >
               <div
                 className="absolute inset-0"
                 style={{
                   background:
-                    "radial-gradient(circle at 60% 40%, rgba(201,201,201,0.08) 0%, transparent 60%)",
+                    "radial-gradient(circle at 60% 40%, rgba(0,0,0,0.04) 0%, transparent 60%)",
                 }}
               />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center space-y-4 px-8">
                   <p
                     className="font-serif text-5xl font-bold"
-                    style={{ color: "#C9C9C9" }}
+                    style={{ color: "#0A0A0A" }}
                   >
                     100%
                   </p>
-                  <p className="label-luxury" style={{ color: "#9A9A9A" }}>
+                  <p className="label-luxury" style={{ color: "#6A6A6A" }}>
                     Authenticated Pieces
                   </p>
                   <div
                     className="h-px w-16 mx-auto"
-                    style={{ backgroundColor: "rgba(201,201,201,0.3)" }}
+                    style={{ backgroundColor: "rgba(0,0,0,0.15)" }}
                   />
                   <p
                     className="font-serif text-5xl font-bold"
-                    style={{ color: "#C9C9C9" }}
+                    style={{ color: "#0A0A0A" }}
                   >
                     50+
                   </p>
-                  <p className="label-luxury" style={{ color: "#9A9A9A" }}>
+                  <p className="label-luxury" style={{ color: "#6A6A6A" }}>
                     Global Brands
                   </p>
                 </div>
@@ -162,8 +162,8 @@ export default function AboutPage() {
       <section
         className="py-24 px-4"
         style={{
-          backgroundColor: "#111111",
-          borderTop: "1px solid rgba(201,201,201,0.12)",
+          backgroundColor: "#F2F2F2",
+          borderTop: "1px solid rgba(0,0,0,0.08)",
         }}
       >
         <div className="container mx-auto max-w-5xl">
@@ -171,7 +171,7 @@ export default function AboutPage() {
             <SectionTitle
               label="Our Values"
               title="What We Stand For"
-              subtitle="Three principles guide everything we do at LuxImport."
+              subtitle="Three principles guide everything we do at Imports."
               align="center"
             />
           </div>
@@ -182,26 +182,26 @@ export default function AboutPage() {
                 key={title}
                 className="rounded-2xl p-8 space-y-5"
                 style={{
-                  backgroundColor: "#0A0A0A",
-                  border: "1px solid rgba(201,201,201,0.12)",
+                  backgroundColor: "#FAFAFA",
+                  border: "1px solid rgba(0,0,0,0.08)",
                 }}
               >
                 <div
                   className="w-12 h-12 rounded-2xl flex items-center justify-center"
                   style={{
-                    backgroundColor: "rgba(201,201,201,0.08)",
-                    border: "1px solid rgba(201,201,201,0.2)",
+                    backgroundColor: "rgba(0,0,0,0.05)",
+                    border: "1px solid rgba(0,0,0,0.1)",
                   }}
                 >
-                  <Icon className="h-5 w-5" style={{ color: "#C9C9C9" }} />
+                  <Icon className="h-5 w-5" style={{ color: "#6A6A6A" }} />
                 </div>
                 <h3
                   className="font-serif text-2xl font-semibold"
-                  style={{ color: "#F5F5F5" }}
+                  style={{ color: "#0A0A0A" }}
                 >
                   {title}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "#9A9A9A" }}>
+                <p className="text-sm leading-relaxed" style={{ color: "#6A6A6A" }}>
                   {description}
                 </p>
               </div>

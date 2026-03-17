@@ -15,7 +15,7 @@ interface NossaHistoriaTeaserProps {
 
 export function NossaHistoriaTeaser({
   videoUrl,
-  videoTitle = "The Story of LuxImport",
+  videoTitle = "The Story of Imports",
   videoDesc,
 }: NossaHistoriaTeaserProps) {
   return (

@@ -9,7 +9,7 @@
  *   SMTP_PORT="587"
  *   SMTP_USER="seu@email.com"
  *   SMTP_PASS="sua-senha-ou-app-password"
- *   SMTP_FROM="LuxImport <noreply@luximport.com.br>"
+ *   SMTP_FROM="Imports <noreply@luximport.com.br>"
  */
 
 interface MailOptions {
@@ -49,7 +49,7 @@ export async function sendMail(opts: MailOptions): Promise<void> {
   });
 
   const from =
-    process.env.SMTP_FROM ?? `LuxImport <${user}>`;
+    process.env.SMTP_FROM ?? `Imports <${user}>`;
 
   await transporter.sendMail({ from, ...opts });
 }
@@ -79,11 +79,11 @@ export async function sendNewOrderNotification(
 
   await sendMail({
     to: adminEmail,
-    subject: `[LuxImport] Novo pedido #${order.id.slice(0, 8).toUpperCase()}`,
+    subject: `[Imports] Novo pedido #${order.id.slice(0, 8).toUpperCase()}`,
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;background:#0A0A0A;color:#F5F5F5;border-radius:12px">
         <h1 style="color:#D4AF37;font-size:1.5rem;margin-bottom:8px">Novo Pedido Recebido</h1>
-        <p style="color:#9A9A9A;margin-bottom:20px">Um novo pedido foi criado na LuxImport.</p>
+        <p style="color:#9A9A9A;margin-bottom:20px">Um novo pedido foi criado na Imports.</p>
         <table style="width:100%;border-collapse:collapse;margin-bottom:20px">
           <tr><td style="padding:6px 0;color:#9A9A9A">Pedido:</td><td style="padding:6px 0;font-weight:600">#${order.id.slice(0, 8).toUpperCase()}</td></tr>
           <tr><td style="padding:6px 0;color:#9A9A9A">Cliente:</td><td style="padding:6px 0">${order.customerName ?? "—"}</td></tr>
@@ -113,7 +113,7 @@ export async function sendOrderConfirmationToCustomer(
 
   await sendMail({
     to: order.customerEmail,
-    subject: `Pedido #${order.id.slice(0, 8).toUpperCase()} recebido — LuxImport`,
+    subject: `Pedido #${order.id.slice(0, 8).toUpperCase()} recebido — Imports`,
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;background:#0A0A0A;color:#F5F5F5;border-radius:12px">
         <h1 style="color:#D4AF37;font-size:1.5rem;margin-bottom:8px">Obrigado pela sua compra!</h1>
@@ -124,7 +124,7 @@ export async function sendOrderConfirmationToCustomer(
           <tr><td style="padding:6px 0;color:#9A9A9A">Forma de pagamento:</td><td style="padding:6px 0">${methodLabel[order.paymentMethod] ?? order.paymentMethod}</td></tr>
         </table>
         <p style="color:#9A9A9A;font-size:0.875rem">Você receberá atualizações sobre o status do seu pedido por email. Em caso de dúvidas, entre em contato conosco.</p>
-        <p style="margin-top:24px;color:rgba(200,200,200,0.4);font-size:0.75rem">LuxImport — Importados de Luxo</p>
+        <p style="margin-top:24px;color:rgba(200,200,200,0.4);font-size:0.75rem">Imports — Importados de Luxo</p>
       </div>
     `,
   });

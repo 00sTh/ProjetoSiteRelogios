@@ -1,5 +1,5 @@
 /**
- * Seed do banco de dados — LuxImport (Watches, Sunglasses, Accessories)
+ * Seed do banco de dados — Imports (Watches, Sunglasses, Accessories)
  * Execução: npm run db:seed
  *
  * Schema SQLite: images é String (JSON serializado)
@@ -15,7 +15,7 @@ function img(url: string): string {
 }
 
 async function main() {
-  console.log("Iniciando seed LuxImport...");
+  console.log("Iniciando seed Imports...");
 
   // ── Categorias ──────────────────────────────────────────────────────────────
   // Note: Category model has no "description" field — slug/name only
@@ -227,7 +227,7 @@ async function main() {
   });
 
   console.log("SiteSettings created");
-  console.log("\nSeed LuxImport completed successfully!");
+  console.log("\nSeed Imports completed successfully!");
   console.log(
     "   12 products across 3 categories (Watches, Sunglasses, Accessories)"
   );

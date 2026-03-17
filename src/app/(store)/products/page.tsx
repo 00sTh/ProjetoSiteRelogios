@@ -4,10 +4,11 @@ import { ProductCard } from "@/components/products/product-card";
 import { ProductFilters } from "@/components/products/product-filters";
 import { getProducts, getCategories } from "@/actions/products";
 import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Products",
-  description: "Explore our complete collection of luxury timepieces and eyewear.",
+  title: "Produtos",
+  description: "Explore nossa coleção completa de relógios, óculos e acessórios de luxo.",
 };
 
 export const revalidate = 1800;
@@ -36,43 +37,43 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   ]);
 
   const pageTitle = params.category
-    ? categories.find((c) => c.slug === params.category)?.name ?? "Products"
+    ? categories.find((c) => c.slug === params.category)?.name ?? "Produtos"
     : params.featured === "true"
-    ? "Featured"
-    : "All Products";
+    ? "Destaques"
+    : "Todos os Produtos";
 
   return (
-    <div style={{ backgroundColor: "#0A0A0A", minHeight: "100vh" }}>
+    <div style={{ backgroundColor: "#FAFAFA", minHeight: "100vh" }}>
       {/* Page hero */}
       <div
         className="relative py-16 px-4 text-center overflow-hidden"
         style={{
-          backgroundColor: "#111111",
-          borderBottom: "1px solid rgba(201,201,201,0.2)",
+          backgroundColor: "#F2F2F2",
+          borderBottom: "1px solid rgba(0,0,0,0.1)",
         }}
       >
         <div
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(201,201,201,0.04) 0%, transparent 70%)",
+              "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(0,0,0,0.02) 0%, transparent 70%)",
           }}
         />
         <div className="relative z-10">
           <p
             className="label-luxury mb-3"
-            style={{ color: "#C9C9C9" }}
+            style={{ color: "#6A6A6A" }}
           >
-            LuxImport Collection
+            Imports Collection
           </p>
           <h1
             className="font-serif text-4xl md:text-5xl font-bold"
-            style={{ color: "#F5F5F5" }}
+            style={{ color: "#0A0A0A" }}
           >
             {pageTitle}
           </h1>
-          <p className="mt-3 text-sm" style={{ color: "#9A9A9A" }}>
-            {total} product{total !== 1 ? "s" : ""} found
+          <p className="mt-3 text-sm" style={{ color: "#6A6A6A" }}>
+            {total} produto{total !== 1 ? "s" : ""} encontrado{total !== 1 ? "s" : ""}
           </p>
         </div>
       </div>
@@ -86,8 +87,8 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               <div
                 className="animate-pulse rounded-2xl h-64"
                 style={{
-                  backgroundColor: "#111111",
-                  border: "1px solid rgba(201,201,201,0.15)",
+                  backgroundColor: "#EAEAEA",
+                  border: "1px solid rgba(0,0,0,0.08)",
                 }}
               />
             }
@@ -96,32 +97,32 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           </Suspense>
 
           {/* Product grid */}
-          <div>
+          <div className="min-w-0 overflow-hidden">
             {products.length === 0 ? (
               <div
                 className="flex flex-col items-center justify-center py-20 text-center rounded-2xl"
                 style={{
-                  backgroundColor: "#111111",
-                  border: "1px solid rgba(201,201,201,0.15)",
+                  backgroundColor: "#EAEAEA",
+                  border: "1px solid rgba(0,0,0,0.08)",
                 }}
               >
-                <p className="text-lg font-serif mb-3" style={{ color: "#F5F5F5" }}>
-                  No Products Found
+                <p className="text-lg font-serif mb-3" style={{ color: "#0A0A0A" }}>
+                  Nenhum Produto Encontrado
                 </p>
-                <p className="text-sm mb-6" style={{ color: "#9A9A9A" }}>
-                  Try adjusting your search filters.
+                <p className="text-sm mb-6" style={{ color: "#6A6A6A" }}>
+                  Tente ajustar seus filtros de busca.
                 </p>
                 <Link
                   href="/products"
                   className="px-6 py-2.5 rounded-full text-xs font-semibold tracking-widest uppercase transition-all hover:bg-[#E8E8E8] hover:shadow-[0_0_15px_rgba(201,201,201,0.4)]"
                   style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
                 >
-                  Clear Filters
+                  Limpar Filtros
                 </Link>
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                <div className="grid grid-cols-2 gap-px sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 border-t border-l border-[rgba(0,0,0,0.06)]">
                   {products.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
@@ -129,43 +130,131 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
                 {/* Pagination */}
                 {pages > 1 && (
-                  <div className="mt-12 flex justify-center gap-2">
-                    {Array.from({ length: pages }).map((_, i) => {
-                      const p = i + 1;
-                      const href = new URL(
-                        `/products?${new URLSearchParams({
-                          ...params,
-                          page: String(p),
-                        })}`,
-                        "http://x"
-                      ).search.slice(1);
-                      const isActive = p === page;
-                      return (
-                        <Link
-                          key={p}
-                          href={`/products?${href}`}
-                          className="w-10 h-10 flex items-center justify-center rounded-full text-sm font-medium transition-all duration-200"
-                          style={{
-                            backgroundColor: isActive
-                              ? "#C9C9C9"
-                              : "rgba(201,201,201,0.08)",
-                            color: isActive ? "#0A0A0A" : "#9A9A9A",
-                            border: isActive
-                              ? "1px solid #C9C9C9"
-                              : "1px solid rgba(201,201,201,0.2)",
-                          }}
-                        >
-                          {p}
-                        </Link>
-                      );
-                    })}
-                  </div>
+                  <Pagination pages={pages} page={page} params={params} />
                 )}
               </>
             )}
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+// ─── Pagination ───────────────────────────────────────────────────────────────
+
+function pageUrl(
+  params: Record<string, string | undefined>,
+  p: number
+): string {
+  const qs = new URLSearchParams(
+    Object.fromEntries(
+      Object.entries({ ...params, page: String(p) }).filter(
+        ([, v]) => v !== undefined
+      ) as [string, string][]
+    )
+  ).toString();
+  return `/products?${qs}`;
+}
+
+function getPageNumbers(current: number, total: number): (number | "…")[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+
+  const pages: (number | "…")[] = [1];
+
+  const left = Math.max(2, current - 2);
+  const right = Math.min(total - 1, current + 2);
+
+  if (left > 2) pages.push("…");
+  for (let i = left; i <= right; i++) pages.push(i);
+  if (right < total - 1) pages.push("…");
+
+  pages.push(total);
+  return pages;
+}
+
+function Pagination({
+  pages,
+  page,
+  params,
+}: {
+  pages: number;
+  page: number;
+  params: Record<string, string | undefined>;
+}) {
+  const items = getPageNumbers(page, pages);
+
+  const btnBase: React.CSSProperties = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    minWidth: "2.25rem",
+    height: "2.25rem",
+    padding: "0 0.5rem",
+    fontSize: "12px",
+    letterSpacing: "0.04em",
+    borderRadius: "2px",
+    transition: "all 0.2s",
+    textDecoration: "none",
+    border: "1px solid rgba(0,0,0,0.1)",
+  };
+
+  return (
+    <div className="mt-12 flex flex-wrap justify-center items-center gap-1">
+      {/* Prev */}
+      {page > 1 ? (
+        <Link
+          href={pageUrl(params, page - 1)}
+          style={{ ...btnBase, color: "#6A6A6A" }}
+          aria-label="Página anterior"
+        >
+          <ChevronLeft className="h-3.5 w-3.5" />
+        </Link>
+      ) : (
+        <span style={{ ...btnBase, color: "rgba(0,0,0,0.2)", cursor: "default" }}>
+          <ChevronLeft className="h-3.5 w-3.5" />
+        </span>
+      )}
+
+      {/* Page numbers */}
+      {items.map((item, idx) =>
+        item === "…" ? (
+          <span
+            key={`ellipsis-${idx}`}
+            style={{ ...btnBase, border: "none", color: "#ABABAB", cursor: "default" }}
+          >
+            …
+          </span>
+        ) : (
+          <Link
+            key={item}
+            href={pageUrl(params, item)}
+            style={{
+              ...btnBase,
+              backgroundColor: item === page ? "#0A0A0A" : "transparent",
+              color: item === page ? "#F5F0E6" : "#6A6A6A",
+              border: item === page ? "1px solid #0A0A0A" : "1px solid rgba(0,0,0,0.1)",
+            }}
+          >
+            {item}
+          </Link>
+        )
+      )}
+
+      {/* Next */}
+      {page < pages ? (
+        <Link
+          href={pageUrl(params, page + 1)}
+          style={{ ...btnBase, color: "#6A6A6A" }}
+          aria-label="Próxima página"
+        >
+          <ChevronRight className="h-3.5 w-3.5" />
+        </Link>
+      ) : (
+        <span style={{ ...btnBase, border: "none", color: "rgba(0,0,0,0.2)", cursor: "default" }}>
+          <ChevronRight className="h-3.5 w-3.5" />
+        </span>
+      )}
     </div>
   );
 }

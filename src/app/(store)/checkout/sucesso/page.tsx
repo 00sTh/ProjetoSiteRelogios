@@ -48,7 +48,7 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
     .join("\n");
 
   const whatsappMessage = encodeURIComponent(
-    `Hello! I placed an order at LuxImport.\n\n` +
+    `Hello! I placed an order at Imports.\n\n` +
     `📦 Order: #${order.id.slice(0, 8).toUpperCase()}\n\n` +
     `Items:\n${itemsList}\n\n` +
     `Total: ${formatPrice(total)}\n\n` +
@@ -62,7 +62,7 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
   return (
     <div
       className="min-h-screen py-16 px-4 flex items-start justify-center"
-      style={{ backgroundColor: "#0A0A0A" }}
+      style={{ backgroundColor: "#FAFAFA" }}
     >
       <div className="w-full max-w-lg">
         {/* Header */}
@@ -80,10 +80,10 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
             />
           </div>
 
-          <h1 className="font-serif text-3xl md:text-4xl font-bold mb-3" style={{ color: "#F5F5F5" }}>
+          <h1 className="font-serif text-3xl md:text-4xl font-bold mb-3" style={{ color: "#0A0A0A" }}>
             {isPaid ? "Payment Confirmed!" : "Order Registered!"}
           </h1>
-          <p className="text-base" style={{ color: "#9A9A9A" }}>
+          <p className="text-base" style={{ color: "#6A6A6A" }}>
             {isPaid && isCard && "Your card was approved. Thank you for your purchase!"}
             {isPaid && isPix && "PIX payment confirmed. Thank you for your purchase!"}
             {isWhatsApp && "Your order has been created. Complete payment via WhatsApp."}
@@ -91,9 +91,9 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
           <div
             className="inline-flex items-center gap-2 mt-3 px-3 py-1.5 rounded-full text-xs"
             style={{
-              backgroundColor: "rgba(201,201,201,0.08)",
-              border: "1px solid rgba(201,201,201,0.2)",
-              color: "rgba(200,187,168,0.6)",
+              backgroundColor: "rgba(0,0,0,0.05)",
+              border: "1px solid rgba(0,0,0,0.1)",
+              color: "#6A6A6A",
             }}
           >
             {isPaid ? <CreditCard className="h-3 w-3" /> : isWhatsApp ? <MessageCircle className="h-3 w-3" /> : <QrCode className="h-3 w-3" />}
@@ -104,31 +104,31 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
         {/* Order summary */}
         <div
           className="rounded-2xl p-6 mb-6 space-y-4"
-          style={{ backgroundColor: "#111111", border: "1px solid rgba(201,201,201,0.2)" }}
+          style={{ backgroundColor: "#F2F2F2", border: "1px solid rgba(0,0,0,0.1)" }}
         >
           <div className="flex items-center gap-2">
-            <Package className="h-4 w-4" style={{ color: "#C9C9C9" }} />
-            <h2 className="font-semibold text-sm uppercase tracking-widest" style={{ color: "#C9C9C9" }}>
+            <Package className="h-4 w-4" style={{ color: "#6A6A6A" }} />
+            <h2 className="font-semibold text-sm uppercase tracking-widest" style={{ color: "#6A6A6A" }}>
               Order Summary
             </h2>
           </div>
           {order.items.map((item) => (
-            <div key={item.id} className="flex justify-between text-sm" style={{ color: "#9A9A9A" }}>
+            <div key={item.id} className="flex justify-between text-sm" style={{ color: "#6A6A6A" }}>
               <span>{item.product.name} × {item.quantity}</span>
-              <span style={{ color: "#F5F5F5" }}>
+              <span style={{ color: "#0A0A0A" }}>
                 {formatPrice(Number(item.price) * item.quantity)}
               </span>
             </div>
           ))}
           <div
             className="pt-3 flex justify-between font-bold"
-            style={{ borderTop: "1px solid rgba(201,201,201,0.15)" }}
+            style={{ borderTop: "1px solid rgba(0,0,0,0.1)" }}
           >
-            <span style={{ color: "#F5F5F5" }}>Total</span>
-            <span style={{ color: "#C9C9C9" }}>{formatPrice(total)}</span>
+            <span style={{ color: "#0A0A0A" }}>Total</span>
+            <span style={{ color: "#0A0A0A" }}>{formatPrice(total)}</span>
           </div>
           {address && (
-            <p className="text-xs pt-2" style={{ color: "rgba(200,187,168,0.6)", borderTop: "1px solid rgba(201,201,201,0.08)" }}>
+            <p className="text-xs pt-2" style={{ color: "#6A6A6A", borderTop: "1px solid rgba(0,0,0,0.06)" }}>
               📍 {address}
             </p>
           )}
@@ -173,14 +173,14 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
           <Link
             href="/account"
             className="flex-1 flex items-center justify-center py-3 rounded-full text-sm font-medium"
-            style={{ border: "1px solid rgba(201,201,201,0.3)", color: "#C9C9C9" }}
+            style={{ border: "1px solid rgba(0,0,0,0.15)", color: "#6A6A6A" }}
           >
             View My Orders
           </Link>
           <Link
             href="/products"
             className="flex-1 flex items-center justify-center py-3 rounded-full text-sm font-medium"
-            style={{ border: "1px solid rgba(200,187,168,0.2)", color: "rgba(200,187,168,0.7)" }}
+            style={{ border: "1px solid rgba(0,0,0,0.1)", color: "#6A6A6A" }}
           >
             Continue Shopping
           </Link>

@@ -7,7 +7,7 @@ import { getServerAuth } from "@/lib/auth";
 import { ProductCard } from "@/components/products/product-card";
 import type { ProductWithCategory } from "@/types";
 
-export const metadata: Metadata = { title: "Lista de Desejos — LuxImport" };
+export const metadata: Metadata = { title: "Lista de Desejos — Imports" };
 
 export default async function WishlistPage() {
   const { userId } = await getServerAuth();

@@ -22,7 +22,7 @@ const extraVideos = [
     id: "3",
     title: "Ciência por Trás da Fórmula",
     duration: "5:12",
-    description: "Nosso laboratório e o processo de criação dos produtos LuxImport.",
+    description: "Nosso laboratório e o processo de criação dos produtos Imports.",
   },
 ];
 
@@ -59,13 +59,13 @@ export function VideosContent({
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <span className="inline-flex items-center gap-2 label-luxury mb-4" style={{ color: "#D4AF37" }}>
               <Sparkles className="h-3 w-3" />
-              LuxImport Stories
+              Imports Stories
             </span>
             <h1 className="font-serif text-4xl md:text-6xl font-bold mb-4" style={{ color: "#F5F5F5" }}>
               Vídeos & Histórias
             </h1>
             <p className="max-w-xl mx-auto text-base leading-relaxed" style={{ color: "#9A9A9A" }}>
-              Mergulhe no universo LuxImport — da pesquisa científica aos rituais de beleza que transformam.
+              Mergulhe no universo Imports — da pesquisa científica aos rituais de beleza que transformam.
             </p>
           </motion.div>
         </div>

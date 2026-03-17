@@ -2,15 +2,18 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ShoppingCart, User, LayoutDashboard, Heart } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Menu, X, ShoppingCart, User, LayoutDashboard } from "lucide-react";
 import { APP_NAME } from "@/lib/constants";
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/products", label: "Collections" },
-  { href: "/products?category=watches", label: "Watches" },
-  { href: "/products?category=sunglasses", label: "Sunglasses" },
+  { href: "/products", label: "Toda a Coleção" },
+  { href: "/products?category=relogios", label: "Relógios" },
+  { href: "/products?category=bolsas", label: "Bolsas" },
+  { href: "/products?category=sapatos", label: "Sapatos" },
+  { href: "/products?category=oculos", label: "Óculos" },
+  { href: "/products?category=perfumes", label: "Perfumes" },
+  { href: "/products?category=acessorios", label: "Acessórios" },
   { href: "/about", label: "About" },
 ];
 
@@ -25,14 +28,13 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
 
   return (
     <>
-      {/* Hamburger */}
       <button
         onClick={() => setOpen(true)}
-        className="md:hidden flex items-center justify-center w-11 h-11 rounded-full transition-colors"
-        style={{ color: "#C9C9C9" }}
+        className="flex items-center justify-center w-9 h-9 transition-colors duration-200 hover:text-[#0A0A0A]"
+        style={{ color: "#6A6A6A" }}
         aria-label="Open menu"
       >
-        <Menu className="h-5 w-5" />
+        <Menu className="h-4 w-4" />
       </button>
 
       <AnimatePresence>
@@ -43,41 +45,48 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
+              transition={{ duration: 0.2 }}
               className="fixed inset-0 z-50"
-              style={{ backgroundColor: "rgba(0,0,0,0.75)" }}
+              style={{ backgroundColor: "rgba(0,0,0,0.3)" }}
               onClick={() => setOpen(false)}
             />
 
-            {/* Drawer */}
+            {/* Drawer — wrapper clips the slide animation to prevent fixed-element overflow in Safari */}
+            <div className="fixed top-0 right-0 h-full w-64 max-w-[80vw] z-50 overflow-hidden">
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 28, stiffness: 220 }}
-              className="fixed top-0 right-0 h-full w-72 z-50 flex flex-col"
+              transition={{ type: "spring", damping: 30, stiffness: 240 }}
+              className="h-full w-full flex flex-col"
               style={{
-                backgroundColor: "#141414",
-                borderLeft: "1px solid rgba(201,201,201,0.2)",
+                backgroundColor: "#FAFAFA",
+                borderLeft: "1px solid rgba(0,0,0,0.08)",
               }}
             >
               {/* Header */}
               <div
-                className="flex items-center justify-between px-6 py-5"
-                style={{ borderBottom: "1px solid rgba(201,201,201,0.12)" }}
+                className="flex items-center justify-between px-6 py-4"
+                style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}
               >
                 <Link
                   href="/"
                   onClick={() => setOpen(false)}
-                  className="font-serif font-bold tracking-[0.18em] uppercase text-lg"
-                  style={{ color: "#F5F5F5" }}
+                  style={{
+                    fontFamily: "var(--font-cormorant), Georgia, serif",
+                    fontSize: "0.75rem",
+                    letterSpacing: "0.4em",
+                    textTransform: "uppercase",
+                    color: "#0A0A0A",
+                    textDecoration: "none",
+                  }}
                 >
                   {APP_NAME}
                 </Link>
                 <button
                   onClick={() => setOpen(false)}
-                  className="w-8 h-8 flex items-center justify-center rounded-full transition-colors hover:text-[#C9C9C9]"
-                  style={{ color: "#9A9A9A" }}
+                  className="w-7 h-7 flex items-center justify-center transition-colors hover:text-[#0A0A0A]"
+                  style={{ color: "#8A8A8A" }}
                   aria-label="Close menu"
                 >
                   <X className="h-4 w-4" />
@@ -85,81 +94,66 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
               </div>
 
               {/* Nav links */}
-              <nav className="flex-1 px-4 py-8">
-                <ul className="space-y-1">
-                  {navLinks.map(({ href, label }, i) => (
-                    <motion.li
-                      key={href}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.05 + i * 0.06 }}
-                    >
+              <nav className="flex-1">
+                <ul>
+                  {navLinks.map(({ href, label }) => (
+                    <li key={href} style={{ borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
                       <Link
                         href={href}
                         onClick={() => setOpen(false)}
-                        className="flex items-center px-4 py-3.5 rounded-xl text-sm font-semibold tracking-wider uppercase transition-all duration-200 hover:text-[#C9C9C9] hover:bg-[rgba(201,201,201,0.06)]"
-                        style={{ color: "#9A9A9A", fontSize: "0.7rem", letterSpacing: "0.14em" }}
+                        className="flex items-center transition-colors duration-200 hover:text-[#0A0A0A]"
+                        style={{
+                          padding: "1rem 1.5rem",
+                          color: "#6A6A6A",
+                          fontSize: "10px",
+                          letterSpacing: "0.3em",
+                          textTransform: "uppercase",
+                          textDecoration: "none",
+                        }}
                       >
                         {label}
                       </Link>
-                    </motion.li>
+                    </li>
                   ))}
                 </ul>
               </nav>
 
               {/* Footer actions */}
               <div
-                className="px-4 pb-8 pt-4 space-y-3"
-                style={{ borderTop: "1px solid rgba(201,201,201,0.12)" }}
+                className="px-6 py-6 space-y-4"
+                style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}
               >
                 <Link
                   href="/cart"
                   onClick={() => setOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all"
-                  style={{
-                    backgroundColor: "rgba(201,201,201,0.08)",
-                    border: "1px solid rgba(201,201,201,0.2)",
-                    color: "#F5F5F5",
-                  }}
+                  className="flex items-center gap-3 transition-colors duration-200 hover:text-[#0A0A0A]"
+                  style={{ color: "#6A6A6A", textDecoration: "none" }}
                 >
-                  <ShoppingCart className="h-4 w-4" style={{ color: "#C9C9C9" }} />
-                  <span>Cart</span>
+                  <ShoppingCart className="h-4 w-4" />
+                  <span style={{ fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+                    Cart
+                  </span>
                   {cartCount > 0 && (
                     <span
-                      className="ml-auto text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full"
-                      style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
+                      className="ml-auto text-xs font-bold w-5 h-5 flex items-center justify-center"
+                      style={{ backgroundColor: "#0A0A0A", color: "#FAFAFA" }}
                     >
                       {cartCount > 9 ? "9+" : cartCount}
                     </span>
                   )}
                 </Link>
 
-                {/* Admin Panel (admins only) */}
                 {isAdmin && (
                   <Link
                     href="/admin"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all"
-                    style={{
-                      border: "1px solid rgba(201,201,201,0.4)",
-                      color: "#C9C9C9",
-                      backgroundColor: "rgba(201,201,201,0.06)",
-                    }}
+                    className="flex items-center gap-3 transition-colors duration-200 hover:text-[#0A0A0A]"
+                    style={{ color: "#6A6A6A", textDecoration: "none" }}
                   >
                     <LayoutDashboard className="h-4 w-4" />
-                    <span>Admin Panel</span>
-                  </Link>
-                )}
-
-                {userId && (
-                  <Link
-                    href="/wishlist"
-                    onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all hover:text-[#C9C9C9]"
-                    style={{ color: "#9A9A9A" }}
-                  >
-                    <Heart className="h-4 w-4" style={{ color: "#C9C9C9" }} />
-                    <span>Wishlist</span>
+                    <span style={{ fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+                      Admin
+                    </span>
                   </Link>
                 )}
 
@@ -167,24 +161,30 @@ export function MobileNav({ userId, isAdmin, cartCount }: MobileNavProps) {
                   <Link
                     href="/account"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all hover:text-[#C9C9C9]"
-                    style={{ color: "#9A9A9A" }}
+                    className="flex items-center gap-3 transition-colors duration-200 hover:text-[#0A0A0A]"
+                    style={{ color: "#6A6A6A", textDecoration: "none" }}
                   >
-                    <User className="h-4 w-4" style={{ color: "#C9C9C9" }} />
-                    <span>My Account</span>
+                    <User className="h-4 w-4" />
+                    <span style={{ fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+                      Account
+                    </span>
                   </Link>
                 ) : (
                   <Link
                     href="/sign-in"
                     onClick={() => setOpen(false)}
-                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-full text-sm font-semibold tracking-widest uppercase w-full transition-all hover:bg-[#E8E8E8]"
-                    style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
+                    className="flex items-center gap-3 transition-colors duration-200 hover:text-[#0A0A0A]"
+                    style={{ color: "#6A6A6A", textDecoration: "none" }}
                   >
-                    Sign In
+                    <User className="h-4 w-4" />
+                    <span style={{ fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase" }}>
+                      Sign In
+                    </span>
                   </Link>
                 )}
               </div>
             </motion.div>
+            </div>
           </>
         )}
       </AnimatePresence>

@@ -33,7 +33,7 @@ const values = [
 ];
 
 const timeline = [
-  { year: "2019", event: "Fundação da LuxImport com foco em relógios e acessórios importados" },
+  { year: "2019", event: "Fundação da Imports com foco em relógios e acessórios importados" },
   { year: "2020", event: "Expansão para eletrônicos premium e parcerias com fornecedores europeus" },
   { year: "2022", event: "Lançamento das categorias Moda e Bolsas & Carteiras de luxo" },
   { year: "2024", event: "Abertura do centro de distribuição próprio com despacho em 24h" },
@@ -183,7 +183,7 @@ export function SobreNosContent({ aboutTitle, aboutText }: SobreNosContentProps)
           <SectionTitle
             label="Nossos Valores"
             title="O que nos Guia"
-            subtitle="Cada decisão na LuxImport é tomada com base em quatro pilares fundamentais."
+            subtitle="Cada decisão na Imports é tomada com base em quatro pilares fundamentais."
             align="center"
             className="mb-16"
           />

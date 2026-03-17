@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidade — LuxImport",
-  description: "Como a LuxImport coleta, usa e protege seus dados pessoais conforme a LGPD.",
+  title: "Política de Privacidade — Imports",
+  description: "Como a Imports coleta, usa e protege seus dados pessoais conforme a LGPD.",
 };
 
 export default function PoliticaDePrivacidadePage() {
@@ -37,8 +37,8 @@ export default function PoliticaDePrivacidadePage() {
         >
           <Section title="1. Quem somos">
             <p>
-              LuxImport Comércio de Importados Ltda., inscrita sob CNPJ 00.000.000/0001-00, com sede na
-              Rua das Flores, 100 — Gramado, RS — Brasil ("LuxImport", "nós" ou "nossos"), é a
+              Imports Comércio de Importados Ltda., inscrita sob CNPJ 00.000.000/0001-00, com sede na
+              Rua das Flores, 100 — Gramado, RS — Brasil ("Imports", "nós" ou "nossos"), é a
               controladora dos dados pessoais coletados através do site altheia.com.br.
             </p>
           </Section>

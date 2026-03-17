@@ -29,6 +29,20 @@ function createPrismaClient() {
             }
           },
         },
+        colorsArray: {
+          needs: { colors: true },
+          compute(product) {
+            // PostgreSQL: colors já é string[]. SQLite: colors é JSON string ou null.
+            if (Array.isArray(product.colors)) return product.colors as string[];
+            if (!product.colors) return [] as string[];
+            try {
+              const parsed = JSON.parse(product.colors as unknown as string);
+              return Array.isArray(parsed) ? (parsed as string[]) : [];
+            } catch {
+              return [] as string[];
+            }
+          },
+        },
       },
     },
   });

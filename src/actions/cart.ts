@@ -66,7 +66,7 @@ export async function addToCart(
   const { userId } = await getServerAuth();
   if (!userId) redirect("/sign-in");
 
-  const { productId, quantity } = addToCartSchema.parse(data);
+  const { productId, quantity, observations } = addToCartSchema.parse(data);
 
   const product = await prisma.product.findUnique({
     where: { id: productId, active: true },
@@ -89,11 +89,11 @@ export async function addToCart(
       throw new Error(`Estoque insuficiente para "${product.name}"`);
     await prisma.cartItem.update({
       where: { id: existing.id },
-      data: { quantity: newQty },
+      data: { quantity: newQty, observations: observations ?? null },
     });
   } else {
     await prisma.cartItem.create({
-      data: { cartId: cart.id, productId, quantity },
+      data: { cartId: cart.id, productId, quantity, observations: observations ?? null },
     });
   }
 

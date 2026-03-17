@@ -107,7 +107,7 @@ export async function createOrder(
   }
   const d = parsed.data;
 
-  const paymentMethod = (formData.get("paymentMethod") as string) || "WHATSAPP";
+  const paymentMethod = "WHATSAPP";
 
   const shippingAddress = JSON.stringify({
     street: d.street,
@@ -259,6 +259,7 @@ export async function createOrder(
             productId: item.productId,
             quantity: item.quantity,
             price: Number(item.product.price),
+            observations: item.observations ?? null,
           })),
         },
       },

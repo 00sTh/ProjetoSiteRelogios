@@ -72,7 +72,7 @@ const siteSettingsSchema = z.object({
   metaDescription: z.string().max(160).optional().or(z.literal("")),
   shippingFreeThreshold: z.coerce.number().min(0),
   whatsappNumber: z.string().max(20).optional().or(z.literal("")),
-  // WhyLuxImport
+  // WhyImports
   whyTitle: z.string().max(200).optional().or(z.literal("")),
   whySubtitle: z.string().max(500).optional().or(z.literal("")),
   benefit1Icon: z.string().max(50).optional().or(z.literal("")),

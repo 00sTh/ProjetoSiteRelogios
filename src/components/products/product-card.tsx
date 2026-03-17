@@ -1,9 +1,6 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { formatPrice } from "@/lib/utils";
-import { parseImages } from "@/lib/utils";
+import { formatPrice, parseImages } from "@/lib/utils";
 import { ProductImage } from "@/components/ui/product-image";
-import { WishlistButton } from "@/components/products/wishlist-button";
 import type { ProductWithCategory } from "@/types";
 
 interface ProductCardProps {
@@ -16,88 +13,99 @@ export function ProductCard({ product }: ProductCardProps) {
   const inStock = product.stock > 0;
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl transition-all duration-300 border border-transparent hover:border-[rgba(201,201,201,0.4)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] bg-[#111111]">
+    <Link
+      href={`/products/${product.slug}`}
+      className="group block min-w-0"
+      style={{
+        borderRight: "1px solid rgba(0,0,0,0.06)",
+        borderBottom: "1px solid rgba(0,0,0,0.06)",
+        borderLeft: "1px solid rgba(0,0,0,0.06)",
+        borderTop: "1px solid rgba(0,0,0,0.06)",
+        textDecoration: "none",
+      }}
+    >
       {/* Image */}
-      <Link href={`/products/${product.slug}`} className="block overflow-hidden">
-        <div className="relative aspect-square bg-[#1A1A1A]">
-          <ProductImage
-            src={mainImage}
-            alt={product.name}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
+      <div
+        className="relative h-48 sm:h-56 overflow-hidden"
+        style={{ backgroundColor: "#FAFAFA" }}
+      >
+        <ProductImage
+          src={mainImage}
+          alt={product.name}
+          fill
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          className="object-contain transition-transform duration-700 group-hover:scale-[1.03]"
+        />
 
-          {/* Hover overlay */}
-          <div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4"
-            style={{
-              background:
-                "linear-gradient(to top, rgba(10,10,10,0.85) 0%, transparent 60%)",
-            }}
-          >
+        <span style={{
+          position: "absolute",
+          top: "8px",
+          left: "8px",
+          fontSize: "8px",
+          letterSpacing: "0.2em",
+          textTransform: "uppercase",
+          backgroundColor: "rgba(10,10,10,0.75)",
+          color: "rgba(245,240,230,0.9)",
+          padding: "3px 8px",
+          pointerEvents: "none",
+          fontFamily: "var(--font-geist-mono), monospace",
+        }}>
+          {product.brand ?? "Superclone"}
+        </span>
+
+        {!inStock && (
+          <div className="absolute bottom-3 left-3">
             <span
-              className="flex items-center gap-1.5 text-[10px] font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full"
-              style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
+              style={{
+                fontSize: "10px",
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                backgroundColor: "rgba(0,0,0,0.7)",
+                color: "#FAFAFA",
+                padding: "3px 8px",
+              }}
             >
-              View Product <ArrowRight className="h-3 w-3" />
+              Indisponível
             </span>
           </div>
-
-          {/* Wishlist button */}
-          <div className="absolute right-3 top-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <WishlistButton productId={product.id} />
-          </div>
-
-          {/* Badges */}
-          <div className="absolute left-3 top-3 flex flex-col gap-1.5">
-            {product.featured && (
-              <span
-                className="text-[10px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full"
-                style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
-              >
-                Featured
-              </span>
-            )}
-            {!inStock && (
-              <span
-                className="text-[10px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full"
-                style={{ backgroundColor: "rgba(224,82,82,0.9)", color: "#F5F5F5" }}
-              >
-                Sold Out
-              </span>
-            )}
-          </div>
-        </div>
-      </Link>
+        )}
+      </div>
 
       {/* Info */}
-      <div className="p-4">
+      <div
+        style={{
+          padding: "0.875rem 1rem",
+          borderTop: "1px solid rgba(0,0,0,0.06)",
+          backgroundColor: "#FAFAFA",
+        }}
+      >
         <p
-          className="label-luxury mb-1.5"
-          style={{ color: "#C9C9C9", fontSize: "0.65rem" }}
+          className="transition-colors duration-200 group-hover:text-[#0A0A0A]"
+          style={{
+            fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
+            fontSize: "12px",
+            color: "#6A6A6A",
+            margin: 0,
+            letterSpacing: "0.02em",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
         >
-          {product.category.name}
+          {product.name}
         </p>
-        <Link href={`/products/${product.slug}`}>
-          <h3
-            className="font-serif font-semibold text-lg leading-snug line-clamp-2 mb-3 transition-colors duration-200 group-hover:text-[#C9C9C9]"
-            style={{ color: "#F5F5F5" }}
-          >
-            {product.name}
-          </h3>
-        </Link>
-        <div className="flex items-center justify-between">
-          <span className="font-medium text-base" style={{ color: "#C9C9C9" }}>
-            {formatPrice(Number(product.price))}
-          </span>
-          {inStock && (
-            <span className="text-xs" style={{ color: "rgba(200,187,168,0.6)" }}>
-              {product.stock} in stock
-            </span>
-          )}
-        </div>
+        <p
+          style={{
+            fontFamily: "var(--font-geist-mono), monospace",
+            fontSize: "11px",
+            color: "#8A8A8A",
+            margin: "3px 0 0",
+            letterSpacing: "0.04em",
+          }}
+        >
+          {formatPrice(Number(product.price))}
+        </p>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -9,6 +9,7 @@ const GUEST_CART_KEY = "altheia:guest-cart";
 export interface GuestCartItem {
   productId: string;
   quantity: number;
+  observations?: string;
 }
 
 export function getGuestCart(): GuestCartItem[] {
@@ -25,13 +26,14 @@ export function setGuestCart(items: GuestCartItem[]): void {
   localStorage.setItem(GUEST_CART_KEY, JSON.stringify(items));
 }
 
-export function addToGuestCart(productId: string, quantity = 1): void {
+export function addToGuestCart(productId: string, quantity = 1, observations?: string): void {
   const items = getGuestCart();
   const existing = items.find((i) => i.productId === productId);
   if (existing) {
     existing.quantity += quantity;
+    if (observations !== undefined) existing.observations = observations;
   } else {
-    items.push({ productId, quantity });
+    items.push({ productId, quantity, observations });
   }
   setGuestCart(items);
 }
@@ -66,7 +68,7 @@ export function useGuestCartSync(): void {
     async function syncToDatabase() {
       await Promise.allSettled(
         guestItems.map((item) =>
-          addToCart({ productId: item.productId, quantity: item.quantity })
+          addToCart({ productId: item.productId, quantity: item.quantity, observations: item.observations })
         )
       );
       clearGuestCart();

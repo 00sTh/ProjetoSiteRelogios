@@ -9,7 +9,7 @@ function getIcon(name: string): LucideIcon {
   return iconMap[name] ?? ShieldCheck;
 }
 
-interface WhyLuxImportProps {
+interface WhyImportsProps {
   benefit1Icon?: string;
   benefit1Title?: string;
   benefit1Text?: string;
@@ -21,7 +21,7 @@ interface WhyLuxImportProps {
   benefit3Text?: string;
 }
 
-export function WhyLuxImport({
+export function WhyImports({
   benefit1Icon = "Truck",
   benefit1Title = "Worldwide Shipping",
   benefit1Text = "Premium delivery to your door, wherever you are.",
@@ -31,7 +31,7 @@ export function WhyLuxImport({
   benefit3Icon = "ShieldCheck",
   benefit3Title = "Secure Checkout",
   benefit3Text = "End-to-end encrypted transactions, always.",
-}: WhyLuxImportProps) {
+}: WhyImportsProps) {
   const benefits = [
     { icon: getIcon(benefit1Icon), title: benefit1Title, description: benefit1Text },
     { icon: getIcon(benefit2Icon), title: benefit2Title, description: benefit2Text },

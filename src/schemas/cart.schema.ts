@@ -3,6 +3,7 @@ import { z } from "zod";
 export const addToCartSchema = z.object({
   productId: z.string().uuid("ID de produto inválido"),
   quantity: z.number().int().min(1, "Quantidade mínima é 1").max(99),
+  observations: z.string().max(200).optional(),
 });
 
 export const updateQuantitySchema = z.object({

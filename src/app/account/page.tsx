@@ -136,7 +136,7 @@ export default async function AccountPage() {
                     .map((i) => `• ${i.product.name} × ${i.quantity}`)
                     .join("\n");
                   const msg = encodeURIComponent(
-                    `Olá! Quero continuar meu pedido na LuxImport.\n\n` +
+                    `Olá! Quero continuar meu pedido na Imports.\n\n` +
                     `📦 Pedido: #${order.id.slice(0, 8).toUpperCase()}\n\n` +
                     `Itens:\n${itemsList}\n\n` +
                     `Total: ${formatPrice(orderTotal)}\n\n` +

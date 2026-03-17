@@ -1,4 +1,4 @@
-export const APP_NAME = "LuxImport";
+export const APP_NAME = "Imports";
 export const APP_TAGLINE = "Timepieces & Eyewear of Distinction";
 export const APP_DESCRIPTION =
   "The finest timepieces and luxury eyewear, curated with precision, authenticated with pride.";

@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { ProductImage } from "@/components/ui/product-image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ShieldCheck, Truck, RefreshCw } from "lucide-react";
-import { AddToCartButton } from "@/components/cart/add-to-cart-button";
+import { ProductActions } from "@/components/products/product-actions";
+import { ProductGallery } from "@/components/products/product-gallery";
 import { WishlistButton } from "@/components/products/wishlist-button";
 import { ProductCard } from "@/components/products/product-card";
 import { ProductAccordion } from "@/components/products/product-accordion";
@@ -13,6 +13,7 @@ import { getSiteSettings } from "@/actions/admin";
 import { getServerAuth } from "@/lib/auth";
 import { formatPrice, truncate } from "@/lib/utils";
 import { parseImages } from "@/lib/utils";
+import { detectProductColors } from "@/lib/color-detect";
 import type { ProductWithCategory } from "@/types";
 
 interface ProductPageProps {
@@ -47,6 +48,8 @@ export async function generateMetadata({
   };
 }
 
+const COLOR_CATEGORIES = new Set(["relogios", "oculos", "bolsas"]);
+
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
   const { userId } = await getServerAuth();
@@ -60,115 +63,91 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const inStock = product.stock > 0;
   const images = parseImages(product.images as unknown as string);
-  const mainImage = images[0] ?? "/placeholder.svg";
 
-  // Fetch wishlist state and related products in parallel
-  const [inWishlist, { products: related }] = await Promise.all([
+  // Run color detection + wishlist + related in parallel
+  const isColorCategory = COLOR_CATEGORIES.has(product.category.slug);
+
+  const [inWishlist, { products: related }, detectedColors] = await Promise.all([
     userId ? isInWishlist(product.id) : Promise.resolve(false),
     getProducts({ categorySlug: product.category.slug, take: 5, skipCount: true }),
+    isColorCategory
+      ? detectProductColors(
+          product.id,
+          images,
+          product.colors !== null,
+          product.colorsArray
+        ).catch(() => [] as string[])
+      : Promise.resolve([] as string[]),
   ]);
+
   const relatedProducts = related.filter((p) => p.id !== product.id).slice(0, 4);
 
-  const shippingThreshold = formatPrice(Number(settings.shippingFreeThreshold));
+  void settings; // used for shippingFreeThreshold if needed later
 
   return (
     <div
-      style={{ backgroundColor: "#0A0A0A", minHeight: "100vh" }}
+      style={{ backgroundColor: "#FAFAFA", minHeight: "100vh" }}
       className="py-10 px-4"
     >
       <div className="container mx-auto max-w-7xl">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 mb-8 text-xs" style={{ color: "#9A9A9A" }}>
-          <Link href="/" className="hover:text-[#C9C9C9] transition-colors">
-            Home
+        <nav className="flex items-center gap-2 mb-8 text-xs" style={{ color: "#6A6A6A" }}>
+          <Link href="/" className="hover:text-[#0A0A0A] transition-colors">
+            Início
           </Link>
-          <span style={{ color: "rgba(200,187,168,0.4)" }}>/</span>
-          <Link href="/products" className="hover:text-[#C9C9C9] transition-colors">
-            Products
+          <span style={{ color: "rgba(0,0,0,0.2)" }}>/</span>
+          <Link href="/products" className="hover:text-[#0A0A0A] transition-colors">
+            Produtos
           </Link>
-          <span style={{ color: "rgba(200,187,168,0.4)" }}>/</span>
+          <span style={{ color: "rgba(0,0,0,0.2)" }}>/</span>
           <Link
             href={`/products?category=${product.category.slug}`}
-            className="hover:text-[#C9C9C9] transition-colors"
+            className="hover:text-[#0A0A0A] transition-colors"
           >
             {product.category.name}
           </Link>
-          <span style={{ color: "rgba(200,187,168,0.4)" }}>/</span>
-          <span style={{ color: "#C9C9C9" }}>{product.name}</span>
+          <span style={{ color: "rgba(0,0,0,0.2)" }}>/</span>
+          <span style={{ color: "#0A0A0A" }}>{product.name}</span>
         </nav>
 
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-          {/* Image Gallery */}
-          <div className="space-y-4">
-            <div
-              className="relative aspect-square overflow-hidden rounded-3xl"
-              style={{
-                backgroundColor: "#111111",
-                border: "1px solid rgba(201,201,201,0.2)",
-              }}
-            >
-              <ProductImage
-                src={mainImage}
-                alt={product.name}
-                fill
-                priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
-              />
-              {/* Gold corner accent */}
-              <div
-                className="absolute top-4 right-4 w-8 h-8 rounded-full"
-                style={{
-                  background: "radial-gradient(circle, rgba(201,201,201,0.3) 0%, transparent 70%)",
-                }}
-              />
-            </div>
-
-            {images.length > 1 && (
-              <div className="flex gap-3 overflow-x-auto pb-2">
-                {images.map((img, idx) => (
-                  <div
-                    key={idx}
-                    className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl cursor-pointer transition-all duration-200 hover:shadow-[0_0_15px_rgba(201,201,201,0.3)]"
-                    style={{
-                      backgroundColor: "#111111",
-                      border:
-                        idx === 0
-                          ? "2px solid #C9C9C9"
-                          : "1px solid rgba(201,201,201,0.2)",
-                    }}
-                  >
-                    <ProductImage
-                      src={img}
-                      alt={`${product.name} ${idx + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* Image Gallery — client component for interactivity */}
+          <ProductGallery images={images} productName={product.name} />
 
           {/* Product Info */}
           <div className="flex flex-col gap-6">
-            {/* Category */}
-            <p className="label-luxury" style={{ color: "#C9C9C9" }}>
-              {product.category.name}
-            </p>
+            {/* Category + detected brand */}
+            <div className="flex items-center gap-3 flex-wrap">
+              <p className="label-luxury" style={{ color: "#6A6A6A" }}>
+                {product.category.name}
+              </p>
+              {product.brand && (
+                <span
+                  className="text-xs font-semibold tracking-widest uppercase px-3 py-1"
+                  style={{
+                    backgroundColor: "#0A0A0A",
+                    color: "#F5F0E6",
+                    letterSpacing: "0.18em",
+                    fontFamily: "var(--font-geist-mono), monospace",
+                  }}
+                >
+                  {product.brand}
+                </span>
+              )}
+            </div>
 
             {/* Name & Price */}
             <div>
               <h1
                 className="font-serif text-3xl md:text-4xl font-bold leading-tight mb-4"
-                style={{ color: "#F5F5F5" }}
+                style={{ color: "#0A0A0A" }}
               >
                 {product.name}
               </h1>
               <div className="flex items-center gap-3 flex-wrap">
                 <span
                   className="font-serif text-4xl font-bold"
-                  style={{ color: "#C9C9C9" }}
+                  style={{ color: "#0A0A0A" }}
                 >
                   {formatPrice(Number(product.price))}
                 </span>
@@ -177,7 +156,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     className="text-xs font-semibold tracking-widest uppercase px-3 py-1.5 rounded-full"
                     style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
                   >
-                    Featured
+                    Destaque
                   </span>
                 )}
                 {!inStock && (
@@ -189,7 +168,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       border: "1px solid rgba(224,82,82,0.3)",
                     }}
                   >
-                    Out of Stock
+                    Esgotado
                   </span>
                 )}
               </div>
@@ -204,23 +183,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
             />
 
             {/* Description */}
-            <p className="leading-relaxed text-base" style={{ color: "#9A9A9A" }}>
+            <p className="leading-relaxed text-base" style={{ color: "#6A6A6A" }}>
               {product.description}
             </p>
 
             {/* Stock */}
             {inStock && (
-              <p className="text-sm" style={{ color: "rgba(200,187,168,0.6)" }}>
-                {product.stock} {product.stock !== 1 ? "units" : "unit"} in stock
+              <p className="text-sm" style={{ color: "#6A6A6A" }}>
+                {product.stock} {product.stock !== 1 ? "unidades" : "unidade"} em estoque
               </p>
             )}
 
             {/* Add to cart + Wishlist */}
-            <div className="flex items-center gap-3">
-              <AddToCartButton
+            <div className="flex flex-col gap-3">
+              <ProductActions
                 productId={product.id}
-                disabled={!inStock}
-                className="flex-1"
+                categorySlug={product.category.slug}
+                inStock={inStock}
+                detectedColors={(detectedColors ?? []).length > 0 ? detectedColors : undefined}
               />
               <WishlistButton
                 productId={product.id}
@@ -232,18 +212,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div
               className="rounded-2xl p-5 space-y-3"
               style={{
-                backgroundColor: "rgba(20,20,20,0.5)",
-                border: "1px solid rgba(201,201,201,0.15)",
+                backgroundColor: "rgba(0,0,0,0.04)",
+                border: "1px solid rgba(0,0,0,0.08)",
               }}
             >
               {[
-                { icon: Truck, text: "Worldwide Shipping" },
-                { icon: RefreshCw, text: "30-Day Returns" },
-                { icon: ShieldCheck, text: "Secure Checkout" },
+                { icon: Truck, text: "Envio Internacional" },
+                { icon: RefreshCw, text: "30 Dias para Devolução" },
+                { icon: ShieldCheck, text: "Checkout Seguro" },
               ].map(({ icon: Icon, text }) => (
                 <div key={text} className="flex items-center gap-3">
-                  <Icon className="h-4 w-4 shrink-0" style={{ color: "#C9C9C9" }} />
-                  <span className="text-sm" style={{ color: "#9A9A9A" }}>
+                  <Icon className="h-4 w-4 shrink-0" style={{ color: "#6A6A6A" }} />
+                  <span className="text-sm" style={{ color: "#6A6A6A" }}>
                     {text}
                   </span>
                 </div>
@@ -262,14 +242,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {relatedProducts.length > 0 && (
           <section className="mt-20">
             <div className="mb-8">
-              <p className="label-luxury mb-2" style={{ color: "#C9C9C9" }}>
-                From the same collection
+              <p className="label-luxury mb-2" style={{ color: "#6A6A6A" }}>
+                Da mesma coleção
               </p>
               <h2
                 className="font-serif text-2xl font-bold"
-                style={{ color: "#F5F5F5" }}
+                style={{ color: "#0A0A0A" }}
               >
-                You May Also Like
+                Você também pode gostar
               </h2>
             </div>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

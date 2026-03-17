@@ -10,7 +10,7 @@ import { getServerAuth } from "@/lib/auth";
 import { formatPrice } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Shopping Cart",
+  title: "Meu Carrinho",
 };
 
 export default async function CartPage() {
@@ -32,23 +32,23 @@ export default async function CartPage() {
     return (
       <div
         className="min-h-screen flex flex-col items-center justify-center text-center gap-6 px-4 py-20"
-        style={{ backgroundColor: "#0A0A0A" }}
+        style={{ backgroundColor: "#FAFAFA" }}
       >
         <div
           className="w-24 h-24 rounded-full flex items-center justify-center"
           style={{
-            backgroundColor: "rgba(201,201,201,0.08)",
-            border: "1px solid rgba(201,201,201,0.2)",
+            backgroundColor: "rgba(0,0,0,0.05)",
+            border: "1px solid rgba(0,0,0,0.1)",
           }}
         >
-          <ShoppingCart className="h-10 w-10" style={{ color: "rgba(201,201,201,0.4)" }} />
+          <ShoppingCart className="h-10 w-10" style={{ color: "rgba(0,0,0,0.2)" }} />
         </div>
         <div>
-          <h1 className="font-serif text-3xl font-bold mb-2" style={{ color: "#F5F5F5" }}>
-            Your Cart is Empty
+          <h1 className="font-serif text-3xl font-bold mb-2" style={{ color: "#0A0A0A" }}>
+            Seu Carrinho está Vazio
           </h1>
-          <p className="text-base" style={{ color: "#9A9A9A" }}>
-            You haven't added any products yet.
+          <p className="text-base" style={{ color: "#6A6A6A" }}>
+            Você ainda não adicionou nenhum produto.
           </p>
         </div>
         <Link
@@ -56,7 +56,7 @@ export default async function CartPage() {
           className="px-8 py-3 rounded-full text-sm font-semibold tracking-widest uppercase transition-all hover:bg-[#E8E8E8] hover:shadow-[0_0_20px_rgba(201,201,201,0.4)]"
           style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
         >
-          Explore Products
+          Ver Produtos
         </Link>
       </div>
     );
@@ -65,16 +65,16 @@ export default async function CartPage() {
   return (
     <div
       className="min-h-screen py-10 px-4"
-      style={{ backgroundColor: "#0A0A0A" }}
+      style={{ backgroundColor: "#FAFAFA" }}
     >
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8">
-          <p className="label-luxury mb-2" style={{ color: "#C9C9C9" }}>
-            My Cart
+          <p className="label-luxury mb-2" style={{ color: "#6A6A6A" }}>
+            Meu Carrinho
           </p>
-          <h1 className="font-serif text-3xl md:text-4xl font-bold" style={{ color: "#F5F5F5" }}>
-            {itemCount} {itemCount === 1 ? "item" : "items"}
+          <h1 className="font-serif text-3xl md:text-4xl font-bold" style={{ color: "#0A0A0A" }}>
+            {itemCount} {itemCount === 1 ? "item" : "itens"}
           </h1>
         </div>
 
@@ -86,8 +86,8 @@ export default async function CartPage() {
                 key={item.id}
                 className="rounded-2xl overflow-hidden"
                 style={{
-                  backgroundColor: "#111111",
-                  border: "1px solid rgba(201,201,201,0.12)",
+                  backgroundColor: "#F2F2F2",
+                  border: "1px solid rgba(0,0,0,0.08)",
                 }}
               >
                 <CartItemCard item={item} />
@@ -99,34 +99,34 @@ export default async function CartPage() {
           <div
             className="h-fit rounded-2xl p-6 space-y-5 sticky top-24"
             style={{
-              backgroundColor: "#111111",
-              border: "1px solid rgba(201,201,201,0.15)",
+              backgroundColor: "#F2F2F2",
+              border: "1px solid rgba(0,0,0,0.08)",
             }}
           >
             <h2
               className="font-serif text-xl font-bold"
-              style={{ color: "#F5F5F5" }}
+              style={{ color: "#0A0A0A" }}
             >
-              Order Summary
+              Resumo do Pedido
             </h2>
 
             <div className="space-y-3 text-sm">
-              <div className="flex justify-between" style={{ color: "#9A9A9A" }}>
-                <span>Subtotal ({itemCount} items)</span>
-                <span style={{ color: "#F5F5F5" }}>{formatPrice(subtotal)}</span>
+              <div className="flex justify-between" style={{ color: "#6A6A6A" }}>
+                <span>Subtotal ({itemCount} {itemCount === 1 ? "item" : "itens"})</span>
+                <span style={{ color: "#0A0A0A" }}>{formatPrice(subtotal)}</span>
               </div>
-              <div className="flex justify-between" style={{ color: "#9A9A9A" }}>
-                <span>Shipping</span>
+              <div className="flex justify-between" style={{ color: "#6A6A6A" }}>
+                <span>Frete</span>
                 <span
                   className="font-medium"
                   style={{ color: freeShipping ? "#4ade80" : "#9A9A9A" }}
                 >
-                  {freeShipping ? "Free" : "Calculated at checkout"}
+                  {freeShipping ? "Grátis" : "Calculado no checkout"}
                 </span>
               </div>
               {!freeShipping && (
-                <p className="text-xs" style={{ color: "rgba(200,187,168,0.6)" }}>
-                  Add {formatPrice(threshold - subtotal)} more for free shipping
+                <p className="text-xs" style={{ color: "#6A6A6A" }}>
+                  Adicione mais {formatPrice(threshold - subtotal)} para frete grátis
                 </p>
               )}
             </div>
@@ -134,20 +134,25 @@ export default async function CartPage() {
             {!freeShipping && (
               <div
                 className="pt-4"
-                style={{ borderTop: "1px solid rgba(201,201,201,0.1)" }}
+                style={{ borderTop: "1px solid rgba(0,0,0,0.08)" }}
               >
                 <ShippingCalculator itemCount={itemCount} />
               </div>
             )}
 
             <div
-              className="pt-4 flex justify-between font-bold text-xl"
-              style={{
-                borderTop: "1px solid rgba(201,201,201,0.15)",
-              }}
+              className="pt-4"
+              style={{ borderTop: "1px solid rgba(0,0,0,0.08)" }}
             >
-              <span style={{ color: "#F5F5F5" }}>Total</span>
-              <span style={{ color: "#C9C9C9" }}>{formatPrice(subtotal)}</span>
+              <div className="flex justify-between font-bold text-xl">
+                <span style={{ color: "#0A0A0A" }}>Total</span>
+                <span style={{ color: "#0A0A0A" }}>{formatPrice(subtotal)}</span>
+              </div>
+              {!freeShipping && (
+                <p className="mt-1 text-xs" style={{ color: "#9A9A9A" }}>
+                  * Frete calculado no checkout
+                </p>
+              )}
             </div>
 
             <Link
@@ -155,18 +160,18 @@ export default async function CartPage() {
               className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full text-sm font-semibold tracking-widest uppercase transition-all hover:bg-[#E8E8E8] hover:shadow-[0_0_20px_rgba(201,201,201,0.4)]"
               style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
             >
-              Proceed to Checkout <ArrowRight className="h-4 w-4" />
+              Finalizar Pedido <ArrowRight className="h-4 w-4" />
             </Link>
 
             <Link
               href="/products"
               className="flex items-center justify-center w-full py-3 rounded-full text-sm font-medium"
               style={{
-                border: "1px solid rgba(201,201,201,0.3)",
-                color: "#C9C9C9",
+                border: "1px solid rgba(0,0,0,0.15)",
+                color: "#6A6A6A",
               }}
             >
-              Continue Shopping
+              Continuar Comprando
             </Link>
           </div>
         </div>

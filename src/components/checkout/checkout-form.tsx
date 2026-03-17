@@ -1,14 +1,11 @@
 "use client";
 
-import { useState, useTransition, useRef } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import {
   Loader2,
-  CreditCard,
-  QrCode,
   MessageCircle,
-  ChevronDown,
   ShoppingCart,
   ArrowRight,
 } from "lucide-react";
@@ -65,10 +62,10 @@ function Field({
 }
 
 function FocusInput(
-  props: React.InputHTMLAttributes<HTMLInputElement> & { wrapperClass?: string }
+  props: React.InputHTMLAttributes<HTMLInputElement>
 ) {
   const [focused, setFocused] = useState(false);
-  const { wrapperClass, style: externalStyle, ...rest } = props;
+  const { style: externalStyle, ...rest } = props;
   return (
     <input
       {...rest}
@@ -82,45 +79,6 @@ function FocusInput(
       onBlur={(e) => { setFocused(false); props.onBlur?.(e); }}
     />
   );
-}
-
-type PaymentMethod = "CREDIT_CARD" | "PIX" | "WHATSAPP";
-type CreditGateway = "CIELO" | "REDE";
-
-// ─── Card validators ──────────────────────────────────────────────────────────
-
-function detectCardBrandClient(n: string): string | null {
-  if (/^4/.test(n)) return "Visa";
-  if (/^(5[1-5]|2(2[2-9][1-9]|[3-6]\d{2}|7[01]\d|720))/.test(n)) return "Mastercard";
-  if (/^3[47]/.test(n)) return "Amex";
-  if (/^(401178|401179|431274|438935|451416|457393|457631|457632|504175|627780|636297|636368|636369|509[0-9]{3}|6504(0[5-9]|[1-3][0-9]|8[5-9]|9[0-9])|6505([0-2][0-9]|3[0-8]|4[1-9]|[5-8][0-9]|9[0-8])|6507(0[0-9]|1[0-8]|2[0-7])|6509(0[1-9]|1[0-9]|20)|6516[5-7][0-9]|6550([0-4][0-9]|5[0-8]|6[0-9]|[7-8][0-9]|9[0-2])|50(669[0-9]|67[0-9]{2}))/.test(n)) return "Elo";
-  if (/^6062/.test(n)) return "Hipercard";
-  if (/^3(0[0-5]|[68])/.test(n)) return "Diners";
-  return null;
-}
-
-function luhnCheck(n: string): boolean {
-  let sum = 0;
-  let alt = false;
-  for (let i = n.length - 1; i >= 0; i--) {
-    let d = parseInt(n[i], 10);
-    if (alt) { d *= 2; if (d > 9) d -= 9; }
-    sum += d;
-    alt = !alt;
-  }
-  return sum % 10 === 0;
-}
-
-// ─── Card formatters ──────────────────────────────────────────────────────────
-
-function formatCardNumber(val: string) {
-  return val.replace(/\D/g, "").slice(0, 16).replace(/(.{4})/g, "$1 ").trim();
-}
-
-function formatExpiry(val: string) {
-  const digits = val.replace(/\D/g, "").slice(0, 6);
-  if (digits.length <= 2) return digits;
-  return `${digits.slice(0, 2)}/${digits.slice(2)}`;
 }
 
 function formatCpf(val: string) {
@@ -138,12 +96,7 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
   const { user } = useUser();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
-  const [method, setMethod] = useState<PaymentMethod>("PIX");
-  const [creditGateway, setCreditGateway] = useState<CreditGateway>("CIELO");
-  const [cardNumber, setCardNumber] = useState("");
-  const [cardExpiry, setCardExpiry] = useState("");
   const [cpf, setCpf] = useState("");
-  const formRef = useRef<HTMLFormElement>(null);
 
   const cartLines = (cart?.items ?? []).map((i) => ({
     name: i.product.name,
@@ -154,7 +107,6 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
 
   const total = cartLines.reduce((acc, i) => acc + i.price * i.quantity, 0);
 
-  // Pre-fill from Clerk profile
   const defaultName = user?.fullName ?? "";
   const defaultEmail = user?.primaryEmailAddress?.emailAddress ?? "";
 
@@ -163,54 +115,13 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
     setError(null);
 
     if (cartLines.length === 0) {
-      setError("Your cart is empty.");
+      setError("Seu carrinho está vazio.");
       return;
     }
 
     const formData = new FormData(e.currentTarget);
-
-    if (method === "CREDIT_CARD") {
-      formData.set("cardNumber", cardNumber.replace(/\s/g, ""));
-      formData.set("cardExpiry", cardExpiry);
-      formData.set("creditGateway", creditGateway);
-    }
-
     formData.set("cpf", cpf.replace(/\D/g, ""));
-
-    if (method === "CREDIT_CARD") {
-      const rawCard = cardNumber.replace(/\s/g, "");
-
-      if (rawCard.length < 13 || !luhnCheck(rawCard)) {
-        setError("Número do cartão inválido.");
-        return;
-      }
-
-      const detectedBrand = detectCardBrandClient(rawCard);
-      if (!detectedBrand) {
-        setError("Bandeira do cartão não reconhecida. Aceitamos Visa, Mastercard, Amex, Elo, Hipercard e Diners.");
-        return;
-      }
-
-      const parts = cardExpiry.split("/");
-      const mm = parseInt(parts[0] ?? "0", 10);
-      const yyyy = parseInt(parts[1] ?? "0", 10);
-      const now = new Date();
-      if (
-        !mm || !yyyy || mm < 1 || mm > 12 ||
-        yyyy < now.getFullYear() ||
-        (yyyy === now.getFullYear() && mm < now.getMonth() + 1)
-      ) {
-        setError("Data de validade inválida ou cartão vencido.");
-        return;
-      }
-
-      const cardCvvValue = (formData.get("cardCvv") as string) ?? "";
-      const expectedCvvLen = detectedBrand === "Amex" ? 4 : 3;
-      if (cardCvvValue.length !== expectedCvvLen) {
-        setError(`CVV deve ter ${expectedCvvLen} dígitos para ${detectedBrand}.`);
-        return;
-      }
-    }
+    formData.set("paymentMethod", "WHATSAPP");
 
     startTransition(async () => {
       const result = await createOrder(formData);
@@ -220,56 +131,9 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
         return;
       }
 
-      if (result.type === "paid") {
-        router.push(`/checkout/sucesso?orderId=${result.orderId}&paid=1`);
-      } else if (result.type === "pix") {
-        const params = new URLSearchParams({
-          orderId: result.orderId,
-          paymentId: result.cieloPaymentId,
-          qr: result.pixQrCode,
-        });
-        router.push(`/checkout/pix?${params.toString()}`);
-      } else {
-        router.push(`/checkout/sucesso?orderId=${result.orderId}`);
-      }
+      router.push(`/checkout/sucesso?orderId=${result.orderId}`);
     });
   }
-
-  const methodButton = (
-    m: PaymentMethod,
-    Icon: React.ElementType,
-    label: string,
-    desc: string
-  ) => (
-    <button
-      type="button"
-      onClick={() => setMethod(m)}
-      className="flex items-start gap-3 rounded-xl p-4 text-left transition-all w-full"
-      style={{
-        border: method === m ? "2px solid #C9C9C9" : "1px solid rgba(201,201,201,0.2)",
-        backgroundColor: method === m ? "rgba(201,201,201,0.08)" : "rgba(20,20,20,0.8)",
-      }}
-    >
-      <div
-        className="h-9 w-9 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
-        style={{ backgroundColor: method === m ? "rgba(201,201,201,0.15)" : "rgba(201,201,201,0.07)" }}
-      >
-        <Icon className="h-4.5 w-4.5" style={{ color: "#C9C9C9" }} />
-      </div>
-      <div>
-        <p className="font-semibold text-sm" style={{ color: "#F5F5F5" }}>{label}</p>
-        <p className="text-xs mt-0.5" style={{ color: "rgba(200,187,168,0.6)" }}>{desc}</p>
-      </div>
-      {method === m && (
-        <div
-          className="ml-auto h-4 w-4 rounded-full shrink-0 mt-1 flex items-center justify-center"
-          style={{ backgroundColor: "#C9C9C9" }}
-        >
-          <div className="h-2 w-2 rounded-full" style={{ backgroundColor: "#0A0A0A" }} />
-        </div>
-      )}
-    </button>
-  );
 
   // Empty cart
   if (cartLines.length === 0) {
@@ -280,14 +144,14 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
       >
         <ShoppingCart className="h-12 w-12 mx-auto" style={{ color: "rgba(201,201,201,0.3)" }} />
         <p className="font-serif text-xl" style={{ color: "#F5F5F5" }}>
-          Your Cart is Empty
+          Seu Carrinho está Vazio
         </p>
         <Link
           href="/products"
           className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold"
           style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
         >
-          Explore Products <ArrowRight className="h-4 w-4" />
+          Ver Produtos <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
     );
@@ -295,7 +159,6 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
 
   return (
     <form
-      ref={formRef}
       onSubmit={handleSubmit}
       className="space-y-6 p-6"
       style={{ backgroundColor: "#111111" }}
@@ -322,7 +185,7 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
         }}
       >
         <h3 className="font-serif font-semibold" style={{ color: "#F5F5F5" }}>
-          Order Summary
+          Resumo do Pedido
         </h3>
         {cartLines.map((item, idx) => {
           const imgs = parseImages(item.images as unknown as string);
@@ -355,15 +218,15 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
 
       {/* Personal data */}
       <div className="space-y-4">
-        <h3 className="label-luxury" style={{ color: "#C9C9C9" }}>Contact Information</h3>
+        <h3 className="label-luxury" style={{ color: "#C9C9C9" }}>Informações de Contato</h3>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <Field label="Full Name *" className="sm:col-span-2">
-            <FocusInput name="name" placeholder="John Smith" required defaultValue={defaultName} />
+          <Field label="Nome Completo *" className="sm:col-span-2">
+            <FocusInput name="name" placeholder="João Silva" required defaultValue={defaultName} />
           </Field>
           <Field label="Email *">
-            <FocusInput name="email" type="email" placeholder="john@email.com" required defaultValue={defaultEmail} />
+            <FocusInput name="email" type="email" placeholder="joao@email.com" required defaultValue={defaultEmail} />
           </Field>
-          <Field label="CPF / Tax ID *">
+          <Field label="CPF *">
             <FocusInput
               name="cpfDisplay"
               value={cpf}
@@ -374,7 +237,7 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
               maxLength={14}
             />
           </Field>
-          <Field label="Phone" className="sm:col-span-2">
+          <Field label="Telefone" className="sm:col-span-2">
             <FocusInput name="phone" type="tel" placeholder="(11) 99999-9999" />
           </Field>
         </div>
@@ -382,192 +245,47 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
 
       {/* Address */}
       <div className="space-y-4">
-        <h3 className="label-luxury" style={{ color: "#C9C9C9" }}>Shipping Address</h3>
+        <h3 className="label-luxury" style={{ color: "#C9C9C9" }}>Endereço de Entrega</h3>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <Field label="ZIP Code *" className="sm:col-span-2">
+          <Field label="CEP *" className="sm:col-span-2">
             <FocusInput name="zip" placeholder="01310-100" required maxLength={9} />
           </Field>
-          <Field label="Street Address *" className="sm:col-span-2">
-            <FocusInput name="street" placeholder="Main Street" required />
+          <Field label="Endereço *" className="sm:col-span-2">
+            <FocusInput name="street" placeholder="Rua das Flores" required />
           </Field>
-          <Field label="Number *">
+          <Field label="Número *">
             <FocusInput name="number" placeholder="42" required />
           </Field>
-          <Field label="Complement / Apt">
+          <Field label="Complemento">
             <FocusInput name="complement" placeholder="Apto 3B" />
           </Field>
-          <Field label="City *">
-            <FocusInput name="city" placeholder="City Name" required />
+          <Field label="Cidade *">
+            <FocusInput name="city" placeholder="São Paulo" required />
           </Field>
-          <Field label="State *">
-            <FocusInput name="state" placeholder="ST" maxLength={2} required />
+          <Field label="Estado *">
+            <FocusInput name="state" placeholder="SP" maxLength={2} required />
           </Field>
         </div>
       </div>
 
-      {/* Payment method */}
-      <input type="hidden" name="paymentMethod" value={method} />
-      <div className="space-y-3">
-        <h3 className="label-luxury" style={{ color: "#C9C9C9" }}>Payment Method</h3>
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-          {methodButton("PIX", QrCode, "PIX", "Instant approval & discount")}
-          {methodButton("CREDIT_CARD", CreditCard, "Credit Card", "Up to 12x interest-free")}
-          {methodButton("WHATSAPP", MessageCircle, "WhatsApp", "Coordinate with our team")}
-        </div>
-      </div>
-
-      {/* Credit card fields */}
-      {method === "CREDIT_CARD" && (
-        <div
-          className="rounded-2xl p-5 space-y-4"
-          style={{
-            backgroundColor: "rgba(10,10,10,0.5)",
-            border: "1px solid rgba(201,201,201,0.2)",
-          }}
-        >
-          <h3 className="label-luxury" style={{ color: "#C9C9C9" }}>Card Details</h3>
-
-          {/* Gateway selector */}
-          <div>
-            <label style={labelStyle}>Payment Platform</label>
-            <div className="flex gap-2">
-              {(["CIELO", "REDE"] as CreditGateway[]).map((gw) => (
-                <button
-                  key={gw}
-                  type="button"
-                  onClick={() => setCreditGateway(gw)}
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all"
-                  style={{
-                    border: creditGateway === gw ? "2px solid #C9C9C9" : "1px solid rgba(201,201,201,0.2)",
-                    backgroundColor: creditGateway === gw ? "rgba(201,201,201,0.12)" : "rgba(20,20,20,0.8)",
-                    color: creditGateway === gw ? "#C9C9C9" : "rgba(200,187,168,0.6)",
-                  }}
-                >
-                  {creditGateway === gw && (
-                    <div
-                      className="h-3 w-3 rounded-full"
-                      style={{ backgroundColor: "#C9C9C9" }}
-                    />
-                  )}
-                  {gw === "CIELO" ? "Cielo" : "Rede"}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <Field label="Card Number *">
-            <FocusInput
-              name="cardNumberDisplay"
-              value={cardNumber}
-              onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
-              placeholder="0000 0000 0000 0000"
-              inputMode="numeric"
-              required={method === "CREDIT_CARD"}
-              maxLength={19}
-            />
-          </Field>
-
-          <Field label="Cardholder Name *">
-            <FocusInput
-              name="cardHolder"
-              placeholder="JOHN SMITH"
-              style={{ textTransform: "uppercase" }}
-              required={method === "CREDIT_CARD"}
-            />
-          </Field>
-
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Expiry Date *">
-              <FocusInput
-                name="cardExpiryDisplay"
-                value={cardExpiry}
-                onChange={(e) => setCardExpiry(formatExpiry(e.target.value))}
-                placeholder="MM/YYYY"
-                inputMode="numeric"
-                required={method === "CREDIT_CARD"}
-                maxLength={7}
-              />
-            </Field>
-            <Field label="CVV *">
-              <FocusInput
-                name="cardCvv"
-                placeholder="123"
-                inputMode="numeric"
-                maxLength={4}
-                required={method === "CREDIT_CARD"}
-              />
-            </Field>
-          </div>
-
-          <Field label="Installments">
-            <div className="relative">
-              <select
-                name="installments"
-                defaultValue="1"
-                style={{ ...inputStyle, cursor: "pointer", appearance: "none" }}
-              >
-                {Array.from({ length: 12 }, (_, i) => i + 1).map((n) => (
-                  <option key={n} value={n}>
-                    {n === 1
-                      ? `1× de ${formatPrice(total)} (à vista)`
-                      : `${n}× de ${formatPrice(total / n)}`}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown
-                className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none"
-                style={{ color: "rgba(201,201,201,0.7)" }}
-              />
-            </div>
-          </Field>
-
-          <p className="text-xs" style={{ color: "rgba(200,187,168,0.5)" }}>
-            🔒 Your card data is sent directly to {creditGateway === "REDE" ? "Rede" : "Cielo"} via secure connection (TLS 1.3) and is never stored on our servers.
+      {/* Payment — WhatsApp only */}
+      <div
+        className="rounded-2xl p-5 flex items-start gap-3"
+        style={{
+          backgroundColor: "rgba(10,10,10,0.5)",
+          border: "1px solid rgba(37,211,102,0.25)",
+        }}
+      >
+        <MessageCircle className="h-8 w-8 shrink-0" style={{ color: "#25D366" }} />
+        <div>
+          <p className="font-semibold text-sm mb-1" style={{ color: "#F5F5F5" }}>
+            Pagamento via WhatsApp
+          </p>
+          <p className="text-xs" style={{ color: "rgba(200,187,168,0.65)" }}>
+            Após confirmar seu pedido, nossa equipe entrará em contato via WhatsApp para combinar o pagamento e os detalhes de envio.
           </p>
         </div>
-      )}
-
-      {/* PIX info */}
-      {method === "PIX" && (
-        <div
-          className="rounded-2xl p-5 flex items-start gap-3"
-          style={{
-            backgroundColor: "rgba(10,10,10,0.5)",
-            border: "1px solid rgba(201,201,201,0.2)",
-          }}
-        >
-          <QrCode className="h-8 w-8 shrink-0" style={{ color: "#C9C9C9" }} />
-          <div>
-            <p className="font-semibold text-sm mb-1" style={{ color: "#F5F5F5" }}>
-              Instant PIX Payment
-            </p>
-            <p className="text-xs" style={{ color: "rgba(200,187,168,0.65)" }}>
-              After confirming, you will receive a PIX QR Code. Payment is processed in seconds and your order is automatically confirmed.
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* WhatsApp info */}
-      {method === "WHATSAPP" && (
-        <div
-          className="rounded-2xl p-5 flex items-start gap-3"
-          style={{
-            backgroundColor: "rgba(10,10,10,0.5)",
-            border: "1px solid rgba(201,201,201,0.2)",
-          }}
-        >
-          <MessageCircle className="h-8 w-8 shrink-0" style={{ color: "#25D366" }} />
-          <div>
-            <p className="font-semibold text-sm mb-1" style={{ color: "#F5F5F5" }}>
-              Complete via WhatsApp
-            </p>
-            <p className="text-xs" style={{ color: "rgba(200,187,168,0.65)" }}>
-              Your order will be registered and you will be redirected to WhatsApp to arrange payment with our team.
-            </p>
-          </div>
-        </div>
-      )}
+      </div>
 
       <button
         type="submit"
@@ -576,13 +294,7 @@ export function CheckoutForm({ cart }: CheckoutFormProps) {
         style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
       >
         {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-        {isPending
-          ? "Processing..."
-          : method === "CREDIT_CARD"
-          ? `Pay ${formatPrice(total)}`
-          : method === "PIX"
-          ? `Generate PIX QR · ${formatPrice(total)}`
-          : `Confirm Order · ${formatPrice(total)}`}
+        {isPending ? "Processando..." : `Confirmar Pedido · ${formatPrice(total)}`}
       </button>
     </form>
   );

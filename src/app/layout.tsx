@@ -43,7 +43,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${cormorantGaramond.variable} font-sans antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${cormorantGaramond.variable} font-sans antialiased overflow-x-hidden`}
       >
         <ClerkProvider>
           <ClerkAuthBridge>{children}</ClerkAuthBridge>

@@ -1,8 +1,12 @@
 import type { Cart, CartItem, Category, Order, OrderItem, Product } from "@prisma/client";
 
 // ── Produto com categoria ─────────────────────────────────────────────
+// imagesArray and colorsArray are computed fields added by the Prisma client extension in src/lib/prisma.ts
 export type ProductWithCategory = Product & {
   category: Category;
+  imagesArray: string[];
+  colorsArray: string[];
+  brand?: string | null;
 };
 
 // ── Item do carrinho com produto completo ─────────────────────────────

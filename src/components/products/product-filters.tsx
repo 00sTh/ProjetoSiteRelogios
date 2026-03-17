@@ -30,17 +30,17 @@ export function ProductFilters({ categories }: ProductFiltersProps) {
 
   return (
     <aside
-      className="rounded-2xl p-5 h-fit sticky top-24"
+      className="rounded-2xl p-5 h-fit sticky top-20"
       style={{
-        backgroundColor: "#111111",
-        border: "1px solid rgba(201,201,201,0.15)",
+        backgroundColor: "#F2F2F2",
+        border: "1px solid rgba(0,0,0,0.08)",
       }}
     >
       <h3
         className="label-luxury mb-4 pb-3"
         style={{
-          color: "#C9C9C9",
-          borderBottom: "1px solid rgba(201,201,201,0.15)",
+          color: "#6A6A6A",
+          borderBottom: "1px solid rgba(0,0,0,0.08)",
         }}
       >
         Categories
@@ -51,11 +51,11 @@ export function ProductFilters({ categories }: ProductFiltersProps) {
             className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
             style={{
               backgroundColor: !currentCategory
-                ? "rgba(201,201,201,0.12)"
+                ? "rgba(0,0,0,0.08)"
                 : "transparent",
-              color: !currentCategory ? "#C9C9C9" : "#9A9A9A",
+              color: !currentCategory ? "#0A0A0A" : "#6A6A6A",
               border: !currentCategory
-                ? "1px solid rgba(201,201,201,0.3)"
+                ? "1px solid rgba(0,0,0,0.2)"
                 : "1px solid transparent",
             }}
             onClick={() => setFilter("category", null)}
@@ -71,11 +71,11 @@ export function ProductFilters({ categories }: ProductFiltersProps) {
                 className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
                 style={{
                   backgroundColor: isActive
-                    ? "rgba(201,201,201,0.12)"
+                    ? "rgba(0,0,0,0.08)"
                     : "transparent",
-                  color: isActive ? "#C9C9C9" : "#9A9A9A",
+                  color: isActive ? "#0A0A0A" : "#6A6A6A",
                   border: isActive
-                    ? "1px solid rgba(201,201,201,0.3)"
+                    ? "1px solid rgba(0,0,0,0.2)"
                     : "1px solid transparent",
                 }}
                 onClick={() => setFilter("category", cat.slug)}
@@ -84,7 +84,7 @@ export function ProductFilters({ categories }: ProductFiltersProps) {
                 <span
                   className="text-xs ml-auto"
                   style={{
-                    color: isActive ? "#C9C9C9" : "rgba(200,187,168,0.5)",
+                    color: isActive ? "#0A0A0A" : "#9A9A9A",
                   }}
                 >
                   {cat._count.products}

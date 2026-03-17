@@ -88,6 +88,11 @@ export default async function AdminOrderPage({ params }: Props) {
                     <p className="text-sm font-medium" style={{ color: "#F5F5F5" }}>
                       {item.product.name}
                     </p>
+                    {item.observations && (
+                      <p className="text-xs mt-0.5" style={{ color: "#C9C9C9", letterSpacing: "0.04em" }}>
+                        {item.observations}
+                      </p>
+                    )}
                     <p className="text-xs mt-0.5" style={{ color: "rgba(200,187,168,0.5)" }}>
                       Qtd: {item.quantity}
                     </p>

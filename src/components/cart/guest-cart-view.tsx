@@ -241,6 +241,11 @@ export function GuestCartView() {
                         <p className="font-serif font-semibold text-sm" style={{ color: "#F5F5F5" }}>
                           {item.product.name}
                         </p>
+                        {item.observations && (
+                          <p style={{ fontSize: "10px", color: "#9A9A9A", letterSpacing: "0.05em" }}>
+                            {item.observations}
+                          </p>
+                        )}
                         <p className="font-bold text-sm" style={{ color: "#C9C9C9" }}>
                           {formatPrice(Number(item.product.price))}
                         </p>
@@ -283,7 +288,7 @@ export function GuestCartView() {
 
             {/* Summary */}
             <div
-              className="h-fit rounded-2xl p-6 space-y-5 sticky top-24"
+              className="h-fit rounded-2xl p-6 space-y-5 sticky top-20"
               style={{
                 backgroundColor: "#111111",
                 border: "1px solid rgba(201,201,201,0.2)",

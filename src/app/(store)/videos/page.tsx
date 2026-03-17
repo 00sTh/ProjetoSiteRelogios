@@ -3,8 +3,8 @@ import { getSiteSettings } from "@/actions/admin";
 import { VideosContent } from "@/components/videos/videos-content";
 
 export const metadata: Metadata = {
-  title: "Vídeos & Histórias — LuxImport",
-  description: "Mergulhe no universo LuxImport — da pesquisa científica aos rituais de beleza que transformam.",
+  title: "Vídeos & Histórias — Imports",
+  description: "Mergulhe no universo Imports — da pesquisa científica aos rituais de beleza que transformam.",
 };
 
 export const revalidate = 3600;
