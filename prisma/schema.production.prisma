@@ -67,6 +67,10 @@ model Product {
   active      Boolean         @default(true)
   ingredients String?
   usage       String?
+  /// Cores detectadas por IA (claude-haiku-4-5 vision). null = não analisado.
+  colors      String[] @default([])
+  /// Marca detectada por IA (ex: "Rolex", "Omega"). null = não analisado.
+  brand       String?
 
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
@@ -101,10 +105,11 @@ model Cart {
 }
 
 model CartItem {
-  id        String @id @default(uuid())
-  cartId    String
-  productId String
-  quantity  Int    @default(1)
+  id           String  @id @default(uuid())
+  cartId       String
+  productId    String
+  quantity     Int     @default(1)
+  observations String?
 
   cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id])
@@ -161,10 +166,11 @@ model Order {
 }
 
 model OrderItem {
-  id       String  @id @default(uuid())
-  quantity Int
+  id           String  @id @default(uuid())
+  quantity     Int
   /// Snapshot do preço no momento da compra
-  price    Decimal @db.Decimal(10, 2)
+  price        Decimal  @db.Decimal(10, 2)
+  observations String?
 
   orderId   String
   productId String
