@@ -208,7 +208,7 @@ export async function createProduct(formData: FormData) {
     product = await prisma.product.create({
       data: {
         ...data,
-        images: JSON.stringify(images),
+        images: images,
         ingredients: ingredients || null,
         usage: usage || null,
       },
@@ -256,7 +256,7 @@ export async function updateProduct(id: string, formData: FormData) {
       where: { id },
       data: {
         ...data,
-        images: JSON.stringify(images),
+        images: images,
         ingredients: ingredients || null,
         usage: usage || null,
       },
