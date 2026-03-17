@@ -48,7 +48,7 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
     .join("\n");
 
   const whatsappMessage = encodeURIComponent(
-    `Hello! I placed an order at Imports.\n\n` +
+    `Hello! I placed an order at S Luxury Collection.\n\n` +
     `📦 Order: #${order.id.slice(0, 8).toUpperCase()}\n\n` +
     `Items:\n${itemsList}\n\n` +
     `Total: ${formatPrice(total)}\n\n` +

@@ -6,7 +6,7 @@ import { GoldButton } from "@/components/ui/gold-button";
 
 export const metadata: Metadata = {
   title: "About Us",
-  description: "The story behind Imports — curating the world's finest timepieces and eyewear.",
+  description: "The story behind S Luxury Collection — curating the world's finest timepieces and eyewear.",
 };
 
 const values = [
@@ -75,7 +75,7 @@ export default function AboutPage() {
             className="text-lg leading-relaxed"
             style={{ color: "#6A6A6A" }}
           >
-            Imports was founded on the belief that the world's finest timepieces and eyewear
+            S Luxury Collection was founded on the belief that the world's finest timepieces and eyewear
             should be accessible — with guaranteed authenticity, expert curation, and a purchasing
             experience worthy of the pieces themselves.
           </p>
@@ -171,7 +171,7 @@ export default function AboutPage() {
             <SectionTitle
               label="Our Values"
               title="What We Stand For"
-              subtitle="Three principles guide everything we do at Imports."
+              subtitle="Three principles guide everything we do at S Luxury Collection."
               align="center"
             />
           </div>

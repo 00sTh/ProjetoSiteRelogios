@@ -85,7 +85,7 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
             style={inputStyle}
             placeholder="https://... (PNG com fundo transparente)"
           />
-          {hint("Se preenchido, substitui o texto 'Imports' na navbar e no hero. Recomendado: PNG 400×120px.")}
+          {hint("Se preenchido, substitui o texto 'S Luxury Collection' na navbar e no hero. Recomendado: PNG 400×120px.")}
         </div>
       </div>
 
@@ -153,7 +153,7 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
               style={inputStyle}
               placeholder="https://... (PNG com fundo transparente)"
             />
-            {hint("Se vazio, exibe o texto 'Imports' em Playfair Display. Recomendado: PNG 680×240px.")}
+            {hint("Se vazio, exibe o texto 'S Luxury Collection' em Playfair Display. Recomendado: PNG 680×240px.")}
           </div>
         </div>
       </div>
@@ -337,7 +337,7 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
 
       {/* WhyImports */}
       <div>
-        {sectionTitle("Por que Imports? (Barra de Benefícios)")}
+        {sectionTitle("Por que S Luxury Collection? (Barra de Benefícios)")}
         <div className="space-y-6">
           {([1, 2, 3] as const).map((n) => (
             <div key={n} className="rounded-xl p-4" style={{ border: "1px solid rgba(201,201,201,0.15)", backgroundColor: "rgba(20,20,20,0.3)" }}>
@@ -413,7 +413,7 @@ export function SiteSettingsForm({ settings }: { settings: SiteSettings }) {
               maxLength={70}
               defaultValue={settings.metaTitle ?? ""}
               style={inputStyle}
-              placeholder="Imports — Importados de Luxo"
+              placeholder="S Luxury Collection — Importados de Luxo"
             />
           </div>
           <div>

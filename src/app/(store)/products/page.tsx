@@ -64,7 +64,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             className="label-luxury mb-3"
             style={{ color: "#6A6A6A" }}
           >
-            Imports Collection
+            S Luxury Collection Collection
           </p>
           <h1
             className="font-serif text-4xl md:text-5xl font-bold"

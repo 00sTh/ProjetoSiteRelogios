@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Termos de Uso — Imports",
-  description: "Termos e condições de uso da plataforma Imports.",
+  title: "Termos de Uso — S Luxury Collection",
+  description: "Termos e condições de uso da plataforma S Luxury Collection.",
 };
 
 export default function TermosDeUsoPage() {
@@ -41,7 +41,7 @@ export default function TermosDeUsoPage() {
 
           <Section title="2. Sobre a Plataforma">
             <p>
-              O Site é operado pela Imports Comércio de Importados Ltda. e destina-se à venda de produtos
+              O Site é operado pela S Luxury Collection Comércio de Importados Ltda. e destina-se à venda de produtos
               cosméticos de uso pessoal no território brasileiro. O acesso a determinadas
               funcionalidades requer cadastro e autenticação.
             </p>
@@ -62,7 +62,7 @@ export default function TermosDeUsoPage() {
                 atividades realizadas em sua conta.
               </li>
               <li>
-                A Imports reserva-se o direito de suspender ou encerrar contas que violem
+                A S Luxury Collection reserva-se o direito de suspender ou encerrar contas que violem
                 estes Termos.
               </li>
             </ul>
@@ -75,7 +75,7 @@ export default function TermosDeUsoPage() {
                 frete.
               </li>
               <li>
-                A Imports reserva-se o direito de alterar preços sem aviso prévio. O preço
+                A S Luxury Collection reserva-se o direito de alterar preços sem aviso prévio. O preço
                 vinculante é o confirmado no momento da finalização do pedido.
               </li>
               <li>
@@ -108,7 +108,7 @@ export default function TermosDeUsoPage() {
                 Frete grátis para pedidos acima de R$ 199,00 (consulte condições vigentes).
               </li>
               <li>
-                A Imports não se responsabiliza por atrasos causados por transportadoras ou
+                A S Luxury Collection não se responsabiliza por atrasos causados por transportadoras ou
                 eventos de força maior.
               </li>
             </ul>
@@ -140,14 +140,14 @@ export default function TermosDeUsoPage() {
           <Section title="8. Propriedade Intelectual">
             <p>
               Todo o conteúdo do Site — incluindo textos, imagens, logotipos, design e código
-              — é de propriedade da Imports ou de seus licenciadores e protegido por direitos
+              — é de propriedade da S Luxury Collection ou de seus licenciadores e protegido por direitos
               autorais. É proibida a reprodução sem autorização prévia por escrito.
             </p>
           </Section>
 
           <Section title="9. Limitação de Responsabilidade">
             <p>
-              A Imports não se responsabiliza por danos indiretos, incidentais ou consequentes
+              A S Luxury Collection não se responsabiliza por danos indiretos, incidentais ou consequentes
               decorrentes do uso do Site. Nossa responsabilidade total não excederá o valor
               pago pelo produto ou serviço em questão.
             </p>

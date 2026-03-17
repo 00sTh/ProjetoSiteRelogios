@@ -31,7 +31,7 @@ export function NewsletterForm() {
   if (state === "success") {
     return (
       <p className="text-sm" style={{ color: "#4ADE80" }}>
-        ✓ Inscrito! Bem-vindo(a) à família Imports.
+        ✓ Inscrito! Bem-vindo(a) à família S Luxury Collection.
       </p>
     );
   }

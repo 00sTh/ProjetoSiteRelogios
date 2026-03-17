@@ -1,5 +1,5 @@
 /**
- * Seed do banco de dados — Imports (Watches, Sunglasses, Accessories)
+ * Seed do banco de dados — S Luxury Collection (Watches, Sunglasses, Accessories)
  * Execução: npm run db:seed
  *
  * Schema SQLite: images é String (JSON serializado)
@@ -15,7 +15,7 @@ function img(url: string): string {
 }
 
 async function main() {
-  console.log("Iniciando seed Imports...");
+  console.log("Iniciando seed S Luxury Collection...");
 
   // ── Categorias ──────────────────────────────────────────────────────────────
   // Note: Category model has no "description" field — slug/name only
@@ -227,7 +227,7 @@ async function main() {
   });
 
   console.log("SiteSettings created");
-  console.log("\nSeed Imports completed successfully!");
+  console.log("\nSeed S Luxury Collection completed successfully!");
   console.log(
     "   12 products across 3 categories (Watches, Sunglasses, Accessories)"
   );
