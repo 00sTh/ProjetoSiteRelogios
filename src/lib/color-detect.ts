@@ -42,8 +42,9 @@ async function analyzeImageWithSharp(url: string): Promise<string[]> {
 
   const buf = Buffer.from(await res.arrayBuffer());
 
-  // Dynamically import sharp (ESM-friendly)
-  const sharp = (await import("sharp")).default;
+  // Dynamic import hidden from bundler static analysis
+  // eslint-disable-next-line @typescript-eslint/no-implied-eval
+  const sharp = (await Function('return import("sharp")')()).default;
 
   const { data } = await sharp(buf)
     .resize(80, 80, { fit: "fill" })
