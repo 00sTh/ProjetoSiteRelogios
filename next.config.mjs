@@ -22,6 +22,7 @@ const nextConfig = {
     ],
     formats: ["image/avif", "image/webp"],
   },
+  serverExternalPackages: ["sharp"],
   experimental: {
     serverActions: {
       bodySizeLimit: "10mb",
