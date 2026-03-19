@@ -174,6 +174,7 @@ const productSchema = z.object({
   imageUrls: z.string().optional(), // JSON array of URLs
   ingredients: z.string().optional(),
   usage: z.string().optional(),
+  brand: z.string().max(100).optional().or(z.literal("")),
 });
 
 export async function createProduct(formData: FormData) {
@@ -185,7 +186,7 @@ export async function createProduct(formData: FormData) {
     return { success: false, error: parsed.error.issues[0].message };
   }
 
-  const { imageUrls, ingredients, usage, ...data } = parsed.data;
+  const { imageUrls, ingredients, usage, brand, ...data } = parsed.data;
   let images: string[] = [];
   try {
     images = imageUrls ? JSON.parse(imageUrls) : [];
@@ -208,6 +209,7 @@ export async function createProduct(formData: FormData) {
     product = await prisma.product.create({
       data: {
         ...data,
+        brand: brand || null,
         images: images,
         ingredients: ingredients || null,
         usage: usage || null,
@@ -234,7 +236,7 @@ export async function updateProduct(id: string, formData: FormData) {
     return { success: false, error: parsed.error.issues[0].message };
   }
 
-  const { imageUrls, ingredients, usage, ...data } = parsed.data;
+  const { imageUrls, ingredients, usage, brand, ...data } = parsed.data;
   let images: string[] = [];
   try {
     images = imageUrls ? JSON.parse(imageUrls) : [];
@@ -256,6 +258,7 @@ export async function updateProduct(id: string, formData: FormData) {
       where: { id },
       data: {
         ...data,
+        brand: brand || null,
         images: images,
         ingredients: ingredients || null,
         usage: usage || null,

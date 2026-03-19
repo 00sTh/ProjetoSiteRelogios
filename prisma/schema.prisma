@@ -62,6 +62,7 @@ model Product {
   stock       Int     @default(0)
   /// JSON: ["url1","url2"] — parsear com parseImages() de utils.ts
   images      String  @default("[]")
+  brand       String?
   featured    Boolean @default(false)
   active      Boolean @default(true)
   ingredients String?
@@ -79,6 +80,7 @@ model Product {
 
   @@index([slug])
   @@index([categoryId])
+  @@index([brand])
   @@index([featured])
   @@index([active])
   @@index([createdAt])

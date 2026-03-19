@@ -1,46 +1,58 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { ProductCard } from "@/components/products/product-card";
-import { ProductFilters } from "@/components/products/product-filters";
-import { getProducts, getCategories } from "@/actions/products";
+import { CategoryBrandTabs } from "@/components/products/category-brand-tabs";
+import { getProducts, getCategories, getBrandsInCategory } from "@/actions/products";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-export const metadata: Metadata = {
-  title: "Produtos",
-  description: "Explore nossa coleção completa de relógios, óculos e acessórios de luxo.",
-};
 
 export const revalidate = 1800;
 
 interface ProductsPageProps {
   searchParams: Promise<{
     category?: string;
+    brand?: string;
     page?: string;
     search?: string;
     featured?: string;
   }>;
 }
 
+export async function generateMetadata({ searchParams }: ProductsPageProps): Promise<Metadata> {
+  const params = await searchParams;
+  const categories = await getCategories();
+  const catName = params.category
+    ? (categories.find((c) => c.slug === params.category)?.name ?? "Produtos")
+    : "Todos os Produtos";
+  const title = params.brand ? `${params.brand} — ${catName}` : catName;
+  return {
+    title,
+    description: "Explore nossa coleção completa de produtos importados de luxo.",
+  };
+}
+
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const params = await searchParams;
   const page = Number(params.page ?? "1");
+  const categorySlug = params.category?.trim().slice(0, 100) || undefined;
+  const brand = params.brand?.trim().slice(0, 100) || undefined;
 
-  const [{ products, total, pages }, categories] = await Promise.all([
+  const [{ products, total, pages }, categories, brandsInCategory] = await Promise.all([
     getProducts({
-      categorySlug: params.category,
+      categorySlug,
+      brand,
       page,
       search: params.search,
       featured: params.featured === "true" ? true : undefined,
     }),
     getCategories(),
+    categorySlug ? getBrandsInCategory(categorySlug) : Promise.resolve([]),
   ]);
 
-  const pageTitle = params.category
-    ? categories.find((c) => c.slug === params.category)?.name ?? "Produtos"
-    : params.featured === "true"
-    ? "Destaques"
-    : "Todos os Produtos";
+  const activeCategory = categories.find((c) => c.slug === categorySlug) ?? null;
+  const pageTitle = brand
+    ? `${brand} — ${activeCategory?.name ?? "Produtos"}`
+    : activeCategory?.name ?? "Todos os Produtos";
 
   return (
     <div style={{ backgroundColor: "#FAFAFA", minHeight: "100vh" }}>
@@ -60,16 +72,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           }}
         />
         <div className="relative z-10">
-          <p
-            className="label-luxury mb-3"
-            style={{ color: "#6A6A6A" }}
-          >
-            S Luxury Collection Collection
+          <p className="label-luxury mb-3" style={{ color: "#6A6A6A" }}>
+            S Luxury Collection
           </p>
-          <h1
-            className="font-serif text-4xl md:text-5xl font-bold"
-            style={{ color: "#0A0A0A" }}
-          >
+          <h1 className="font-serif text-4xl md:text-5xl font-bold" style={{ color: "#0A0A0A" }}>
             {pageTitle}
           </h1>
           <p className="mt-3 text-sm" style={{ color: "#6A6A6A" }}>
@@ -80,62 +86,52 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
       {/* Content */}
       <div className="container mx-auto px-4 py-10 max-w-7xl">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[240px_1fr]">
-          {/* Filters */}
-          <Suspense
-            fallback={
-              <div
-                className="animate-pulse rounded-2xl h-64"
-                style={{
-                  backgroundColor: "#EAEAEA",
-                  border: "1px solid rgba(0,0,0,0.08)",
-                }}
-              />
-            }
+        {/* Abas de categoria + marca */}
+        <Suspense fallback={null}>
+          <CategoryBrandTabs
+            categories={categories}
+            currentCategory={categorySlug ?? null}
+            currentBrand={brand ?? null}
+            brandsInCategory={brandsInCategory}
+          />
+        </Suspense>
+
+        {/* Product grid */}
+        {products.length === 0 ? (
+          <div
+            className="flex flex-col items-center justify-center py-20 text-center rounded-2xl"
+            style={{
+              backgroundColor: "#EAEAEA",
+              border: "1px solid rgba(0,0,0,0.08)",
+            }}
           >
-            <ProductFilters categories={categories} />
-          </Suspense>
-
-          {/* Product grid */}
-          <div className="min-w-0 overflow-hidden">
-            {products.length === 0 ? (
-              <div
-                className="flex flex-col items-center justify-center py-20 text-center rounded-2xl"
-                style={{
-                  backgroundColor: "#EAEAEA",
-                  border: "1px solid rgba(0,0,0,0.08)",
-                }}
-              >
-                <p className="text-lg font-serif mb-3" style={{ color: "#0A0A0A" }}>
-                  Nenhum Produto Encontrado
-                </p>
-                <p className="text-sm mb-6" style={{ color: "#6A6A6A" }}>
-                  Tente ajustar seus filtros de busca.
-                </p>
-                <Link
-                  href="/products"
-                  className="px-6 py-2.5 rounded-full text-xs font-semibold tracking-widest uppercase transition-all hover:bg-[#E8E8E8] hover:shadow-[0_0_15px_rgba(201,201,201,0.4)]"
-                  style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
-                >
-                  Limpar Filtros
-                </Link>
-              </div>
-            ) : (
-              <>
-                <div className="grid grid-cols-2 gap-px sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 border-t border-l border-[rgba(0,0,0,0.06)]">
-                  {products.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                  ))}
-                </div>
-
-                {/* Pagination */}
-                {pages > 1 && (
-                  <Pagination pages={pages} page={page} params={params} />
-                )}
-              </>
-            )}
+            <p className="text-lg font-serif mb-3" style={{ color: "#0A0A0A" }}>
+              Nenhum Produto Encontrado
+            </p>
+            <p className="text-sm mb-6" style={{ color: "#6A6A6A" }}>
+              Tente ajustar seus filtros de busca.
+            </p>
+            <Link
+              href="/products"
+              className="px-6 py-2.5 rounded-full text-xs font-semibold tracking-widest uppercase transition-all hover:bg-[#E8E8E8] hover:shadow-[0_0_15px_rgba(201,201,201,0.4)]"
+              style={{ backgroundColor: "#C9C9C9", color: "#0A0A0A" }}
+            >
+              Limpar Filtros
+            </Link>
           </div>
-        </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 gap-px sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 border-t border-l border-[rgba(0,0,0,0.06)]">
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+
+            {pages > 1 && (
+              <Pagination pages={pages} page={page} params={params} />
+            )}
+          </>
+        )}
       </div>
     </div>
   );
@@ -161,7 +157,6 @@ function getPageNumbers(current: number, total: number): (number | "…")[] {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
 
   const pages: (number | "…")[] = [1];
-
   const left = Math.max(2, current - 2);
   const right = Math.min(total - 1, current + 2);
 
@@ -201,13 +196,8 @@ function Pagination({
 
   return (
     <div className="mt-12 flex flex-wrap justify-center items-center gap-1">
-      {/* Prev */}
       {page > 1 ? (
-        <Link
-          href={pageUrl(params, page - 1)}
-          style={{ ...btnBase, color: "#6A6A6A" }}
-          aria-label="Página anterior"
-        >
+        <Link href={pageUrl(params, page - 1)} style={{ ...btnBase, color: "#6A6A6A" }} aria-label="Página anterior">
           <ChevronLeft className="h-3.5 w-3.5" />
         </Link>
       ) : (
@@ -216,13 +206,9 @@ function Pagination({
         </span>
       )}
 
-      {/* Page numbers */}
       {items.map((item, idx) =>
         item === "…" ? (
-          <span
-            key={`ellipsis-${idx}`}
-            style={{ ...btnBase, border: "none", color: "#ABABAB", cursor: "default" }}
-          >
+          <span key={`ellipsis-${idx}`} style={{ ...btnBase, border: "none", color: "#ABABAB", cursor: "default" }}>
             …
           </span>
         ) : (
@@ -241,13 +227,8 @@ function Pagination({
         )
       )}
 
-      {/* Next */}
       {page < pages ? (
-        <Link
-          href={pageUrl(params, page + 1)}
-          style={{ ...btnBase, color: "#6A6A6A" }}
-          aria-label="Próxima página"
-        >
+        <Link href={pageUrl(params, page + 1)} style={{ ...btnBase, color: "#6A6A6A" }} aria-label="Próxima página">
           <ChevronRight className="h-3.5 w-3.5" />
         </Link>
       ) : (

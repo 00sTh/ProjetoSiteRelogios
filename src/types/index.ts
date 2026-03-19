@@ -6,7 +6,6 @@ export type ProductWithCategory = Product & {
   category: Category;
   imagesArray: string[];
   colorsArray: string[];
-  brand?: string | null;
 };
 
 // ── Item do carrinho com produto completo ─────────────────────────────

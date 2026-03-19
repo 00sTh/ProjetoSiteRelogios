@@ -18,6 +18,7 @@ interface ProductFormData {
   ingredients: string | null;
   usage: string | null;
   categoryId: string;
+  brand: string | null;
 }
 
 interface CategoryOption {
@@ -136,6 +137,18 @@ export function ProductForm({ product, categories }: ProductFormProps) {
             pattern="[a-z0-9-]+"
             style={inputStyle}
             placeholder="serum-facial-vitamina-c"
+          />
+        </div>
+
+        {/* Brand */}
+        <div className="flex flex-col gap-1.5">
+          <label style={labelStyle}>Marca</label>
+          <input
+            name="brand"
+            defaultValue={product?.brand ?? ""}
+            style={inputStyle}
+            placeholder="Ex: Rolex, Cartier, Louis Vuitton"
+            autoComplete="off"
           />
         </div>
 

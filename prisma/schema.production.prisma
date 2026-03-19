@@ -84,6 +84,7 @@ model Product {
 
   @@index([slug])
   @@index([categoryId])
+  @@index([brand])
   @@index([featured])
   @@index([active])
   @@index([createdAt])

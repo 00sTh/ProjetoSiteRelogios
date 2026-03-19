@@ -44,13 +44,20 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-qr-code": "^2.0.18",
-    "stripe": "^17.7.0",
+    "sharp": "^0.34.5",
     "tailwind-merge": "^3.0.2",
     "zod": "^3.24.1"
   },
   "packageManager": "pnpm@10.30.3",
   "pnpm": {
-    "onlyBuiltDependencies": ["@clerk/shared", "@prisma/client", "@prisma/engines", "esbuild", "prisma", "sharp"]
+    "onlyBuiltDependencies": [
+      "@clerk/shared",
+      "@prisma/client",
+      "@prisma/engines",
+      "esbuild",
+      "prisma",
+      "sharp"
+    ]
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
@@ -58,6 +65,8 @@
     "@types/node": "^22.12.0",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
+    "better-sqlite3": "^12.8.0",
+    "pg": "^8.20.0",
     "prisma": "6.19.2",
     "tailwindcss": "^4.0.9",
     "tsx": "^4.19.2",

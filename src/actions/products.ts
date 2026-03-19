@@ -8,6 +8,7 @@ import type { ProductWithCategory } from "@/types";
 /** Parâmetros de filtro para listagem de produtos */
 interface GetProductsParams {
   categorySlug?: string;
+  brand?: string;
   page?: number;
   featured?: boolean;
   search?: string;
@@ -21,12 +22,13 @@ export async function getProducts(params: GetProductsParams = {}): Promise<{
   total: number;
   pages: number;
 }> {
-  const { categorySlug, page = 1, featured, search, take, skipCount } = params;
+  const { categorySlug, brand, page = 1, featured, search, take, skipCount } = params;
 
   const where = {
     active: true,
     ...(featured !== undefined && { featured }),
     ...(categorySlug && { category: { slug: categorySlug } }),
+    ...(brand && { brand }),
     ...(search && {
       OR: [
         {
@@ -104,4 +106,19 @@ export async function getCategories() {
     orderBy: { name: "asc" },
     include: { _count: { select: { products: true } } },
   });
+}
+
+/** Retorna marcas distintas (com produtos ativos) dentro de uma categoria */
+export async function getBrandsInCategory(categorySlug: string): Promise<string[]> {
+  const products = await prisma.product.findMany({
+    where: {
+      active: true,
+      brand: { not: "" },
+      category: { slug: categorySlug },
+    },
+    select: { brand: true },
+    distinct: ["brand"],
+    orderBy: { brand: "asc" },
+  });
+  return products.map((p) => p.brand).filter((b): b is string => Boolean(b));
 }

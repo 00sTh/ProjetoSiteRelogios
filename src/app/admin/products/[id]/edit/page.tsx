@@ -35,6 +35,7 @@ export default async function EditProductPage({ params }: Props) {
     ingredients: product.ingredients,
     usage: product.usage,
     categoryId: product.categoryId,
+    brand: product.brand,
   };
   const plainCategories = categories.map(({ id, name }) => ({ id, name }));
 
