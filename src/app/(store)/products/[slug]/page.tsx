@@ -67,9 +67,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
   // Run color detection + wishlist + related in parallel
   const isColorCategory = COLOR_CATEGORIES.has(product.category.slug);
 
-  const [inWishlist, { products: related }, detectedColors] = await Promise.all([
+  const brandSlug = (name: string) =>
+    name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+
+  const [inWishlist, { products: related }, { products: sameModel }, detectedColors] = await Promise.all([
     userId ? isInWishlist(product.id) : Promise.resolve(false),
     getProducts({ categorySlug: product.category.slug, take: 5, skipCount: true }),
+    product.brand ? getProducts({ brand: product.brand, take: 5, skipCount: true }) : Promise.resolve({ products: [], total: 0, pages: 0 }),
     isColorCategory
       ? detectProductColors(
           product.id,
@@ -81,6 +85,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   ]);
 
   const relatedProducts = related.filter((p) => p.id !== product.id).slice(0, 4);
+  const sameModelProducts = sameModel.filter((p) => p.id !== product.id).slice(0, 4);
 
   void settings; // used for shippingFreeThreshold if needed later
 
@@ -91,23 +96,37 @@ export default async function ProductPage({ params }: ProductPageProps) {
     >
       <div className="container mx-auto max-w-7xl">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 mb-8 text-xs" style={{ color: "#6A6A6A" }}>
-          <Link href="/" className="hover:text-[#0A0A0A] transition-colors">
-            Início
-          </Link>
+        <nav className="flex items-center gap-2 mb-8 text-xs flex-wrap" style={{ color: "#6A6A6A" }}>
+          <Link href="/" className="hover:text-[#0A0A0A] transition-colors">Início</Link>
           <span style={{ color: "rgba(0,0,0,0.2)" }}>/</span>
-          <Link href="/products" className="hover:text-[#0A0A0A] transition-colors">
-            Produtos
-          </Link>
+          <Link href="/products" className="hover:text-[#0A0A0A] transition-colors">Produtos</Link>
           <span style={{ color: "rgba(0,0,0,0.2)" }}>/</span>
-          <Link
-            href={`/products?category=${product.category.slug}`}
-            className="hover:text-[#0A0A0A] transition-colors"
-          >
+          <Link href={`/products?category=${product.category.slug}`} className="hover:text-[#0A0A0A] transition-colors">
             {product.category.name}
           </Link>
-          <span style={{ color: "rgba(0,0,0,0.2)" }}>/</span>
-          <span style={{ color: "#0A0A0A" }}>{product.name}</span>
+          {product.brand && (
+            <>
+              <span style={{ color: "rgba(0,0,0,0.2)" }}>/</span>
+              <Link
+                href={`/products/brand/${brandSlug(product.brand)}`}
+                className="hover:text-[#0A0A0A] transition-colors"
+              >
+                {product.brand}
+              </Link>
+            </>
+          )}
+          {product.model_name && (
+            <>
+              <span style={{ color: "rgba(0,0,0,0.2)" }}>/</span>
+              <span style={{ color: "#6A6A6A" }}>{product.model_name}</span>
+            </>
+          )}
+          {!product.model_name && (
+            <>
+              <span style={{ color: "rgba(0,0,0,0.2)" }}>/</span>
+              <span style={{ color: "#0A0A0A" }}>{product.name}</span>
+            </>
+          )}
         </nav>
 
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
@@ -135,6 +154,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </span>
               )}
             </div>
+
+            {/* model_name as subtitle */}
+            {product.model_name && (
+              <p
+                className="font-serif text-xl md:text-2xl"
+                style={{ color: "#6A6A6A", fontStyle: "italic", marginTop: "-8px" }}
+              >
+                {product.model_name}
+              </p>
+            )}
 
             {/* Name & Price */}
             <div>
@@ -237,6 +266,34 @@ export default async function ProductPage({ params }: ProductPageProps) {
             />
           </div>
         </div>
+
+        {/* Outros modelos desta marca */}
+        {sameModelProducts.length > 0 && product.brand && (
+          <section className="mt-20">
+            <div className="mb-8 flex items-end justify-between">
+              <div>
+                <p className="label-luxury mb-2" style={{ color: "#6A6A6A" }}>
+                  {product.brand}
+                </p>
+                <h2 className="font-serif text-2xl font-bold" style={{ color: "#0A0A0A" }}>
+                  Outros modelos desta marca
+                </h2>
+              </div>
+              <Link
+                href={`/products/brand/${brandSlug(product.brand)}`}
+                className="text-xs transition-colors hover:text-[#0A0A0A]"
+                style={{ color: "#ABABAB", borderBottom: "1px solid rgba(0,0,0,0.15)", paddingBottom: "1px" }}
+              >
+                Ver todos →
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 gap-px sm:grid-cols-4 border-t border-l border-[rgba(0,0,0,0.06)]">
+              {sameModelProducts.map((p) => (
+                <ProductCard key={p.id} product={p as unknown as ProductWithCategory} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Related products */}
         {relatedProducts.length > 0 && (

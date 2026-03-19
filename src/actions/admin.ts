@@ -9,6 +9,8 @@ import { getServerAuth } from "@/lib/auth";
 import { uploadImage, deleteImage } from "@/lib/blob";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
+import { analyzeProductImage } from "@/lib/color-detect";
+import { parseImages } from "@/lib/utils";
 
 // ─── Auth guard ─────────────────────────────────────────────────────────────
 
@@ -175,6 +177,7 @@ const productSchema = z.object({
   ingredients: z.string().optional(),
   usage: z.string().optional(),
   brand: z.string().max(100).optional().or(z.literal("")),
+  model_name: z.string().max(200).optional().or(z.literal("")),
 });
 
 export async function createProduct(formData: FormData) {
@@ -186,7 +189,7 @@ export async function createProduct(formData: FormData) {
     return { success: false, error: parsed.error.issues[0].message };
   }
 
-  const { imageUrls, ingredients, usage, brand, ...data } = parsed.data;
+  const { imageUrls, ingredients, usage, brand, model_name, ...data } = parsed.data;
   let images: string[] = [];
   try {
     images = imageUrls ? JSON.parse(imageUrls) : [];
@@ -210,6 +213,7 @@ export async function createProduct(formData: FormData) {
       data: {
         ...data,
         brand: brand || null,
+        model_name: model_name || null,
         images: images,
         ingredients: ingredients || null,
         usage: usage || null,
@@ -236,7 +240,7 @@ export async function updateProduct(id: string, formData: FormData) {
     return { success: false, error: parsed.error.issues[0].message };
   }
 
-  const { imageUrls, ingredients, usage, brand, ...data } = parsed.data;
+  const { imageUrls, ingredients, usage, brand, model_name, ...data } = parsed.data;
   let images: string[] = [];
   try {
     images = imageUrls ? JSON.parse(imageUrls) : [];
@@ -259,6 +263,7 @@ export async function updateProduct(id: string, formData: FormData) {
       data: {
         ...data,
         brand: brand || null,
+        model_name: model_name || null,
         images: images,
         ingredients: ingredients || null,
         usage: usage || null,
@@ -603,4 +608,38 @@ export async function deleteCategory(id: string) {
   revalidatePath("/admin/categories");
   revalidatePath("/products");
   return { success: true };
+}
+
+// ─── Gemini bulk analysis ─────────────────────────────────────────────────────
+
+export async function analyzeProductsWithGemini(productIds: string[]) {
+  await requireAdmin();
+
+  const results: { id: string; colors: string[]; brand: string | null; model: string | null }[] = [];
+
+  for (const id of productIds) {
+    const product = await prisma.product.findUnique({ where: { id } });
+    if (!product) continue;
+
+    const images = parseImages(product.images as string | string[]);
+    if (!images[0]) continue;
+
+    const { colors, brand, model } = await analyzeProductImage(id, images[0]);
+
+    await prisma.product.update({
+      where: { id },
+      data: {
+        // Dev SQLite: colors is String (JSON); prod PostgreSQL: String[]. Cast matches existing images pattern.
+        colors: colors as unknown as string,
+        brand: brand ?? product.brand,
+        model_name: model ?? product.model_name,
+      },
+    });
+
+    results.push({ id, colors, brand, model });
+  }
+
+  revalidatePath("/products");
+  revalidatePath("/admin/products");
+  return results;
 }

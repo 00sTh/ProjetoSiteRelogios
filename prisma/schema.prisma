@@ -62,7 +62,10 @@ model Product {
   stock       Int     @default(0)
   /// JSON: ["url1","url2"] — parsear com parseImages() de utils.ts
   images      String  @default("[]")
+  /// JSON: ["Preto","Dourado"] — cores detectadas por IA (SQLite: JSON string; prod: String[])
+  colors      String  @default("[]")
   brand       String?
+  model_name  String?   // ex: "Submariner", "Neverfull", "Speedmaster"
   featured    Boolean @default(false)
   active      Boolean @default(true)
   ingredients String?

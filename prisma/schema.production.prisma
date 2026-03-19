@@ -71,6 +71,8 @@ model Product {
   colors      String[] @default([])
   /// Marca detectada por IA (ex: "Rolex", "Omega"). null = não analisado.
   brand       String?
+  /// Modelo específico (ex: "Submariner", "Neverfull", "Speedmaster"). null = não preenchido.
+  model_name  String?
 
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])

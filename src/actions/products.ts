@@ -108,6 +108,33 @@ export async function getCategories() {
   });
 }
 
+/** Converte slug de marca para nome exato no banco (ex: "louis-vuitton" → "Louis Vuitton") */
+export async function getBrandBySlug(slug: string): Promise<string | null> {
+  const products = await prisma.product.findMany({
+    where: { active: true, brand: { not: null } },
+    select: { brand: true },
+    distinct: ["brand"],
+  });
+  const normalized = slug.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+  for (const p of products) {
+    if (!p.brand) continue;
+    const candidateSlug = p.brand.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+    if (candidateSlug === normalized) return p.brand;
+  }
+  return null;
+}
+
+/** Retorna todas as marcas distintas (com produtos ativos) */
+export async function getAllBrands(): Promise<string[]> {
+  const products = await prisma.product.findMany({
+    where: { active: true, brand: { not: null } },
+    select: { brand: true },
+    distinct: ["brand"],
+    orderBy: { brand: "asc" },
+  });
+  return products.map((p) => p.brand).filter((b): b is string => Boolean(b));
+}
+
 /** Retorna marcas distintas (com produtos ativos) dentro de uma categoria */
 export async function getBrandsInCategory(categorySlug: string): Promise<string[]> {
   const products = await prisma.product.findMany({

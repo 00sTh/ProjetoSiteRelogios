@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-// Foto de luxo padrão — substitui via admin (heroImageUrl) quando disponível
 const DEFAULT_HERO =
   "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=1920&q=80&fit=crop";
 
@@ -42,7 +41,7 @@ export function HeroSection({ imageUrl }: HeroSectionProps) {
               marginBottom: "2rem",
             }}
           >
-            Superclone · Importados de Luxo
+            Relógios · Bolsas · Sapatos · Óculos
           </span>
 
           <h1
@@ -69,19 +68,36 @@ export function HeroSection({ imageUrl }: HeroSectionProps) {
             }}
           />
 
-          <Link
-            href="/products"
-            className="transition-colors duration-300 hover:text-white"
-            style={{
-              fontSize: "9px",
-              letterSpacing: "0.5em",
-              textTransform: "uppercase",
-              color: "rgba(245,240,230,0.7)",
-              textDecoration: "none",
-            }}
-          >
-            Explore Collection
-          </Link>
+          <div className="flex items-center justify-center gap-8">
+            <Link
+              href="/products"
+              className="transition-colors duration-300 hover:text-white"
+              style={{
+                fontSize: "9px",
+                letterSpacing: "0.5em",
+                textTransform: "uppercase",
+                color: "rgba(245,240,230,0.9)",
+                textDecoration: "none",
+                borderBottom: "1px solid rgba(201,169,71,0.5)",
+                paddingBottom: "2px",
+              }}
+            >
+              Explore Collection
+            </Link>
+            <Link
+              href="/products?category=relogios"
+              className="transition-colors duration-300 hover:text-white"
+              style={{
+                fontSize: "9px",
+                letterSpacing: "0.5em",
+                textTransform: "uppercase",
+                color: "rgba(245,240,230,0.5)",
+                textDecoration: "none",
+              }}
+            >
+              Ver por Marca
+            </Link>
+          </div>
         </div>
       </div>
     </section>

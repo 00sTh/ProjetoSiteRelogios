@@ -1,8 +1,52 @@
 "server-only";
 
 import { unstable_cache } from "next/cache";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// ─── Named color centers (luxury product palette) ─────────────────────────────
+const GEMINI_PROMPT = `Analise esta imagem de produto de luxo. Retorne um JSON com:
+{
+  "colors": ["cor1", "cor2"],
+  "brand": "NomeDaMarca",
+  "model": "NomeDoModelo"
+}
+Regras:
+- colors: máximo 4 cores em português (ex: "Preto", "Dourado", "Azul Marinho", "Prata", "Rose Gold")
+- brand: marca detectada (ex: "Rolex", "Louis Vuitton", "Omega") ou null se não identificada
+- model: modelo específico (ex: "Submariner", "Neverfull", "Speedmaster") ou null se não identificado
+Apenas JSON puro, sem markdown, sem explicações.`;
+
+async function analyzeWithGemini(imageUrl: string): Promise<{
+  colors: string[];
+  brand: string | null;
+  model: string | null;
+}> {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) return { colors: [], brand: null, model: null };
+
+  const genAI = new GoogleGenerativeAI(apiKey);
+  const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+  const res = await fetch(imageUrl, { signal: AbortSignal.timeout(8000) });
+  if (!res.ok) return { colors: [], brand: null, model: null };
+  const buf = Buffer.from(await res.arrayBuffer());
+  const base64 = buf.toString("base64");
+  const mimeType = (res.headers.get("content-type") ?? "image/jpeg").split(";")[0]!;
+
+  const result = await geminiModel.generateContent([
+    GEMINI_PROMPT,
+    { inlineData: { data: base64, mimeType } },
+  ]);
+  const text = result.response.text().trim();
+  const cleaned = text.replace(/```json?|```/g, "").trim();
+  const json = JSON.parse(cleaned);
+  return {
+    colors: Array.isArray(json.colors) ? json.colors.slice(0, 4) : [],
+    brand: typeof json.brand === "string" ? json.brand : null,
+    model: typeof json.model === "string" ? json.model : null,
+  };
+}
+
+// ─── Sharp fallback (pixel sampling) ─────────────────────────────────────────
 
 const COLOR_CENTERS: { name: string; r: number; g: number; b: number }[] = [
   { name: "Preto",     r: 25,  g: 25,  b: 25  },
@@ -19,7 +63,6 @@ const COLOR_CENTERS: { name: string; r: number; g: number; b: number }[] = [
   { name: "Roxo",      r: 110, g: 40,  b: 160 },
 ];
 
-// Colors to skip in output (usually backgrounds/noise)
 const SKIP_NAMES = new Set(["Cinza"]);
 
 function distSq(r: number, g: number, b: number, center: { r: number; g: number; b: number }) {
@@ -36,60 +79,40 @@ function nearestColor(r: number, g: number, b: number): string {
   return best.name;
 }
 
-async function analyzeImageWithSharp(url: string): Promise<string[]> {
+async function analyzeWithSharp(url: string): Promise<string[]> {
   const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
   if (!res.ok) return [];
-
   const buf = Buffer.from(await res.arrayBuffer());
-
-  // Dynamic import hidden from bundler static analysis
   // eslint-disable-next-line @typescript-eslint/no-implied-eval
   const sharp = (await Function('return import("sharp")')()).default;
-
   const { data } = await sharp(buf)
     .resize(80, 80, { fit: "fill" })
     .removeAlpha()
     .raw()
     .toBuffer({ resolveWithObject: true });
-
   const counts: Record<string, number> = {};
   let sampled = 0;
-
   for (let i = 0; i < data.length; i += 9) {
-    const r = data[i]!;
-    const g = data[i + 1]!;
-    const b = data[i + 2]!;
+    const r = data[i]!; const g = data[i + 1]!; const b = data[i + 2]!;
     const brightness = (r + g + b) / 3;
-
-    // Skip near-white (background) and extremely dark noise
-    if (brightness > 215) continue;
-    if (brightness < 12) continue;
-
+    if (brightness > 215 || brightness < 12) continue;
     sampled++;
     const name = nearestColor(r, g, b);
-    if (!SKIP_NAMES.has(name)) {
-      counts[name] = (counts[name] ?? 0) + 1;
-    }
+    if (!SKIP_NAMES.has(name)) counts[name] = (counts[name] ?? 0) + 1;
   }
-
   if (sampled === 0) return [];
-
   return Object.entries(counts)
-    .filter(([, c]) => c / sampled > 0.07) // at least 7% presence
+    .filter(([, c]) => c / sampled > 0.07)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5)
     .map(([name]) => name);
 }
 
-// ─── Cached detection (keyed by productId) ───────────────────────────────────
+// ─── Exported functions ───────────────────────────────────────────────────────
 
 /**
- * Returns product colors, preferring pre-analyzed DB values over sharp fallback.
- *
- * @param productId      - Used as cache key
- * @param imageUrls      - Fallback: images to analyze with sharp
- * @param colorsAnalyzed - true if the DB field has been set (even if empty array)
- * @param storedColors   - The colors array from DB (empty = analyzed but no colors found)
+ * Returns product colors. Prefers Gemini over Sharp fallback.
+ * If colorsAnalyzed is true, returns storedColors directly (no API call).
  */
 export const detectProductColors = unstable_cache(
   async (
@@ -98,29 +121,37 @@ export const detectProductColors = unstable_cache(
     colorsAnalyzed: boolean,
     storedColors: string[]
   ): Promise<string[]> => {
-    // DB has pre-analyzed result — return it directly (no sharp needed)
     if (colorsAnalyzed) return storedColors;
-
-    // Fallback: sharp pixel analysis (for products not yet analyzed by AI)
     if (!imageUrls[0]) return [];
     try {
-      const results = await Promise.allSettled(
-        imageUrls.slice(0, 2).map((url) => analyzeImageWithSharp(url))
-      );
-      const seen = new Set<string>();
-      const colors: string[] = [];
-      for (const r of results) {
-        if (r.status === "fulfilled") {
-          for (const c of r.value) {
-            if (!seen.has(c)) { seen.add(c); colors.push(c); }
-          }
-        }
-      }
-      return colors.slice(0, 5);
+      const { colors } = await analyzeWithGemini(imageUrls[0]);
+      if (colors.length > 0) return colors;
+      // Fallback to sharp if Gemini returned nothing
+      return await analyzeWithSharp(imageUrls[0]);
     } catch {
-      return [];
+      try {
+        return await analyzeWithSharp(imageUrls[0]);
+      } catch {
+        return [];
+      }
     }
   },
-  ["product-colors-v2"],
-  { revalidate: 60 * 60 * 24 * 7 } // 7 days
+  ["product-colors-gemini-v1"],
+  { revalidate: 60 * 60 * 24 * 7 }
+);
+
+/**
+ * Full image analysis (colors + brand + model) — used in admin bulk analyze.
+ * Cached per productId for 30 days.
+ */
+export const analyzeProductImage = unstable_cache(
+  async (productId: string, imageUrl: string) => {
+    try {
+      return await analyzeWithGemini(imageUrl);
+    } catch {
+      return { colors: [] as string[], brand: null, model: null };
+    }
+  },
+  ["product-image-analysis-v1"],
+  { revalidate: 60 * 60 * 24 * 30 }
 );

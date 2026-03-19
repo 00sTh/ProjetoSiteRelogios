@@ -19,6 +19,7 @@ interface ProductFormData {
   usage: string | null;
   categoryId: string;
   brand: string | null;
+  model_name: string | null;
 }
 
 interface CategoryOption {
@@ -148,6 +149,18 @@ export function ProductForm({ product, categories }: ProductFormProps) {
             defaultValue={product?.brand ?? ""}
             style={inputStyle}
             placeholder="Ex: Rolex, Cartier, Louis Vuitton"
+            autoComplete="off"
+          />
+        </div>
+
+        {/* Model */}
+        <div className="flex flex-col gap-1.5">
+          <label style={labelStyle}>Modelo</label>
+          <input
+            name="model_name"
+            defaultValue={product?.model_name ?? ""}
+            style={inputStyle}
+            placeholder="Ex: Submariner, Neverfull, Speedmaster"
             autoComplete="off"
           />
         </div>
