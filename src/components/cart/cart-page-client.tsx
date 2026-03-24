@@ -20,7 +20,7 @@ export function CartPageClient() {
         const merged = items.map(item => {
           const found = data.find(d => d.productId === item.productId);
           if (!found) return null;
-          return { ...item, ...found } as HydratedCartItem;
+          return { ...found, ...item } as HydratedCartItem;
         }).filter((i): i is HydratedCartItem => i !== null);
         setHydrated(merged);
       })
@@ -45,22 +45,23 @@ export function CartPageClient() {
         <h1 className="font-serif text-3xl font-light mb-10">Carrinho</h1>
         <div className="space-y-4 mb-8">
           {hydrated.map(item => (
-            <div key={item.productId} className="flex gap-4 py-4 border-b" style={{ borderColor: "rgba(13,11,11,0.08)" }}>
+            <div key={`${item.productId}:${item.color ?? ""}`} className="flex gap-4 py-4 border-b" style={{ borderColor: "rgba(13,11,11,0.08)" }}>
               <div className="relative flex-shrink-0 bg-white overflow-hidden" style={{ width: 80, height: 100 }}>
                 {item.image && <Image src={item.image} alt={item.name ?? ""} fill className="object-cover" />}
               </div>
               <div className="flex-1">
                 <p className="label-slc mb-0.5" style={{ color: "#B8963E" }}>{item.brandName}</p>
-                <p className="font-serif italic text-sm mb-2">{item.name}</p>
+                <p className="font-serif italic text-sm mb-1">{item.name}</p>
+                {item.color && <p className="label-slc text-[10px] mb-1" style={{ color: "rgba(13,11,11,0.5)" }}>Cor: {item.color}</p>}
                 <p className="font-mono text-sm">{formatPrice(item.price ?? 0)}</p>
               </div>
               <div className="flex flex-col items-end gap-2">
                 <div className="flex items-center border" style={{ borderColor: "rgba(13,11,11,0.15)" }}>
-                  <button onClick={() => updateItem(item.productId, item.quantity - 1)} className="px-2 py-1 text-sm">−</button>
+                  <button onClick={() => updateItem(item.productId, item.quantity - 1, item.color)} className="px-2 py-1 text-sm">−</button>
                   <span className="px-3 py-1 font-mono text-xs">{item.quantity}</span>
-                  <button onClick={() => updateItem(item.productId, item.quantity + 1)} className="px-2 py-1 text-sm">+</button>
+                  <button onClick={() => updateItem(item.productId, item.quantity + 1, item.color)} className="px-2 py-1 text-sm">+</button>
                 </div>
-                <button onClick={() => removeItem(item.productId)} className="label-slc opacity-40 hover:opacity-100">Remover</button>
+                <button onClick={() => removeItem(item.productId, item.color)} className="label-slc opacity-40 hover:opacity-100">Remover</button>
               </div>
             </div>
           ))}

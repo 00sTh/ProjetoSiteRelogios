@@ -13,12 +13,15 @@ export function ProductDetailClient({ product }: { product: ProductWithRelations
   const [selectedImage, setSelectedImage] = useState(0);
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  const [selectedColor, setSelectedColor] = useState<string | undefined>(
+    product.colors.length > 0 ? product.colors[0] : undefined
+  );
   const { addItem } = useGuestCart();
 
   const attrs = product.attributes as Record<string, string> | null;
 
   function handleAdd() {
-    addItem(product.id, qty);
+    addItem(product.id, qty, selectedColor);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   }
@@ -63,6 +66,32 @@ export function ProductDetailClient({ product }: { product: ProductWithRelations
             <span className="font-mono text-2xl font-medium">{formatPrice(product.price)}</span>
             {product.comparePrice && <span className="font-mono text-sm line-through" style={{ color: "rgba(13,11,11,0.4)" }}>{formatPrice(product.comparePrice)}</span>}
           </motion.div>
+
+          {/* Color selector */}
+          {product.colors.length > 0 && (
+            <motion.div variants={fadeInUp} className="mb-6">
+              <p className="label-slc mb-3">
+                Cor: <span style={{ color: "#0D0B0B", fontWeight: 500 }}>{selectedColor}</span>
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {product.colors.map((color) => (
+                  <button
+                    key={color}
+                    type="button"
+                    onClick={() => setSelectedColor(color)}
+                    className="px-4 py-1.5 text-xs border transition-all"
+                    style={{
+                      borderColor: selectedColor === color ? "#B8963E" : "rgba(13,11,11,0.15)",
+                      color: selectedColor === color ? "#B8963E" : "#0D0B0B",
+                      backgroundColor: selectedColor === color ? "rgba(184,150,62,0.05)" : "transparent",
+                    }}
+                  >
+                    {color}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
 
           {/* Attributes */}
           {attrs && Object.keys(attrs).length > 0 && (

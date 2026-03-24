@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { updateProduct, deleteProduct } from "@/actions/admin";
+import { ColorDetector } from "@/components/admin/color-detector";
 import { notFound, redirect } from "next/navigation";
 export const dynamic = "force-dynamic";
 
@@ -78,6 +79,11 @@ export default async function EditProduto({ params }: { params: Promise<{ id: st
           <div className="flex flex-col gap-1 sm:col-span-2">
             <label className="label-slc">Atributos (JSON)</label>
             <textarea name="attributes" defaultValue={attrs} rows={4} className="border px-3 py-2 text-sm outline-none focus:border-[#B8963E] resize-none font-mono text-xs" style={{ borderColor: "rgba(13,11,11,0.2)" }} />
+          </div>
+
+          <div className="flex flex-col gap-1 sm:col-span-2">
+            <label className="label-slc">Cores disponíveis</label>
+            <ColorDetector imageUrl={product.images[0]} defaultColors={product.colors.join(", ")} />
           </div>
 
           {product.images.length > 0 && (

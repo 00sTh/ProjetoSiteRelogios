@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { createProduct } from "@/actions/admin";
+import { ColorDetector } from "@/components/admin/color-detector";
 import { redirect } from "next/navigation";
 export const dynamic = "force-dynamic";
 
@@ -69,6 +70,11 @@ export default async function NovoProduto() {
           <div className="flex flex-col gap-1 sm:col-span-2">
             <label className="label-slc">Atributos (JSON)</label>
             <textarea name="attributes" rows={3} placeholder='{"Movimento":"Automático","Diâmetro":"41mm","Material":"Ouro 18k"}' className="border px-3 py-2 text-sm outline-none focus:border-[#B8963E] resize-none font-mono text-xs" style={{ borderColor: "rgba(13,11,11,0.2)" }} />
+          </div>
+
+          <div className="flex flex-col gap-1 sm:col-span-2">
+            <label className="label-slc">Cores disponíveis</label>
+            <ColorDetector />
           </div>
 
           <div className="flex flex-col gap-1 sm:col-span-2">

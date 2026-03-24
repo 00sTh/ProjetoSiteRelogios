@@ -41,6 +41,7 @@ export type OrderWithItems = Order & {
 export interface CartItem {
   productId: string;
   quantity: number;
+  color?: string;
 }
 
 // Hydrated cart item (productId + fetched data)

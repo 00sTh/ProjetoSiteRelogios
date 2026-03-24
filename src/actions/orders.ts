@@ -26,7 +26,7 @@ export async function createOrder(input: CreateOrderInput) {
     if (product.stock < item.quantity) throw new Error(`Estoque insuficiente: ${product.name}`);
     const price = Number(product.price);
     total += price * item.quantity;
-    return { productId: item.productId, quantity: item.quantity, price: product.price };
+    return { productId: item.productId, quantity: item.quantity, price: product.price, color: item.color ?? null };
   });
 
   const orderNumber = generateOrderNumber();

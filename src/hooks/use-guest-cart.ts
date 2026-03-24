@@ -4,6 +4,10 @@ import { useState, useEffect, useCallback } from "react";
 import { CART_KEY } from "@/lib/constants";
 import type { CartItem } from "@/types";
 
+function cartKey(productId: string, color?: string) {
+  return `${productId}:${color ?? ""}`;
+}
+
 function readCart(): CartItem[] {
   if (typeof window === "undefined") return [];
   try {
@@ -32,33 +36,36 @@ export function useGuestCart() {
   }, []);
 
   const addItem = useCallback(
-    (productId: string, quantity = 1) => {
+    (productId: string, quantity = 1, color?: string) => {
       const current = readCart();
-      const existing = current.find((i) => i.productId === productId);
+      const existing = current.find(
+        (i) => cartKey(i.productId, i.color) === cartKey(productId, color)
+      );
       if (existing) {
         syncAndSet(
           current.map((i) =>
-            i.productId === productId
+            cartKey(i.productId, i.color) === cartKey(productId, color)
               ? { ...i, quantity: i.quantity + quantity }
               : i
           )
         );
       } else {
-        syncAndSet([...current, { productId, quantity }]);
+        syncAndSet([...current, { productId, quantity, color }]);
       }
     },
     [syncAndSet]
   );
 
   const updateItem = useCallback(
-    (productId: string, quantity: number) => {
+    (productId: string, quantity: number, color?: string) => {
       const current = readCart();
+      const key = cartKey(productId, color);
       if (quantity <= 0) {
-        syncAndSet(current.filter((i) => i.productId !== productId));
+        syncAndSet(current.filter((i) => cartKey(i.productId, i.color) !== key));
       } else {
         syncAndSet(
           current.map((i) =>
-            i.productId === productId ? { ...i, quantity } : i
+            cartKey(i.productId, i.color) === key ? { ...i, quantity } : i
           )
         );
       }
@@ -67,8 +74,9 @@ export function useGuestCart() {
   );
 
   const removeItem = useCallback(
-    (productId: string) => {
-      syncAndSet(readCart().filter((i) => i.productId !== productId));
+    (productId: string, color?: string) => {
+      const key = cartKey(productId, color);
+      syncAndSet(readCart().filter((i) => cartKey(i.productId, i.color) !== key));
     },
     [syncAndSet]
   );

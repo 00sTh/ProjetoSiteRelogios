@@ -45,6 +45,7 @@ model Product {
   stock        Int            @default(0)
   sku          String?        @unique
   images       String[]       @default([])
+  colors       String[]       @default([])
   featured     Boolean        @default(false)
   active       Boolean        @default(true)
   attributes   Json?
@@ -113,6 +114,7 @@ model OrderItem {
   productId String
   quantity  Int
   price     Decimal @db.Decimal(12, 2)
+  color     String?
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product   Product @relation(fields: [productId], references: [id], onDelete: Restrict)
 
