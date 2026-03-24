@@ -1,25 +1,14 @@
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import { GuestCartSync } from "@/components/layout/guest-cart-sync";
-import { WhatsAppFab } from "@/components/ui/whatsapp-fab";
-import { getSiteSettings } from "@/actions/admin";
+import { getCategories } from "@/actions/products";
 
-/** Layout compartilhado pela loja (todas as páginas públicas) */
-export default async function StoreLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const settings = await getSiteSettings();
-
+export default async function StoreLayout({ children }: { children: React.ReactNode }) {
+  const categories = await getCategories();
   return (
-    <div className="flex min-h-screen flex-col">
-      {/* Sincroniza carrinho guest → banco quando usuário faz login */}
-      <GuestCartSync />
-      <Navbar />
+    <div className="flex min-h-screen flex-col" style={{ backgroundColor: "#F7F4EE" }}>
+      <Navbar categories={categories} />
       <main className="flex-1">{children}</main>
       <Footer />
-      <WhatsAppFab whatsappNumber={settings?.whatsappNumber ?? "5511999999999"} />
     </div>
   );
 }

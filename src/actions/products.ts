@@ -1,151 +1,45 @@
 "use server";
-
-import { cache } from "react";
 import { prisma } from "@/lib/prisma";
-import { PRODUCTS_PER_PAGE } from "@/lib/constants";
-import type { ProductWithCategory } from "@/types";
+import type { ProductWithRelations, CategoryWithBrands, BrandWithProducts } from "@/types";
 
-/** Parâmetros de filtro para listagem de produtos */
-interface GetProductsParams {
-  categorySlug?: string;
-  brand?: string;
-  page?: number;
-  featured?: boolean;
-  search?: string;
-  take?: number;
-  skipCount?: boolean;
+export async function getCategories(): Promise<CategoryWithBrands[]> {
+  return prisma.category.findMany({
+    orderBy: { sortOrder: "asc" },
+    include: { brands: { include: { _count: { select: { products: true } } }, orderBy: { name: "asc" } }, _count: { select: { brands: true, products: true } } },
+  }) as Promise<CategoryWithBrands[]>;
 }
 
-/** Retorna produtos com paginação e filtros opcionais */
-export async function getProducts(params: GetProductsParams = {}): Promise<{
-  products: ProductWithCategory[];
-  total: number;
-  pages: number;
-}> {
-  const { categorySlug, brand, page = 1, featured, search, take, skipCount } = params;
+export async function getCategoryBySlug(slug: string) {
+  return prisma.category.findUnique({ where: { slug }, include: { brands: { orderBy: { name: "asc" } } } });
+}
 
+export async function getBrandBySlug(slug: string) {
+  return prisma.brand.findUnique({ where: { slug }, include: { category: true, _count: { select: { products: true } } } }) as Promise<BrandWithProducts | null>;
+}
+
+export async function getProducts(params?: { categoryId?: string; brandId?: string; featured?: boolean; take?: number; skip?: number; search?: string; }) {
   const where = {
     active: true,
-    ...(featured !== undefined && { featured }),
-    ...(categorySlug && { category: { slug: categorySlug } }),
-    ...(brand && { brand }),
-    ...(search && {
-      OR: [
-        {
-          name: {
-            contains: search,
-            ...((process.env.DATABASE_URL ?? "").startsWith("postgres") && {
-              mode: "insensitive" as const,
-            }),
-          },
-        },
-        {
-          description: {
-            contains: search,
-            ...((process.env.DATABASE_URL ?? "").startsWith("postgres") && {
-              mode: "insensitive" as const,
-            }),
-          },
-        },
-      ],
-    }),
+    ...(params?.categoryId && { categoryId: params.categoryId }),
+    ...(params?.brandId && { brandId: params.brandId }),
+    ...(params?.featured && { featured: true }),
+    ...(params?.search && { name: { contains: params.search, mode: "insensitive" as const } }),
   };
-
-  const [products, total] = skipCount
-    ? [
-        await prisma.product.findMany({
-          where,
-          include: { category: true },
-          orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
-          take: take ?? PRODUCTS_PER_PAGE,
-          skip: 0,
-        }),
-        0,
-      ]
-    : await Promise.all([
-        prisma.product.findMany({
-          where,
-          include: { category: true },
-          orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
-          take: take ?? PRODUCTS_PER_PAGE,
-          skip: (page - 1) * PRODUCTS_PER_PAGE,
-        }),
-        prisma.product.count({ where }),
-      ]);
-
-  return {
-    products: products as ProductWithCategory[],
-    total,
-    pages: Math.ceil(total / (PRODUCTS_PER_PAGE || 1)),
-  };
+  const [products, total] = await Promise.all([
+    prisma.product.findMany({ where, orderBy: { createdAt: "desc" }, take: params?.take ?? 20, skip: params?.skip ?? 0, include: { brand: { include: { category: true } }, category: true } }),
+    prisma.product.count({ where }),
+  ]);
+  return { products: products as ProductWithRelations[], total };
 }
 
-/** Busca um produto pelo slug (cache() deduplica entre generateMetadata e page) */
-export const getProductBySlug = cache(async (
-  slug: string
-): Promise<ProductWithCategory | null> => {
-  const product = await prisma.product.findUnique({
-    where: { slug, active: true },
-    include: { category: true },
-  });
-  return product as ProductWithCategory | null;
-});
-
-/** Busca produtos por lista de IDs (usado pelo carrinho guest) */
-export async function getProductsByIds(ids: string[]) {
-  if (ids.length === 0) return [];
-  return prisma.product.findMany({
-    where: { id: { in: ids }, active: true },
-    select: { id: true, name: true, price: true, images: true, stock: true, slug: true },
-  });
+export async function getProductBySlug(slug: string): Promise<ProductWithRelations | null> {
+  return prisma.product.findUnique({ where: { slug }, include: { brand: { include: { category: true } }, category: true } }) as Promise<ProductWithRelations | null>;
 }
 
-/** Retorna todas as categorias */
-export async function getCategories() {
-  return prisma.category.findMany({
-    orderBy: { name: "asc" },
-    include: { _count: { select: { products: true } } },
-  });
+export async function getFeaturedProducts(take = 5): Promise<ProductWithRelations[]> {
+  return prisma.product.findMany({ where: { featured: true, active: true }, take, include: { brand: { include: { category: true } }, category: true }, orderBy: { createdAt: "desc" } }) as Promise<ProductWithRelations[]>;
 }
 
-/** Converte slug de marca para nome exato no banco (ex: "louis-vuitton" → "Louis Vuitton") */
-export async function getBrandBySlug(slug: string): Promise<string | null> {
-  const products = await prisma.product.findMany({
-    where: { active: true, brand: { not: null } },
-    select: { brand: true },
-    distinct: ["brand"],
-  });
-  const normalized = slug.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
-  for (const p of products) {
-    if (!p.brand) continue;
-    const candidateSlug = p.brand.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
-    if (candidateSlug === normalized) return p.brand;
-  }
-  return null;
-}
-
-/** Retorna todas as marcas distintas (com produtos ativos) */
-export async function getAllBrands(): Promise<string[]> {
-  const products = await prisma.product.findMany({
-    where: { active: true, brand: { not: null } },
-    select: { brand: true },
-    distinct: ["brand"],
-    orderBy: { brand: "asc" },
-  });
-  return products.map((p) => p.brand).filter((b): b is string => Boolean(b));
-}
-
-/** Retorna marcas distintas (com produtos ativos) dentro de uma categoria */
-export async function getBrandsInCategory(categorySlug: string): Promise<string[]> {
-  const products = await prisma.product.findMany({
-    where: {
-      active: true,
-      brand: { not: "" },
-      category: { slug: categorySlug },
-    },
-    select: { brand: true },
-    distinct: ["brand"],
-    orderBy: { brand: "asc" },
-  });
-  return products.map((p) => p.brand).filter((b): b is string => Boolean(b));
+export async function getRelatedProducts(productId: string, brandId: string, take = 4): Promise<ProductWithRelations[]> {
+  return prisma.product.findMany({ where: { brandId, active: true, id: { not: productId } }, take, include: { brand: { include: { category: true } }, category: true } }) as Promise<ProductWithRelations[]>;
 }

@@ -1,98 +1,39 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
 @import "tailwindcss";
 
-/* ============================================================
-   TEMA LUXIMPORT — Dark + Silver/Platinum (Ultra Premium)
-   ============================================================ */
 @theme inline {
-  --color-background:        var(--dark-bg);
-  --color-foreground:        var(--text-primary);
-  --color-card:              var(--dark-surface);
-  --color-card-foreground:   var(--text-primary);
-  --color-popover:           var(--dark-surface-2);
-  --color-popover-foreground: var(--text-primary);
-  --color-primary:           var(--silver);
-  --color-primary-foreground: var(--dark-bg);
-  --color-secondary:         var(--dark-surface-2);
-  --color-secondary-foreground: var(--text-primary);
-  --color-muted:             var(--dark-surface-2);
-  --color-muted-foreground:  var(--text-muted);
-  --color-accent:            var(--dark-surface-2);
-  --color-accent-foreground: var(--text-primary);
-  --color-destructive:       #e05252;
-  --color-destructive-foreground: var(--text-primary);
-  --color-border:            var(--border-subtle);
-  --color-input:             var(--dark-surface-2);
-  --color-ring:              var(--silver);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  /* Font families */
-  --font-serif: var(--font-cormorant), Georgia, "Times New Roman", serif;
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), monospace;
-}
-
-/* ── LuxImport Dark + Silver/Platinum Palette ── */
-@layer base {
-  :root {
-    --dark-bg:       #FAFAFA;
-    --dark-surface:  #F2F2F2;
-    --dark-surface-2:#EAEAEA;
-    --dark-surface-3:#E0E0E0;
-    --silver:        #1A1A1A;
-    --platinum:      #0A0A0A;
-    --silver-dim:    #8A8A8A;
-    --text-primary:  #0A0A0A;
-    --text-muted:    #6A6A6A;
-    --border-subtle: rgba(0,0,0,0.08);
-    --radius: 0.5rem;
-  }
+  --color-ivory:       #F7F4EE;
+  --color-ivory-dim:   #EDE9E0;
+  --color-ink:         #0D0B0B;
+  --color-ink-soft:    #1C1917;
+  --color-gold:        #B8963E;
+  --color-gold-light:  rgba(184,150,62,0.12);
+  --color-gold-dim:    rgba(184,150,62,0.35);
+  --color-bordeaux:    #6B1A2A;
+  --color-border:      rgba(13,11,11,0.08);
+  --color-border-gold: rgba(184,150,62,0.22);
+  --color-background:  #F7F4EE;
+  --color-foreground:  #0D0B0B;
+  --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans:  var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono:  var(--font-geist-mono), monospace;
+  --radius: 0.125rem;
 }
 
 @layer base {
-  * {
-    border-color: var(--border-subtle);
-    box-sizing: border-box;
-  }
-
-  html, body {
-    overflow-x: hidden;
-    overscroll-behavior-x: none;
-    max-width: 100%;
-  }
-
-  body {
-    background-color: var(--dark-bg);
-    color: var(--text-primary);
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 2px; height: 2px; }
-  ::-webkit-scrollbar-track { background: #F2F2F2; }
-  ::-webkit-scrollbar-thumb { background: #CACACA; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #ABABAB; }
+  *, *::before, *::after { box-sizing: border-box; border-color: rgba(13,11,11,0.08); }
+  html, body { overflow-x: hidden; }
+  body { background-color: #F7F4EE; color: #0D0B0B; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  ::-webkit-scrollbar { width: 2px; }
+  ::-webkit-scrollbar-track { background: #F7F4EE; }
+  ::-webkit-scrollbar-thumb { background: rgba(184,150,62,0.3); }
 }
 
 @layer utilities {
-  .text-gradient-silver {
-    background: linear-gradient(135deg, var(--silver) 0%, var(--platinum) 50%, var(--silver) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .border-silver-subtle {
-    border-color: rgba(201,201,201,0.2);
-  }
-  .border-silver-medium {
-    border-color: rgba(201,201,201,0.5);
-  }
-  .label-luxury {
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    font-size: 0.7rem;
-  }
+  .label-slc { font-size: 0.625rem; letter-spacing: 0.5em; text-transform: uppercase; font-family: var(--font-sans); color: rgba(13,11,11,0.4); }
+  .text-gradient-gold { background: linear-gradient(135deg, #B8963E 0%, #E8C96B 50%, #B8963E 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .cta-link { font-size: 0.625rem; letter-spacing: 0.45em; text-transform: uppercase; border-bottom: 1px solid currentColor; padding-bottom: 2px; text-decoration: none; transition: opacity 0.25s; }
+  .cta-link:hover { opacity: 0.55; }
+  .font-serif { font-family: var(--font-serif); }
+  .divider-gold { width: 2rem; border: none; border-top: 1px solid rgba(184,150,62,0.35); margin: 1.5rem auto; }
 }

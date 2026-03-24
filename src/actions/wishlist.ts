@@ -1,78 +1,28 @@
 "use server";
-
-import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { getServerAuth } from "@/lib/auth";
-import { z } from "zod";
-
-const wishlistItemSchema = z.object({
-  productId: z.string().uuid(),
-});
-
-async function getOrCreateWishlist(clerkId: string) {
-  return prisma.wishlist.upsert({
-    where: { clerkId },
-    create: { clerkId },
-    update: {},
-  });
-}
-
-export async function addToWishlist(productId: string) {
-  const { userId } = await getServerAuth();
-  if (!userId) return { success: false, error: "Não autenticado" };
-
-  const { productId: pid } = wishlistItemSchema.parse({ productId });
-  const wishlist = await getOrCreateWishlist(userId);
-
-  await prisma.wishlistItem.upsert({
-    where: { wishlistId_productId: { wishlistId: wishlist.id, productId: pid } },
-    create: { wishlistId: wishlist.id, productId: pid },
-    update: {},
-  });
-
-  revalidatePath("/wishlist");
-  return { success: true };
-}
-
-export async function removeFromWishlist(productId: string) {
-  const { userId } = await getServerAuth();
-  if (!userId) return { success: false, error: "Não autenticado" };
-
-  const { productId: pid } = wishlistItemSchema.parse({ productId });
-  const wishlist = await prisma.wishlist.findUnique({ where: { clerkId: userId } });
-  if (!wishlist) return { success: true };
-
-  await prisma.wishlistItem.deleteMany({
-    where: { wishlistId: wishlist.id, productId: pid },
-  });
-
-  revalidatePath("/wishlist");
-  return { success: true };
-}
+import { getAuthUser } from "@/lib/auth";
 
 export async function getWishlist() {
-  const { userId } = await getServerAuth();
-  if (!userId) return null;
-
-  return prisma.wishlist.findUnique({
-    where: { clerkId: userId },
-    include: {
-      items: {
-        include: { product: { include: { category: true } } },
-      },
-    },
-  });
+  const userId = await getAuthUser();
+  if (!userId) return [];
+  return prisma.wishlistItem.findMany({ where: { userId }, include: { product: { include: { brand: { include: { category: true } }, category: true } } }, orderBy: { createdAt: "desc" } });
 }
 
-export async function isInWishlist(productId: string): Promise<boolean> {
-  const { userId } = await getServerAuth();
-  if (!userId) return false;
+export async function toggleWishlist(productId: string) {
+  const userId = await getAuthUser();
+  if (!userId) return { error: "Not authenticated" };
+  const existing = await prisma.wishlistItem.findUnique({ where: { userId_productId: { userId, productId } } });
+  if (existing) {
+    await prisma.wishlistItem.delete({ where: { id: existing.id } });
+    return { added: false };
+  }
+  await prisma.wishlistItem.create({ data: { userId, productId } });
+  return { added: true };
+}
 
-  const item = await prisma.wishlistItem.findFirst({
-    where: {
-      wishlist: { clerkId: userId },
-      productId,
-    },
-  });
+export async function isInWishlist(productId: string) {
+  const userId = await getAuthUser();
+  if (!userId) return false;
+  const item = await prisma.wishlistItem.findUnique({ where: { userId_productId: { userId, productId } } });
   return !!item;
 }
