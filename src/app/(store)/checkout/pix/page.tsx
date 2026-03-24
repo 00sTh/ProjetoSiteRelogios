@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
-export default function PixPage() {
+function PixContent() {
   const params = useSearchParams();
   const router = useRouter();
   const paymentId = params.get("paymentId");
   const qrCode = params.get("qrCode");
   const qrCodeBase64 = params.get("qrCodeBase64");
 
-  const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 min
+  const [timeLeft, setTimeLeft] = useState(30 * 60);
   const [status, setStatus] = useState<"pending" | "paid" | "expired">("pending");
 
   const pollPayment = useCallback(async () => {
@@ -80,51 +80,31 @@ export default function PixPage() {
             Escaneie o QR code abaixo com seu aplicativo bancário
           </p>
 
-          {/* QR Code image */}
           {qrCodeBase64 ? (
-            <img
-              src={`data:image/png;base64,${qrCodeBase64}`}
-              alt="QR Code PIX"
-              className="w-56 h-56 border"
-              style={{ borderColor: "rgba(13,11,11,0.1)" }}
-            />
+            <img src={`data:image/png;base64,${qrCodeBase64}`} alt="QR Code PIX" className="w-56 h-56 border" style={{ borderColor: "rgba(13,11,11,0.1)" }} />
           ) : (
             <div className="w-56 h-56 border flex items-center justify-center" style={{ borderColor: "rgba(13,11,11,0.1)" }}>
               <p className="label-slc opacity-40">QR Code</p>
             </div>
           )}
 
-          {/* Pix copy-paste code */}
           {qrCode && (
             <div className="w-full max-w-sm">
               <p className="label-slc mb-2 opacity-50">Ou copie o código PIX</p>
               <div className="flex gap-2">
-                <input
-                  readOnly
-                  value={qrCode}
-                  className="flex-1 border px-3 py-2 text-xs font-mono outline-none truncate"
-                  style={{ borderColor: "rgba(13,11,11,0.2)" }}
-                />
-                <button
-                  onClick={() => navigator.clipboard.writeText(qrCode)}
-                  className="px-3 py-2 text-[10px] tracking-widest uppercase text-white flex-shrink-0"
-                  style={{ backgroundColor: "#0D0B0B" }}
-                >
+                <input readOnly value={qrCode} className="flex-1 border px-3 py-2 text-xs font-mono outline-none truncate" style={{ borderColor: "rgba(13,11,11,0.2)" }} />
+                <button onClick={() => navigator.clipboard.writeText(qrCode)} className="px-3 py-2 text-[10px] tracking-widest uppercase text-white flex-shrink-0" style={{ backgroundColor: "#0D0B0B" }}>
                   Copiar
                 </button>
               </div>
             </div>
           )}
 
-          {/* Countdown */}
           <div className="flex flex-col items-center gap-1 mt-2">
-            <p className="font-mono text-2xl" style={{ color: timeLeft < 120 ? "#6B1A2A" : "#0D0B0B" }}>
-              {minutes}:{seconds}
-            </p>
+            <p className="font-mono text-2xl" style={{ color: timeLeft < 120 ? "#6B1A2A" : "#0D0B0B" }}>{minutes}:{seconds}</p>
             <p className="label-slc opacity-40">Tempo restante</p>
           </div>
 
-          {/* Polling indicator */}
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: "#B8963E" }} />
             <p className="label-slc opacity-50">Aguardando confirmação automática...</p>
@@ -132,5 +112,17 @@ export default function PixPage() {
         </>
       )}
     </div>
+  );
+}
+
+export default function PixPage() {
+  return (
+    <Suspense fallback={
+      <div className="pt-24 min-h-screen flex items-center justify-center">
+        <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: "#B8963E" }} />
+      </div>
+    }>
+      <PixContent />
+    </Suspense>
   );
 }
