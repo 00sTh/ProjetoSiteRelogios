@@ -1,26 +1,18 @@
-/**
- * src/lib/auth.ts — Camada de autenticação via Clerk
- */
-
 import { auth, currentUser } from "@clerk/nextjs/server";
 
-export type ServerAuthResult = {
-  userId: string | null;
-  sessionClaims: { metadata?: { role?: string } } | null;
-  redirectToSignIn: (opts?: { returnBackUrl?: string }) => never;
-};
-
-/** Retorna userId + sessionClaims */
-export async function getServerAuth(): Promise<ServerAuthResult> {
-  const result = await auth();
-  return {
-    userId: result.userId,
-    sessionClaims: result.sessionClaims as { metadata?: { role?: string } } | null,
-    redirectToSignIn: result.redirectToSignIn as (opts?: { returnBackUrl?: string }) => never,
-  };
+export async function requireAdmin() {
+  const { userId, sessionClaims } = await auth();
+  if (!userId) return null;
+  const role = (sessionClaims?.metadata as { role?: string } | undefined)?.role;
+  if (role !== "admin") return null;
+  return userId;
 }
 
-/** Retorna dados do usuário atual */
-export async function getServerUser() {
+export async function getAuthUser() {
+  const { userId } = await auth();
+  return userId;
+}
+
+export async function getFullUser() {
   return currentUser();
 }

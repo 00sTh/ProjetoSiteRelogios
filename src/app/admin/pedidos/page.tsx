@@ -1,5 +1,6 @@
 import { getAdminOrders } from "@/actions/admin";
 import { formatPrice } from "@/lib/utils";
+import Link from "next/link";
 export const dynamic = "force-dynamic";
 export default async function AdminPedidos() {
   const { orders, total } = await getAdminOrders({ take: 30 });
@@ -16,6 +17,7 @@ export default async function AdminPedidos() {
               <p className="font-mono text-sm">{formatPrice(o.total)}</p>
               <p className="label-slc px-2 py-0.5" style={{ backgroundColor: "rgba(184,150,62,0.1)", color: "#B8963E" }}>{o.status}</p>
               <p className="label-slc opacity-40 text-[9px]">{new Date(o.createdAt).toLocaleDateString("pt-BR")}</p>
+              <Link href={`/admin/pedidos/${o.id}`} className="label-slc opacity-50 hover:opacity-100">Ver</Link>
             </div>
           );
         })}

@@ -1,33 +1,73 @@
-import type { Cart, CartItem, Category, Order, OrderItem, Product } from "@prisma/client";
+import type {
+  Category,
+  Brand,
+  Product,
+  Order,
+  OrderItem,
+  UserProfile,
+  WishlistItem,
+  OrderStatus,
+  PaymentMethod,
+} from "@/generated/prisma";
 
-// ── Produto com categoria ─────────────────────────────────────────────
-// imagesArray and colorsArray are computed fields added by the Prisma client extension in src/lib/prisma.ts
-export type ProductWithCategory = Product & {
+export type { Category, Brand, Product, Order, OrderItem, UserProfile, WishlistItem, OrderStatus, PaymentMethod };
+
+export type ProductWithRelations = Product & {
+  brand: Brand & { category: Category };
   category: Category;
-  imagesArray: string[];
-  colorsArray: string[];
 };
 
-// ── Item do carrinho com produto completo ─────────────────────────────
-export type CartItemWithProduct = CartItem & {
-  product: Product;
+export type BrandWithCategory = Brand & { category: Category };
+
+export type BrandWithProducts = Brand & {
+  category: Category;
+  products: Product[];
+  _count: { products: number };
 };
 
-// ── Carrinho completo ─────────────────────────────────────────────────
-export type CartWithItems = Cart & {
-  items: CartItemWithProduct[];
-};
-
-// ── Pedido com itens e produto ────────────────────────────────────────
-export type OrderItemWithProduct = OrderItem & {
-  product: Product;
+export type CategoryWithBrands = Category & {
+  brands: (Brand & { _count: { products: number } })[];
+  _count: { brands: number; products: number };
 };
 
 export type OrderWithItems = Order & {
-  items: OrderItemWithProduct[];
+  items: (OrderItem & {
+    product: Pick<Product, "id" | "name" | "images" | "slug" | "price">;
+  })[];
+  user?: UserProfile | null;
 };
 
-// ── Resposta padrão de Server Actions ────────────────────────────────
+// Guest cart (localStorage)
+export interface CartItem {
+  productId: string;
+  quantity: number;
+}
+
+// Hydrated cart item (productId + fetched data)
+export interface HydratedCartItem extends CartItem {
+  name: string;
+  price: number;
+  image: string;
+  slug: string;
+  brandName: string;
+  stock: number;
+}
+
 export type ActionResult<T = void> =
   | { success: true; data: T }
   | { success: false; error: string };
+
+// Checkout form data
+export interface CheckoutCustomer {
+  name: string;
+  email: string;
+  phone?: string;
+  cpf?: string;
+  cep: string;
+  street: string;
+  number: string;
+  complement?: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+}

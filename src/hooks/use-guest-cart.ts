@@ -1,79 +1,97 @@
 "use client";
 
-import { useEffect } from "react";
-import { useAuth } from "@/context/auth";
-import { addToCart } from "@/actions/cart";
+import { useState, useEffect, useCallback } from "react";
+import { CART_KEY } from "@/lib/constants";
+import type { CartItem } from "@/types";
 
-const GUEST_CART_KEY = "altheia:guest-cart";
-
-export interface GuestCartItem {
-  productId: string;
-  quantity: number;
-  observations?: string;
-}
-
-export function getGuestCart(): GuestCartItem[] {
+function readCart(): CartItem[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = localStorage.getItem(GUEST_CART_KEY);
-    return raw ? (JSON.parse(raw) as GuestCartItem[]) : [];
+    const raw = localStorage.getItem(CART_KEY);
+    return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
   }
 }
 
-export function setGuestCart(items: GuestCartItem[]): void {
-  localStorage.setItem(GUEST_CART_KEY, JSON.stringify(items));
+function writeCart(items: CartItem[]) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(CART_KEY, JSON.stringify(items));
 }
 
-export function addToGuestCart(productId: string, quantity = 1, observations?: string): void {
-  const items = getGuestCart();
-  const existing = items.find((i) => i.productId === productId);
-  if (existing) {
-    existing.quantity += quantity;
-    if (observations !== undefined) existing.observations = observations;
-  } else {
-    items.push({ productId, quantity, observations });
-  }
-  setGuestCart(items);
-}
-
-export function updateGuestCartItem(productId: string, quantity: number): void {
-  const items = getGuestCart();
-  if (quantity <= 0) {
-    setGuestCart(items.filter((i) => i.productId !== productId));
-  } else {
-    setGuestCart(items.map((i) => (i.productId === productId ? { ...i, quantity } : i)));
-  }
-}
-
-export function removeGuestCartItem(productId: string): void {
-  setGuestCart(getGuestCart().filter((i) => i.productId !== productId));
-}
-
-export function clearGuestCart(): void {
-  localStorage.removeItem(GUEST_CART_KEY);
-}
-
-/** Hook: sincroniza carrinho guest → banco ao fazer login */
-export function useGuestCartSync(): void {
-  const { isSignedIn, isLoaded } = useAuth();
+export function useGuestCart() {
+  const [items, setItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
-    if (!isLoaded || !isSignedIn) return;
+    setItems(readCart());
+  }, []);
 
-    const guestItems = getGuestCart();
-    if (guestItems.length === 0) return;
+  const syncAndSet = useCallback((next: CartItem[]) => {
+    writeCart(next);
+    setItems(next);
+  }, []);
 
-    async function syncToDatabase() {
-      await Promise.allSettled(
-        guestItems.map((item) =>
-          addToCart({ productId: item.productId, quantity: item.quantity, observations: item.observations })
-        )
-      );
-      clearGuestCart();
-    }
+  const addItem = useCallback(
+    (productId: string, quantity = 1) => {
+      const current = readCart();
+      const existing = current.find((i) => i.productId === productId);
+      if (existing) {
+        syncAndSet(
+          current.map((i) =>
+            i.productId === productId
+              ? { ...i, quantity: i.quantity + quantity }
+              : i
+          )
+        );
+      } else {
+        syncAndSet([...current, { productId, quantity }]);
+      }
+    },
+    [syncAndSet]
+  );
 
-    void syncToDatabase();
-  }, [isSignedIn, isLoaded]);
+  const updateItem = useCallback(
+    (productId: string, quantity: number) => {
+      const current = readCart();
+      if (quantity <= 0) {
+        syncAndSet(current.filter((i) => i.productId !== productId));
+      } else {
+        syncAndSet(
+          current.map((i) =>
+            i.productId === productId ? { ...i, quantity } : i
+          )
+        );
+      }
+    },
+    [syncAndSet]
+  );
+
+  const removeItem = useCallback(
+    (productId: string) => {
+      syncAndSet(readCart().filter((i) => i.productId !== productId));
+    },
+    [syncAndSet]
+  );
+
+  const clearCart = useCallback(() => {
+    syncAndSet([]);
+  }, [syncAndSet]);
+
+  const count = items.reduce((acc, i) => acc + i.quantity, 0);
+
+  return { items, addItem, updateItem, removeItem, clearCart, count };
+}
+
+export function useCartCount() {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    const update = () => {
+      const items = readCart();
+      setCount(items.reduce((acc, i) => acc + i.quantity, 0));
+    };
+    update();
+    window.addEventListener("storage", update);
+    return () => window.removeEventListener("storage", update);
+  }, []);
+  return count;
 }

@@ -1,98 +1,37 @@
-/**
- * src/lib/blob.ts — Upload de imagens via Cloudinary
- *
- * Produção: CLOUDINARY_CLOUD_NAME + CLOUDINARY_API_KEY + CLOUDINARY_API_SECRET
- * Dev local: salva em public/uploads/ (servido estaticamente)
- */
+"use server";
 
-import fs from "fs/promises";
-import path from "path";
+import { v2 as cloudinary } from "cloudinary";
 
-export interface UploadResult {
-  url: string;
-  pathname: string;
-}
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function uploadImage(
-  file: Buffer | Blob,
-  filename: string
-): Promise<UploadResult> {
-  // ── Cloudinary (produção) ──────────────────────────────────────────────────
-  if (
-    process.env.CLOUDINARY_CLOUD_NAME &&
-    process.env.CLOUDINARY_API_KEY &&
-    process.env.CLOUDINARY_API_SECRET
-  ) {
-    const { v2: cloudinary } = await import("cloudinary");
+  file: File,
+  folder = "slc"
+): Promise<string> {
+  const bytes = await file.arrayBuffer();
+  const buffer = Buffer.from(bytes);
 
-    cloudinary.config({
-      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-      api_key:    process.env.CLOUDINARY_API_KEY,
-      api_secret: process.env.CLOUDINARY_API_SECRET,
-    });
-
-    const buffer =
-      file instanceof Buffer ? file : Buffer.from(await (file as Blob).arrayBuffer());
-
-    const result = await new Promise<{ secure_url: string; public_id: string }>(
-      (resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: "altheia", resource_type: "image" },
-          (err, res) => {
-            if (err || !res) return reject(err ?? new Error("Cloudinary upload falhou"));
-            resolve(res as { secure_url: string; public_id: string });
-          }
-        );
-        stream.end(buffer);
-      }
-    );
-
-    return { url: result.secure_url, pathname: result.public_id };
-  }
-
-  // ── Fallback local: public/uploads/ (apenas dev) ───────────────────────────
-  const uploadsDir = path.join(process.cwd(), "public", "uploads");
-  try {
-    await fs.mkdir(uploadsDir, { recursive: true });
-    const buffer =
-      file instanceof Buffer ? file : Buffer.from(await (file as Blob).arrayBuffer());
-    const safe = filename.replace(/[^a-zA-Z0-9._-]/g, "-");
-    await fs.writeFile(path.join(uploadsDir, safe), buffer);
-    return { url: `/uploads/${safe}`, pathname: `uploads/${safe}` };
-  } catch (err: unknown) {
-    const code = (err as NodeJS.ErrnoException).code;
-    if (code === "EROFS" || code === "EACCES") {
-      throw new Error(
-        "Configure CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY e CLOUDINARY_API_SECRET para upload em produção."
-      );
-    }
-    throw err;
-  }
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader
+      .upload_stream({ folder, resource_type: "image" }, (err, result) => {
+        if (err || !result) return reject(err ?? new Error("Upload failed"));
+        resolve(result.secure_url);
+      })
+      .end(buffer);
+  });
 }
 
-export async function deleteImage(pathname: string): Promise<void> {
-  // ── Cloudinary ─────────────────────────────────────────────────────────────
-  if (
-    process.env.CLOUDINARY_CLOUD_NAME &&
-    process.env.CLOUDINARY_API_KEY &&
-    process.env.CLOUDINARY_API_SECRET
-  ) {
-    const { v2: cloudinary } = await import("cloudinary");
-    cloudinary.config({
-      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-      api_key:    process.env.CLOUDINARY_API_KEY,
-      api_secret: process.env.CLOUDINARY_API_SECRET,
-    });
-    if (!pathname.startsWith("/uploads/") && !pathname.startsWith("uploads/")) {
-      await cloudinary.uploader.destroy(pathname);
-    }
-    return;
-  }
-
-  // ── Local ──────────────────────────────────────────────────────────────────
-  try {
-    await fs.unlink(path.join(process.cwd(), "public", pathname));
-  } catch {
-    // arquivo pode não existir
+export async function deleteImage(url: string): Promise<void> {
+  const match = url.match(/\/([^/]+)\.[a-z]+$/);
+  if (!match) return;
+  const publicId = url
+    .split("/upload/")[1]
+    ?.replace(/\.[a-z]+$/, "");
+  if (publicId) {
+    await cloudinary.uploader.destroy(publicId);
   }
 }

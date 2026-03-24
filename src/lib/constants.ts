@@ -1,25 +1,18 @@
 export const APP_NAME = "SLC";
-export const APP_TAGLINE = "Timepieces & Eyewear of Distinction";
+export const APP_FULL_NAME = "S Luxury Collection";
+export const APP_TAGLINE = "Objetos de Desejo. Criados para Durar.";
 export const APP_DESCRIPTION =
-  "The finest timepieces and luxury eyewear, curated with precision, authenticated with pride.";
-export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-
-/** Number of products per page in the listing */
+  "A coleção mais refinada de relógios, perfumes, bolsas e sapatos de luxo.";
+export const SOFT_DESCRIPTOR = "SLC LUXURY";
 export const PRODUCTS_PER_PAGE = 12;
+export const CART_KEY = "slc:cart";
 
-/** Visual mapping of order statuses */
-export const ORDER_STATUS_LABEL: Record<string, string> = {
-  PENDING: "Awaiting Payment",
-  PAID: "Paid",
-  SHIPPED: "Shipped",
-  DELIVERED: "Delivered",
-  CANCELLED: "Cancelled",
-};
+export const CIELO_BASE_URL =
+  process.env.CIELO_ENV === "production"
+    ? "https://api.cieloecommerce.cielo.com.br"
+    : "https://apisandbox.cieloecommerce.cielo.com.br";
 
-export const ORDER_STATUS_COLOR: Record<string, string> = {
-  PENDING: "bg-yellow-100 text-yellow-800",
-  PAID: "bg-blue-100 text-blue-800",
-  SHIPPED: "bg-purple-100 text-purple-800",
-  DELIVERED: "bg-green-100 text-green-800",
-  CANCELLED: "bg-red-100 text-red-800",
-};
+export const CIELO_QUERY_URL =
+  process.env.CIELO_ENV === "production"
+    ? "https://apiquery.cieloecommerce.cielo.com.br"
+    : "https://apiquerysandbox.cieloecommerce.cielo.com.br";

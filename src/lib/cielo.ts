@@ -1,222 +1,103 @@
-/**
- * src/lib/cielo.ts — Cliente da Cielo eCommerce API 3.0
- *
- * Credenciais via env vars — NUNCA hardcodar no código.
- * CIELO_MERCHANT_ID e CIELO_MERCHANT_KEY em .env.local
- */
+import { CIELO_BASE_URL, CIELO_QUERY_URL, SOFT_DESCRIPTOR } from "./constants";
 
-const CIELO_MERCHANT_ID = process.env.CIELO_MERCHANT_ID ?? "";
-const CIELO_MERCHANT_KEY = process.env.CIELO_MERCHANT_KEY ?? "";
-const CIELO_ENV = process.env.CIELO_ENV ?? "production";
+const MERCHANT_ID = process.env.CIELO_MERCHANT_ID!;
+const MERCHANT_KEY = process.env.CIELO_MERCHANT_KEY!;
 
-const BASE_URL =
-  CIELO_ENV === "sandbox"
-    ? "https://apisandbox.cieloecommerce.cielo.com.br"
-    : "https://api.cieloecommerce.cielo.com.br";
-
-const QUERY_URL =
-  CIELO_ENV === "sandbox"
-    ? "https://apiquerysandbox.cieloecommerce.cielo.com.br"
-    : "https://apiquery.cieloecommerce.cielo.com.br";
-
-// ─── Tipos ────────────────────────────────────────────────────────────────────
-
-export type CieloCardBrand =
-  | "Visa"
-  | "Master"
-  | "Amex"
-  | "Elo"
-  | "Hipercard"
-  | "Diners";
-
-/** Status do pagamento Cielo */
-export const CIELO_STATUS: Record<number, string> = {
-  0: "NotFinished",
-  1: "Authorized",
-  2: "PaymentConfirmed",
-  3: "Denied",
-  10: "Voided",
-  11: "Refunded",
-  12: "Pending",
-  13: "Aborted",
-  20: "Scheduled",
+const headers = {
+  "Content-Type": "application/json",
+  MerchantId: MERCHANT_ID,
+  MerchantKey: MERCHANT_KEY,
 };
 
-export interface CieloCustomer {
-  Name: string;
-  Email?: string;
-  Phone?: string;
-}
-
-export interface CieloCreditCard {
-  CardNumber: string;
-  Holder: string;
-  /** "MM/YYYY" */
-  ExpirationDate: string;
-  SecurityCode: string;
-  Brand: CieloCardBrand;
-}
-
-export interface CieloPaymentResult {
-  PaymentId: string;
-  Type: string;
-  Status: number;
-  StatusDescription?: string;
-  Amount: number;
-  ReturnCode?: string;
-  ReturnMessage?: string;
-  AuthorizationCode?: string;
-  // PIX
-  QrCodeString?: string;
-  QrCodeBase64Image?: string;
-}
-
-export interface CieloSaleResponse {
-  MerchantOrderId: string;
-  Customer: { Name: string };
-  Payment: CieloPaymentResult;
-}
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function headers(): Record<string, string> {
-  return {
-    "Content-Type": "application/json",
-    MerchantId: CIELO_MERCHANT_ID,
-    MerchantKey: CIELO_MERCHANT_KEY,
-    RequestId: crypto.randomUUID(),
-  };
-}
-
-/** Converte reais (float) para centavos (int) */
-export function toCentavos(priceInReais: number): number {
-  return Math.round(priceInReais * 100);
-}
-
-/** Detecta bandeira pelo número do cartão. Retorna null se não reconhecida. */
-export function detectCardBrand(rawNumber: string): CieloCardBrand | null {
-  const n = rawNumber.replace(/\D/g, "");
-  if (/^4/.test(n)) return "Visa";
-  if (/^(5[1-5]|2(2[2-9][1-9]|[3-6]\d{2}|7[01]\d|720))/.test(n)) return "Master";
-  if (/^3[47]/.test(n)) return "Amex";
-  if (/^(401178|401179|431274|438935|451416|457393|457631|457632|504175|627780|636297|636368|636369|509[0-9]{3}|6504(0[5-9]|[1-3][0-9]|8[5-9]|9[0-9])|6505([0-2][0-9]|3[0-8]|4[1-9]|[5-8][0-9]|9[0-8])|6507(0[0-9]|1[0-8]|2[0-7])|6509(0[1-9]|1[0-9]|20)|6516[5-7][0-9]|6550([0-4][0-9]|5[0-8]|6[0-9]|[7-8][0-9]|9[0-2])|50(669[0-9]|67[0-9]{2}))/.test(n)) return "Elo";
-  if (/^6062/.test(n)) return "Hipercard";
-  if (/^3(0[0-5]|[68])/.test(n)) return "Diners";
-  return null; // bandeira não reconhecida
-}
-
-// ─── Criação de pagamentos ────────────────────────────────────────────────────
-
-/** Cria pagamento com cartão de crédito e captura imediata */
-export async function createCreditCardPayment({
-  merchantOrderId,
-  customer,
-  amountInReais,
-  installments,
-  card,
-  softDescriptor = "AMERICANAS",
-}: {
-  merchantOrderId: string;
-  customer: CieloCustomer;
-  amountInReais: number;
+export interface CieloCardPayment {
+  orderId: string;
+  amount: number; // centavos
   installments: number;
-  card: CieloCreditCard;
+  cardNumber: string;
+  holderName: string;
+  expirationDate: string; // MM/AAAA
+  securityCode: string;
+  customerName: string;
+  customerEmail: string;
+  customerCpf: string;
   softDescriptor?: string;
-}): Promise<CieloSaleResponse> {
-  const resp = await fetch(`${BASE_URL}/1/sales`, {
-    method: "POST",
-    headers: headers(),
-    body: JSON.stringify({
-      MerchantOrderId: merchantOrderId,
-      Customer: customer,
-      Payment: {
-        Type: "CreditCard",
-        Amount: toCentavos(amountInReais),
-        Installments: installments,
-        SoftDescriptor: softDescriptor.slice(0, 13),
-        Capture: true,
-        CreditCard: {
-          CardNumber: card.CardNumber.replace(/\s/g, ""),
-          Holder: card.Holder.toUpperCase().slice(0, 25),
-          ExpirationDate: card.ExpirationDate,
-          SecurityCode: card.SecurityCode,
-          Brand: card.Brand,
-        },
+}
+
+export interface CieloPixPayment {
+  orderId: string;
+  amount: number; // centavos
+  customerName: string;
+  customerEmail: string;
+  softDescriptor?: string;
+}
+
+export async function processCardPayment(data: CieloCardPayment) {
+  const body = {
+    MerchantOrderId: data.orderId,
+    Customer: {
+      Name: data.customerName,
+      Email: data.customerEmail,
+      Identity: data.customerCpf.replace(/\D/g, ""),
+      IdentityType: "CPF",
+    },
+    Payment: {
+      Type: "CreditCard",
+      Amount: data.amount,
+      Installments: data.installments,
+      SoftDescriptor: data.softDescriptor ?? SOFT_DESCRIPTOR,
+      CreditCard: {
+        CardNumber: data.cardNumber.replace(/\s/g, ""),
+        Holder: data.holderName,
+        ExpirationDate: data.expirationDate,
+        SecurityCode: data.securityCode,
+        SaveCard: false,
+        Brand: detectCardBrand(data.cardNumber),
       },
-    }),
-    // Timeout de 30s
-    signal: AbortSignal.timeout(30_000),
-  });
+    },
+  };
 
-  if (!resp.ok) {
-    const body = await resp.text().catch(() => "");
-    throw new Error(`Cielo API ${resp.status}: ${body}`);
-  }
-
-  return resp.json() as Promise<CieloSaleResponse>;
-}
-
-/** Cria pagamento PIX — retorna QR code e copia-e-cola */
-export async function createPixPayment({
-  merchantOrderId,
-  customer,
-  amountInReais,
-}: {
-  merchantOrderId: string;
-  customer: CieloCustomer;
-  amountInReais: number;
-}): Promise<CieloSaleResponse> {
-  const resp = await fetch(`${BASE_URL}/1/sales`, {
+  const res = await fetch(`${CIELO_BASE_URL}/1/sales`, {
     method: "POST",
-    headers: headers(),
-    body: JSON.stringify({
-      MerchantOrderId: merchantOrderId,
-      Customer: customer,
-      Payment: {
-        Type: "Pix",
-        Amount: toCentavos(amountInReais),
-      },
-    }),
-    signal: AbortSignal.timeout(30_000),
+    headers,
+    body: JSON.stringify(body),
   });
-
-  if (!resp.ok) {
-    const body = await resp.text().catch(() => "");
-    throw new Error(`Cielo PIX ${resp.status}: ${body}`);
-  }
-
-  return resp.json() as Promise<CieloSaleResponse>;
+  return res.json();
 }
 
-/** Consulta o status atual de um pagamento pelo PaymentId */
-export async function getPaymentStatus(
-  paymentId: string
-): Promise<CieloPaymentResult | null> {
-  try {
-    const resp = await fetch(`${QUERY_URL}/1/sales/${paymentId}`, {
-      headers: headers(),
-      cache: "no-store",
-      signal: AbortSignal.timeout(15_000),
-    });
-    if (!resp.ok) return null;
-    const data = (await resp.json()) as { Payment?: CieloPaymentResult };
-    return data.Payment ?? null;
-  } catch {
-    return null;
-  }
+export async function processPixPayment(data: CieloPixPayment) {
+  const body = {
+    MerchantOrderId: data.orderId,
+    Customer: { Name: data.customerName, Email: data.customerEmail },
+    Payment: {
+      Type: "Pix",
+      Amount: data.amount,
+      SoftDescriptor: data.softDescriptor ?? SOFT_DESCRIPTOR,
+    },
+  };
+
+  const res = await fetch(`${CIELO_BASE_URL}/1/sales`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+  });
+  return res.json();
 }
 
-/** Verifica se o status Cielo indica pagamento confirmado */
-export function isPaymentConfirmed(status: number): boolean {
-  return status === 1 || status === 2; // Authorized ou PaymentConfirmed
+export async function queryPayment(paymentId: string) {
+  const res = await fetch(
+    `${CIELO_QUERY_URL}/1/sales/${paymentId}`,
+    { headers }
+  );
+  return res.json();
 }
 
-/** Verifica se o pagamento foi negado/abortado */
-export function isPaymentDenied(status: number): boolean {
-  return status === 3 || status === 13;
-}
-
-/** Verifica se o pagamento está pendente (PIX aguardando) */
-export function isPaymentPending(status: number): boolean {
-  return status === 0 || status === 12;
+export function detectCardBrand(number: string): string {
+  const n = number.replace(/\s/g, "");
+  if (/^4/.test(n)) return "Visa";
+  if (/^5[1-5]/.test(n) || /^2[2-7]/.test(n)) return "Master";
+  if (/^3[47]/.test(n)) return "Amex";
+  if (/^(636368|438935|504175|451416|636297|5067|4576|4011)/.test(n)) return "Elo";
+  if (/^6370/.test(n)) return "Hipercard";
+  if (/^30[0-5]|^36|^38/.test(n)) return "Diners";
+  return "Visa";
 }

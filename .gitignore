@@ -1,56 +1,35 @@
-# deps
-/node_modules
-/.pnp
-.pnp.*
+# dependencies
+node_modules/
+.pnpm-store/
 
-# next.js
-/.next/
-/out/
+# Next.js
+.next/
+out/
 
-# prod
+# Production build
 /build
 
-# env — NUNCA commitar!
+# Env files
 .env
 .env.local
 .env.*.local
-.env*
-!.env.example
 
-# misc
-.DS_Store
-*.pem
+# Prisma generated
+src/generated/
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# vercel
+# Vercel
 .vercel
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# OS
+.DS_Store
+Thumbs.db
 
-# prisma
-prisma/dev.db
-prisma/dev.db-journal
-prisma/demo.db
-prisma/demo.db-journal
-prisma/demo.db-wal
-prisma/demo.db-shm
-# stray nested prisma dir
-prisma/prisma/
+# IDE
+.vscode/
+.idea/
+*.swp
 
-# stray asset at root (usar public/ em vez disso)
-lumina-serum.png
-.env.production
-
-# yarn berry
-.yarn/install-state.gz
-.yarn/unplugged/
-.yarn/cache/
-test-results/
-package-lock.json
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*

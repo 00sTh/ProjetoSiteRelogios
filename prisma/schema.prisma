@@ -1,280 +1,137 @@
-/**
- * SCHEMA DE DESENVOLVIMENTO — SQLite (local)
- *
- * Para produção (PostgreSQL Neon), use:
- *   npm run build:prod   (copia schema.production.prisma → schema.prisma)
- *
- * Diferenças deste schema (SQLite) vs produção (PostgreSQL):
- *   - provider "sqlite" sem directUrl
- *   - price/shippingFreeThreshold: Decimal (sem @db.Decimal)
- *   - images: String (JSON serializado) ao invés de String[]
- *   - status/paymentMethod: String (SQLite não suporta enums)
- */
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  output          = "../src/generated/prisma"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
-}
-
-model UserProfile {
-  id        String   @id @default(uuid())
-  clerkId   String   @unique
-  email     String
-  firstName String?
-  lastName  String?
-  avatarUrl String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  orders Order[]
-  cart   Cart?
-
-  @@index([clerkId])
-  @@map("user_profiles")
+  provider = "postgresql"
 }
 
 model Category {
-  id       String  @id @default(uuid())
-  name     String
-  slug     String  @unique
-  imageUrl String?
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  image     String?
+  sortOrder Int       @default(0)
+  brands    Brand[]
+  products  Product[]
 
-  parentId String?
-  parent   Category?  @relation("CategoryChildren", fields: [parentId], references: [id])
-  children Category[] @relation("CategoryChildren")
-
-  products Product[]
-
-  @@index([slug])
   @@map("categories")
 }
 
-model Product {
-  id          String  @id @default(uuid())
+model Brand {
+  id          String    @id @default(cuid())
   name        String
-  slug        String  @unique
-  description String
-  price       Decimal
-  stock       Int     @default(0)
-  /// JSON: ["url1","url2"] — parsear com parseImages() de utils.ts
-  images      String  @default("[]")
-  /// JSON: ["Preto","Dourado"] — cores detectadas por IA (SQLite: JSON string; prod: String[])
-  colors      String  @default("[]")
-  brand       String?
-  model_name  String?   // ex: "Submariner", "Neverfull", "Speedmaster"
-  featured    Boolean @default(false)
-  active      Boolean @default(true)
-  ingredients String?
-  usage       String?
+  slug        String    @unique
+  description String?
+  logo        String?
+  banner      String?
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  products    Product[]
 
-  categoryId String
-  category   Category @relation(fields: [categoryId], references: [id])
-
-  cartItems     CartItem[]
-  orderItems    OrderItem[]
-  wishlistItems WishlistItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([slug])
   @@index([categoryId])
-  @@index([brand])
+  @@map("brands")
+}
+
+model Product {
+  id           String         @id @default(cuid())
+  name         String
+  slug         String         @unique
+  description  String?
+  price        Decimal        @db.Decimal(12, 2)
+  comparePrice Decimal?       @db.Decimal(12, 2)
+  stock        Int            @default(0)
+  sku          String?        @unique
+  images       String[]       @default([])
+  featured     Boolean        @default(false)
+  active       Boolean        @default(true)
+  attributes   Json?
+  brandId      String
+  brand        Brand          @relation(fields: [brandId], references: [id], onDelete: Restrict)
+  categoryId   String
+  category     Category       @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  orderItems   OrderItem[]
+  wishlistItems WishlistItem[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([brandId])
+  @@index([categoryId])
   @@index([featured])
   @@index([active])
-  @@index([createdAt])
   @@map("products")
 }
 
-model Cart {
-  id        String   @id @default(uuid())
-  clerkId   String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model UserProfile {
+  id       String         @id
+  email    String         @unique
+  name     String?
+  role     String         @default("customer")
+  orders   Order[]
+  wishlist WishlistItem[]
 
-  userProfileId String?      @unique
-  userProfile   UserProfile? @relation(fields: [userProfileId], references: [id])
-  items         CartItem[]
-
-  @@index([clerkId])
-  @@map("carts")
+  @@map("user_profiles")
 }
 
-model CartItem {
-  id        String @id @default(uuid())
-  cartId    String
+model WishlistItem {
+  id        String      @id @default(cuid())
+  userId    String
   productId String
-  quantity  Int    @default(1)
+  user      UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now())
 
-  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id])
-
-  @@unique([cartId, productId])
-  @@map("cart_items")
+  @@unique([userId, productId])
+  @@map("wishlist_items")
 }
 
 model Order {
-  id              String  @id @default(uuid())
-  /// PENDING | PAID | SHIPPED | DELIVERED | CANCELLED
-  status          String  @default("PENDING")
-  price           Decimal
-  stripePaymentId String?
-  stripeSessionId String?
-  cieloPaymentId  String?
-  redePaymentId   String?
-  gateway         String?
-  /// WHATSAPP | CREDIT_CARD | PIX
-  paymentMethod   String  @default("WHATSAPP")
-  pixQrCode       String?
-  customerName    String?
-  customerEmail   String?
-  customerPhone   String?
-  customerCpf     String?
-  /// JSON: { street, number, complement, city, state, zip }
-  shippingAddress String?
-  notes           String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  userProfileId String?
-  userProfile   UserProfile? @relation(fields: [userProfileId], references: [id])
+  id            String        @id @default(cuid())
+  orderNumber   String        @unique
+  status        OrderStatus   @default(PENDING)
+  total         Decimal       @db.Decimal(12, 2)
+  customer      Json
+  userId        String?
+  user          UserProfile?  @relation(fields: [userId], references: [id], onDelete: SetNull)
   items         OrderItem[]
+  payment       Json?
+  paymentMethod PaymentMethod
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
-  @@index([userProfileId])
+  @@index([userId])
   @@index([status])
   @@index([createdAt])
-  @@index([cieloPaymentId])
-  @@index([redePaymentId])
   @@map("orders")
 }
 
 model OrderItem {
-  id       String  @id @default(uuid())
-  quantity Int
-  /// Snapshot do preço no momento da compra
-  price    Decimal
-
+  id        String  @id @default(cuid())
   orderId   String
   productId String
+  quantity  Int
+  price     Decimal @db.Decimal(12, 2)
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onDelete: Restrict)
 
+  @@index([orderId])
+  @@index([productId])
   @@map("order_items")
 }
 
-/// Configurações globais do site (singleton — id sempre = "default")
-model SiteSettings {
-  id                    String   @id @default("default")
-  siteLogoUrl           String?
-  whatsappNumber        String   @default("5511999999999")
-  heroTitle             String   @default("Importados de Luxo Direto para Você")
-  heroSubtitle          String   @default("Os melhores produtos importados com entrega garantida em todo o Brasil")
-  heroImageUrl          String?
-  heroVideoUrl          String?
-  leftVideoUrl          String?
-  rightVideoUrl         String?
-  heroLogoUrl           String?
-  luminaLabel           String   @default("Produto em Destaque")
-  luminaTitle           String   @default("Descubra Nossa Seleção Premium")
-  luminaSubtitle        String   @default("Produtos importados selecionados com critério para garantir a mais alta qualidade e sofisticação.")
-  luminaImageUrl        String?
-  luminaBadgeText       String   @default("Novo")
-  luminaProductLink     String   @default("/products")
-  aboutTitle            String   @default("Nossa História")
-  aboutText             String   @default("A LuxImport nasceu da paixão por trazer ao Brasil o que há de melhor no mercado internacional. Curadoria rigorosa, autenticidade garantida.")
-  aboutImageUrl         String?
-  featuredVideoUrl      String?
-  featuredVideoTitle    String   @default("Nossa Missão")
-  featuredVideoDesc     String   @default("Conheça a história por trás de cada produto LuxImport")
-  instagramUrl          String?
-  youtubeUrl            String?
-  twitterUrl            String?
-  whyTitle              String   @default("Por que LuxImport?")
-  whySubtitle           String   @default("Qualidade, autenticidade e sofisticação em cada produto.")
-  benefit1Icon          String   @default("Truck")
-  benefit1Title         String   @default("Frete grátis acima de R$299")
-  benefit1Text          String   @default("Entrega em todo o Brasil sem custo adicional.")
-  benefit2Icon          String   @default("RotateCcw")
-  benefit2Title         String   @default("Devolução em 30 dias")
-  benefit2Text          String   @default("Satisfação garantida ou seu dinheiro de volta.")
-  benefit3Icon          String   @default("ShieldCheck")
-  benefit3Title         String   @default("Pagamento seguro")
-  benefit3Text          String   @default("Transações criptografadas e dados protegidos.")
-  newsletterTitle       String   @default("Ofertas Exclusivas")
-  newsletterSubtitle    String   @default("Cadastre-se e seja o primeiro a saber das novidades")
-  metaTitle             String?
-  metaDescription       String?
-  shippingFreeThreshold Decimal  @default(299)
-  notificationEmail     String?
-  cepOrigem             String   @default("01310100")
-  pesoMedioProduto      Int      @default(500)
-  updatedAt             DateTime @updatedAt
-
-  @@map("site_settings")
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
 }
 
-/// Banco de mídia (imagens e vídeos)
-model MediaAsset {
-  id        String   @id @default(uuid())
-  name      String
-  url       String
-  /// IMAGE | VIDEO
-  type      String   @default("IMAGE")
-  size      Int?
-  createdAt DateTime @default(now())
-
-  @@map("media_assets")
-}
-
-/// Lista de desejos do usuário
-model Wishlist {
-  id        String   @id @default(uuid())
-  clerkId   String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  items WishlistItem[]
-
-  @@index([clerkId])
-  @@map("wishlists")
-}
-
-model WishlistItem {
-  id         String @id @default(uuid())
-  wishlistId String
-  productId  String
-
-  wishlist Wishlist @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
-  product  Product  @relation(fields: [productId], references: [id])
-
-  @@unique([wishlistId, productId])
-  @@map("wishlist_items")
-}
-
-/// Inscritos na newsletter
-model NewsletterSubscriber {
-  id          String    @id @default(uuid())
-  email       String    @unique
-  confirmedAt DateTime?
-  createdAt   DateTime  @default(now())
-
-  @@index([email])
-  @@map("newsletter_subscribers")
-}
-
-/// Log de erros capturados pela aplicação
-model ErrorLog {
-  id        String   @id @default(uuid())
-  digest    String?
-  message   String
-  stack     String?
-  path      String?
-  createdAt DateTime @default(now())
-
-  @@index([createdAt])
-  @@map("error_logs")
+enum PaymentMethod {
+  CREDIT_CARD
+  PIX
+  WHATSAPP
 }
