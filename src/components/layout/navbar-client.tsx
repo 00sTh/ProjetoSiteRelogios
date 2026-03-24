@@ -75,8 +75,12 @@ export function NavbarClient({ categories }: { categories: CategoryWithBrands[] 
                     <div className="flex flex-wrap gap-6">
                       {cat.brands.map(brand => (
                         <Link key={brand.id} href={`/${cat.slug}/${brand.slug}`} className="group flex flex-col items-center gap-1.5 min-w-[80px]">
-                          <div className="w-12 h-12 rounded-full border flex items-center justify-center group-hover:border-yellow-600 transition-colors" style={{ borderColor: "rgba(13,11,11,0.1)" }}>
-                            <span className="text-[8px] tracking-widest uppercase text-center px-1 leading-tight" style={{ color: "#0D0B0B" }}>{brand.name.slice(0, 2)}</span>
+                          <div className="w-12 h-12 rounded-full border flex items-center justify-center overflow-hidden group-hover:border-yellow-600 transition-colors" style={{ borderColor: "rgba(13,11,11,0.1)" }}>
+                            {brand.logo ? (
+                              <img src={brand.logo} alt={brand.name} className="w-10 h-10 object-contain" />
+                            ) : (
+                              <span className="text-[8px] tracking-widest uppercase text-center px-1 leading-tight" style={{ color: "#0D0B0B" }}>{brand.name.slice(0, 2)}</span>
+                            )}
                           </div>
                           <span className="label-slc group-hover:opacity-100 opacity-60 transition-opacity text-center">{brand.name}</span>
                         </Link>
