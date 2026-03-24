@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/auth";
 import { slugify } from "@/lib/utils";
 import { uploadImage } from "@/lib/blob";
 import { revalidatePath } from "next/cache";
+import { OrderStatus } from "@/generated/prisma";
 
 async function checkAdmin() {
   const adminId = await requireAdmin();
@@ -59,8 +60,9 @@ export async function createBrand(formData: FormData) {
 export async function updateBrand(id: string, formData: FormData) {
   await checkAdmin();
   const name = formData.get("name") as string;
+  const categoryId = formData.get("categoryId") as string;
   const description = formData.get("description") as string || null;
-  const data: Record<string, unknown> = { name, description };
+  const data: Record<string, unknown> = { name, description, categoryId };
   const logoFile = formData.get("logo") as File | null;
   const bannerFile = formData.get("banner") as File | null;
   if (logoFile && logoFile.size > 0) data.logo = await uploadImage(logoFile, "slc/brands");
@@ -90,7 +92,10 @@ export async function createProduct(formData: FormData) {
   const sku = formData.get("sku") as string || null;
   const featured = formData.get("featured") === "true";
   const attrRaw = formData.get("attributes") as string;
-  const attributes = attrRaw ? JSON.parse(attrRaw) : null;
+  let attributes = null;
+  if (attrRaw) {
+    try { attributes = JSON.parse(attrRaw); } catch { attributes = null; }
+  }
 
   const imageFiles = formData.getAll("images") as File[];
   const images: string[] = [];
@@ -116,8 +121,12 @@ export async function updateProduct(id: string, formData: FormData) {
   const featured = formData.get("featured") === "true";
   const active = formData.get("active") === "true";
   const attrRaw = formData.get("attributes") as string;
-  const attributes = attrRaw ? JSON.parse(attrRaw) : null;
-  const existingImages = JSON.parse((formData.get("existingImages") as string) ?? "[]") as string[];
+  let attributes = null;
+  if (attrRaw) {
+    try { attributes = JSON.parse(attrRaw); } catch { attributes = null; }
+  }
+  let existingImages: string[] = [];
+  try { existingImages = JSON.parse((formData.get("existingImages") as string) ?? "[]"); } catch { existingImages = []; }
 
   const imageFiles = formData.getAll("images") as File[];
   const newImages: string[] = [];
@@ -138,7 +147,7 @@ export async function deleteProduct(id: string) {
 // ── Orders ─────────────────────────────────────────────────────────────────
 export async function getAdminOrders(params?: { status?: string; take?: number; skip?: number }) {
   await checkAdmin();
-  const where = params?.status ? { status: params.status as never } : {};
+  const where = params?.status ? { status: params.status as OrderStatus } : {};
   const [orders, total] = await Promise.all([
     prisma.order.findMany({ where, orderBy: { createdAt: "desc" }, take: params?.take ?? 20, skip: params?.skip ?? 0, include: { items: { include: { product: { select: { name: true, images: true } } } } } }),
     prisma.order.count({ where }),
@@ -148,7 +157,7 @@ export async function getAdminOrders(params?: { status?: string; take?: number; 
 
 export async function updateOrderStatus(id: string, status: string) {
   await checkAdmin();
-  await prisma.order.update({ where: { id }, data: { status: status as never } });
+  await prisma.order.update({ where: { id }, data: { status: status as OrderStatus } });
   revalidatePath("/admin/pedidos");
 }
 
