@@ -5,6 +5,7 @@ import { slugify } from "@/lib/utils";
 import { uploadImage } from "@/lib/blob";
 import { revalidatePath } from "next/cache";
 import { OrderStatus } from "@/generated/prisma";
+import { SITE_CONFIG_DEFAULTS } from "@/lib/site-config";
 
 async function checkAdmin() {
   const adminId = await requireAdmin();
@@ -184,6 +185,28 @@ export async function updateOrderStatus(id: string, status: string) {
   await checkAdmin();
   await prisma.order.update({ where: { id }, data: { status: status as OrderStatus } });
   revalidatePath("/admin/pedidos");
+}
+
+// ── SiteConfig ─────────────────────────────────────────────────────────────
+export async function getSiteConfig(): Promise<Record<string, string>> {
+  const rows = await prisma.siteConfig.findMany();
+  return Object.fromEntries(rows.map((r) => [r.key, r.value]));
+}
+
+export async function setSiteConfigsFromForm(formData: FormData) {
+  await checkAdmin();
+  const knownKeys = Object.keys(SITE_CONFIG_DEFAULTS);
+  for (const key of knownKeys) {
+    const value = (formData.get(key) as string) ?? "";
+    await prisma.siteConfig.upsert({
+      where: { key },
+      update: { value },
+      create: { key, value },
+    });
+  }
+  revalidatePath("/");
+  revalidatePath("/sobre");
+  revalidatePath("/admin/configuracoes");
 }
 
 export async function getAdminStats() {

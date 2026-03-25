@@ -132,6 +132,13 @@ enum OrderStatus {
   CANCELLED
 }
 
+model SiteConfig {
+  key       String   @id
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+  @@map("site_config")
+}
+
 enum PaymentMethod {
   CREDIT_CARD
   PIX
