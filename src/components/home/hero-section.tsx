@@ -40,7 +40,7 @@ export function HeroSection({ config }: { config: HeroConfig }) {
                 height: "100vh",
                 minWidth: "100%",
                 minHeight: "56.25vw",
-                transform: "translate(-50%, -50%)",
+                transform: "translate(-50%, -50%) scale(1.5)",
                 filter: "brightness(0.75)",
               }}
             />
@@ -78,25 +78,25 @@ export function HeroSection({ config }: { config: HeroConfig }) {
             initial="hidden"
             animate="visible"
           >
-            <motion.p className="label-slc mb-4" variants={fadeInUp} style={{ color: "rgba(247,244,238,0.6)" }}>
+            <motion.p className="label-slc mb-4" variants={fadeInUp} style={{ color: "rgba(247,244,238,0.6)", textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}>
               S Luxury Collection
             </motion.p>
             <motion.h1
-              className="font-serif font-light leading-none mb-1"
-              style={{ fontSize: "clamp(2.5rem,5vw,4.5rem)", color: "#F7F4EE" }}
+              className="font-serif font-normal leading-none mb-1"
+              style={{ fontSize: "clamp(2.5rem,5vw,4.5rem)", color: "#F7F4EE", textShadow: "0 2px 8px rgba(0,0,0,0.7)" }}
               variants={fadeInUp}
             >
               {config.title}
             </motion.h1>
             <motion.h1
-              className="font-serif italic font-light leading-none mb-6"
-              style={{ fontSize: "clamp(2.5rem,5vw,4.5rem)", color: "#B8963E" }}
+              className="font-serif italic font-normal leading-none mb-6"
+              style={{ fontSize: "clamp(2.5rem,5vw,4.5rem)", color: "#B8963E", textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}
               variants={fadeInUp}
             >
               {config.titleItalic}
             </motion.h1>
             <motion.hr className="divider-gold" style={{ margin: "0 auto 1.5rem", width: "2.5rem" }} variants={fadeInUp} />
-            <motion.p className="label-slc mb-8" variants={fadeInUp} style={{ color: "rgba(247,244,238,0.7)" }}>
+            <motion.p className="label-slc mb-8" variants={fadeInUp} style={{ color: "rgba(247,244,238,0.7)", textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}>
               {config.tagline}
             </motion.p>
             <motion.div className="flex gap-4 flex-wrap justify-center" variants={fadeInUp}>
