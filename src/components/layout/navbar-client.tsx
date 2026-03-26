@@ -7,32 +7,61 @@ import { useCartCount } from "@/hooks/use-guest-cart";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import type { CategoryWithBrands } from "@/types";
 
-export function NavbarClient({ categories }: { categories: CategoryWithBrands[] }) {
+const NAV_ITEMS = [
+  {
+    key: "feminina",
+    label: "Moda Feminina",
+    subcategories: [
+      { label: "Relógios", href: "/relogios" },
+      { label: "Bolsas", href: "/bolsas" },
+      { label: "Perfumes", href: "/perfumes" },
+    ],
+  },
+  {
+    key: "masculina",
+    label: "Moda Masculina",
+    subcategories: [
+      { label: "Relógios", href: "/relogios" },
+      { label: "Bolsas", href: "/bolsas" },
+      { label: "Perfumes", href: "/perfumes" },
+    ],
+  },
+];
+
+export function NavbarClient({ categories: _ }: { categories: CategoryWithBrands[] }) {
   const count = useCartCount();
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [activeKey, setActiveKey] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <>
       <header
         className="fixed top-0 left-0 right-0 z-50 border-b"
-        style={{ backgroundColor: "rgba(247,244,238,0.96)", backdropFilter: "blur(12px)", borderColor: "rgba(13,11,11,0.07)" }}
+        style={{ backgroundColor: "#0D0B0B", borderColor: "rgba(184,150,62,0.25)" }}
       >
         <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
-          {/* Left: categories */}
+          {/* Left: nav items */}
           <nav className="hidden lg:flex items-center gap-8">
-            {categories.map(cat => (
-              <div key={cat.id} className="relative" onMouseEnter={() => setActiveCategory(cat.slug)} onMouseLeave={() => setActiveCategory(null)}>
-                <Link href={`/${cat.slug}`} className="label-slc hover:opacity-70 transition-opacity">
-                  {cat.name.replace(" de Luxo", "")}
-                </Link>
+            {NAV_ITEMS.map(item => (
+              <div
+                key={item.key}
+                className="relative"
+                onMouseEnter={() => setActiveKey(item.key)}
+                onMouseLeave={() => setActiveKey(null)}
+              >
+                <button
+                  className="text-[11px] tracking-[0.3em] uppercase font-bold transition-colors"
+                  style={{ color: activeKey === item.key ? "#B8963E" : "#F7F4EE" }}
+                >
+                  {item.label}
+                </button>
               </div>
             ))}
           </nav>
 
           {/* Center: Logo */}
           <Link href="/" className="absolute left-1/2 -translate-x-1/2">
-            <span className="font-serif text-lg tracking-[0.5em] uppercase" style={{ color: "#0D0B0B" }}>SLC</span>
+            <span className="font-serif text-lg tracking-[0.5em] uppercase font-bold" style={{ color: "#B8963E" }}>SLC</span>
           </Link>
 
           {/* Right: icons */}
@@ -41,52 +70,51 @@ export function NavbarClient({ categories }: { categories: CategoryWithBrands[] 
               <UserButton afterSignOutUrl="/" />
             </SignedIn>
             <SignedOut>
-              <Link href="/sign-in" className="label-slc hover:opacity-70 transition-opacity hidden sm:block">Entrar</Link>
+              <Link
+                href="/sign-in"
+                className="text-[11px] tracking-[0.3em] uppercase font-bold transition-colors hidden sm:block"
+                style={{ color: "#F7F4EE" }}
+              >
+                Entrar
+              </Link>
             </SignedOut>
-            <Link href="/carrinho" className="relative">
+            <Link href="/carrinho" className="relative" style={{ color: "#F7F4EE" }}>
               <ShoppingBag size={18} strokeWidth={1.5} />
               {count > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full text-[9px] flex items-center justify-center text-white font-medium" style={{ backgroundColor: "#6B1A2A" }}>{count}</span>
+                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full text-[9px] flex items-center justify-center text-white font-medium" style={{ backgroundColor: "#B8963E" }}>{count}</span>
               )}
             </Link>
-            <button className="lg:hidden" onClick={() => setMobileOpen(v => !v)}>
+            <button className="lg:hidden" style={{ color: "#F7F4EE" }} onClick={() => setMobileOpen(v => !v)}>
               {mobileOpen ? <X size={20} strokeWidth={1.5} /> : <Menu size={20} strokeWidth={1.5} />}
             </button>
           </div>
         </div>
 
-        {/* Mega-menu */}
+        {/* Dropdown */}
         <AnimatePresence>
-          {activeCategory && (
+          {activeKey && (
             <motion.div
-              initial={{ opacity: 0, y: -8 }}
+              initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2 }}
-              className="absolute left-0 right-0 top-full border-b shadow-sm"
-              style={{ backgroundColor: "#F7F4EE", borderColor: "rgba(184,150,62,0.2)" }}
-              onMouseEnter={() => setActiveCategory(activeCategory)}
-              onMouseLeave={() => setActiveCategory(null)}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18 }}
+              className="absolute left-0 right-0 top-full border-b"
+              style={{ backgroundColor: "#0D0B0B", borderColor: "rgba(184,150,62,0.25)" }}
+              onMouseEnter={() => setActiveKey(activeKey)}
+              onMouseLeave={() => setActiveKey(null)}
             >
-              <div className="mx-auto max-w-7xl px-6 py-6">
-                {categories.filter(c => c.slug === activeCategory).map(cat => (
-                  <div key={cat.id}>
-                    <p className="label-slc mb-4">{cat.name}</p>
-                    <div className="flex flex-wrap gap-6">
-                      {cat.brands.map(brand => (
-                        <Link key={brand.id} href={`/${cat.slug}/${brand.slug}`} className="group flex flex-col items-center gap-1.5 min-w-[80px]">
-                          <div className="w-12 h-12 rounded-full border flex items-center justify-center overflow-hidden group-hover:border-yellow-600 transition-colors" style={{ borderColor: "rgba(13,11,11,0.1)" }}>
-                            {brand.logo ? (
-                              <img src={brand.logo} alt={brand.name} className="w-10 h-10 object-contain" />
-                            ) : (
-                              <span className="text-[8px] tracking-widest uppercase text-center px-1 leading-tight" style={{ color: "#0D0B0B" }}>{brand.name.slice(0, 2)}</span>
-                            )}
-                          </div>
-                          <span className="label-slc group-hover:opacity-100 opacity-60 transition-opacity text-center">{brand.name}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
+              <div className="mx-auto max-w-7xl px-6 py-5 flex gap-8">
+                {NAV_ITEMS.find(i => i.key === activeKey)?.subcategories.map(sub => (
+                  <Link
+                    key={sub.href}
+                    href={sub.href}
+                    className="text-[11px] tracking-[0.3em] uppercase font-bold transition-colors"
+                    style={{ color: "rgba(247,244,238,0.7)" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "#B8963E")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "rgba(247,244,238,0.7)")}
+                  >
+                    {sub.label}
+                  </Link>
                 ))}
               </div>
             </motion.div>
@@ -103,15 +131,25 @@ export function NavbarClient({ categories }: { categories: CategoryWithBrands[] 
             exit={{ x: "100%" }}
             transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="fixed inset-0 z-40 lg:hidden"
-            style={{ backgroundColor: "#F7F4EE" }}
+            style={{ backgroundColor: "#0D0B0B" }}
           >
             <div className="p-6 pt-20 overflow-y-auto h-full">
-              {categories.map(cat => (
-                <div key={cat.id} className="mb-6">
-                  <Link href={`/${cat.slug}`} className="label-slc block mb-3" onClick={() => setMobileOpen(false)}>{cat.name}</Link>
-                  <div className="grid grid-cols-2 gap-2">
-                    {cat.brands.map(brand => (
-                      <Link key={brand.id} href={`/${cat.slug}/${brand.slug}`} className="text-sm py-1.5 opacity-60 hover:opacity-100 transition-opacity" onClick={() => setMobileOpen(false)}>{brand.name}</Link>
+              {NAV_ITEMS.map(item => (
+                <div key={item.key} className="mb-8">
+                  <p className="text-[11px] tracking-[0.3em] uppercase font-bold mb-4" style={{ color: "#B8963E" }}>
+                    {item.label}
+                  </p>
+                  <div className="flex flex-col gap-3">
+                    {item.subcategories.map(sub => (
+                      <Link
+                        key={sub.href}
+                        href={sub.href}
+                        className="text-sm font-bold tracking-wider uppercase transition-opacity opacity-70 hover:opacity-100"
+                        style={{ color: "#F7F4EE" }}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        {sub.label}
+                      </Link>
                     ))}
                   </div>
                 </div>
