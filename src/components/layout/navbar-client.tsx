@@ -12,18 +12,17 @@ const NAV_ITEMS = [
     key: "feminina",
     label: "Moda Feminina",
     subcategories: [
-      { label: "Relógios", href: "/relogios" },
-      { label: "Bolsas", href: "/bolsas" },
-      { label: "Perfumes", href: "/perfumes" },
+      { label: "Relógios Femininos", href: "/relogios" },
+      { label: "Bolsas Femininas", href: "/bolsas" },
+      { label: "Perfumes Femininos", href: "/perfumes" },
     ],
   },
   {
     key: "masculina",
     label: "Moda Masculina",
     subcategories: [
-      { label: "Relógios", href: "/relogios" },
-      { label: "Bolsas", href: "/bolsas" },
-      { label: "Perfumes", href: "/perfumes" },
+      { label: "Relógios Masculinos", href: "/relogios" },
+      { label: "Perfumes Masculinos", href: "/perfumes" },
     ],
   },
 ];
