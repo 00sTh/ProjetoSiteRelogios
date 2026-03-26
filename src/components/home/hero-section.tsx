@@ -25,18 +25,26 @@ export function HeroSection({ config }: { config: HeroConfig }) {
       {/* Split video layout */}
       <div className="flex h-full">
 
-        {/* Left half — vídeo 1 */}
+        {/* Left half — YouTube embed */}
         <div className="relative hidden md:flex" style={{ width: "50%" }}>
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ filter: "brightness(0.75)" }}
-          >
-            <source src={config.videoLeft} type="video/mp4" />
-          </video>
+          <div className="absolute inset-0 overflow-hidden">
+            <iframe
+              src="https://www.youtube.com/embed/mMuPO0r8KKM?autoplay=1&mute=1&loop=1&playlist=mMuPO0r8KKM&controls=0&rel=0&playsinline=1&modestbranding=1"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+              className="absolute pointer-events-none"
+              style={{
+                top: "50%",
+                left: "50%",
+                width: "177.78vh",
+                height: "100vh",
+                minWidth: "100%",
+                minHeight: "56.25vw",
+                transform: "translate(-50%, -50%)",
+                filter: "brightness(0.75)",
+              }}
+            />
+          </div>
           <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to right, rgba(13,11,11,0.2) 0%, rgba(13,11,11,0.6) 100%)" }} />
           <div className="absolute bottom-10 left-8 z-10">
             <p className="label-slc mb-1" style={{ color: "rgba(247,244,238,0.6)" }}>Categoria</p>

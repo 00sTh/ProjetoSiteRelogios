@@ -43,7 +43,7 @@ const nextConfig: NextConfig = {
               "font-src 'self' data: https://fonts.gstatic.com",
               "img-src 'self' data: blob: https://res.cloudinary.com https://img.clerk.com https://images.clerk.dev https://images.unsplash.com",
               "connect-src 'self' https://cdn.clerk.com https://*.clerk.accounts.dev https://clerk.sluxurycollection.com.br https://*.neon.tech wss://*.neon.tech https://api.cloudinary.com",
-              "frame-src 'self' https://challenges.cloudflare.com https://accounts.google.com",
+              "frame-src 'self' https://challenges.cloudflare.com https://accounts.google.com https://www.youtube.com https://www.youtube-nocookie.com",
               "media-src 'self' data: blob: https://res.cloudinary.com",
               "worker-src 'self' blob:",
             ].join("; "),
