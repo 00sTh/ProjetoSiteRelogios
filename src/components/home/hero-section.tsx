@@ -19,119 +19,163 @@ export type HeroConfig = {
   labelRightHref: string;
 };
 
-export function HeroSection({ config }: { config: HeroConfig }) {
+const IFRAME_STYLE: React.CSSProperties = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  width: "177.78vh",
+  height: "100vh",
+  minWidth: "100%",
+  minHeight: "56.25vw",
+  transform: "translate(-50%, -50%) scale(1.5)",
+  pointerEvents: "none",
+};
+
+export function HeroSection({ config: _ }: { config: HeroConfig }) {
   return (
-    <section className="relative w-full overflow-hidden" style={{ height: "100vh", minHeight: "600px", paddingTop: "64px" }}>
-      {/* Split video layout */}
+    <section
+      className="relative w-full overflow-hidden"
+      style={{ height: "100vh", minHeight: "600px", paddingTop: "64px" }}
+    >
+      {/* SLC — logo flutuante centralizado entre os dois lados (desktop) */}
+      <div className="absolute z-20 hidden md:flex flex-col items-center" style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
+        <span
+          className="font-serif tracking-[0.7em] uppercase"
+          style={{ fontSize: "0.7rem", color: "rgba(184,150,62,0.85)", textShadow: "0 1px 6px rgba(0,0,0,0.8)", letterSpacing: "0.7em" }}
+        >
+          SLC
+        </span>
+      </div>
+
       <div className="flex h-full">
 
-        {/* Left half — YouTube embed */}
+        {/* ── Esquerda: Moda Masculina ── */}
         <div className="relative hidden md:flex" style={{ width: "50%" }}>
+          {/* Vídeo */}
           <div className="absolute inset-0 overflow-hidden">
             <iframe
               src="https://www.youtube.com/embed/mMuPO0r8KKM?autoplay=1&mute=1&loop=1&playlist=mMuPO0r8KKM&controls=0&rel=0&playsinline=1&modestbranding=1"
               allow="autoplay; encrypted-media"
               allowFullScreen
-              className="absolute pointer-events-none"
-              style={{
-                top: "50%",
-                left: "50%",
-                width: "177.78vh",
-                height: "100vh",
-                minWidth: "100%",
-                minHeight: "56.25vw",
-                transform: "translate(-50%, -50%) scale(1.5)",
-                filter: "brightness(0.75)",
-              }}
+              className="absolute"
+              style={{ ...IFRAME_STYLE, filter: "brightness(0.6)" }}
             />
           </div>
-          <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to right, rgba(13,11,11,0.2) 0%, rgba(13,11,11,0.6) 100%)" }} />
-          <div className="absolute bottom-10 left-8 z-10">
-            <p className="label-slc mb-1" style={{ color: "rgba(247,244,238,0.6)" }}>Categoria</p>
-            <Link href={config.labelLeftHref} className="font-serif text-2xl font-light text-white hover:text-[#B8963E] transition-colors">
-              {config.labelLeft} →
-            </Link>
-          </div>
+
+          {/* Overlay frio — azul-escuro */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: "linear-gradient(160deg, rgba(8,14,32,0.35) 0%, rgba(8,14,32,0.72) 100%)" }}
+          />
+
+          {/* Texto centralizado */}
+          <motion.div
+            className="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-8"
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.p
+              variants={fadeInUp}
+              className="mb-4"
+              style={{ fontSize: "0.6rem", letterSpacing: "0.55em", textTransform: "uppercase", color: "#7A9CC8", textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}
+            >
+              Coleção
+            </motion.p>
+            <motion.h2
+              variants={fadeInUp}
+              className="font-serif font-light leading-none"
+              style={{ fontSize: "clamp(2rem,3.5vw,3.8rem)", color: "#D8E4F8", textShadow: "0 2px 10px rgba(0,0,0,0.75)" }}
+            >
+              Moda
+            </motion.h2>
+            <motion.h2
+              variants={fadeInUp}
+              className="font-serif italic font-light leading-none mb-6"
+              style={{ fontSize: "clamp(2rem,3.5vw,3.8rem)", color: "#D8E4F8", textShadow: "0 2px 10px rgba(0,0,0,0.75)" }}
+            >
+              Masculina
+            </motion.h2>
+            <motion.div
+              variants={fadeInUp}
+              style={{ width: "2rem", height: "1px", backgroundColor: "#7A9CC8", margin: "0 auto 1.5rem" }}
+            />
+            <motion.div variants={fadeInUp}>
+              <Link
+                href="/relogios"
+                className="transition-opacity hover:opacity-70"
+                style={{ fontSize: "0.6rem", letterSpacing: "0.45em", textTransform: "uppercase", color: "#B0C4E8", textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}
+              >
+                Explorar →
+              </Link>
+            </motion.div>
+          </motion.div>
         </div>
 
-        {/* Center divider */}
+        {/* Divisor dourado */}
         <div className="hidden md:block flex-shrink-0" style={{ width: "2px", backgroundColor: "#B8963E", zIndex: 10 }} />
 
-        {/* Right half — YouTube embed + texto centralizado no mobile */}
+        {/* ── Direita: Moda Feminina ── */}
         <div className="relative flex-1">
+          {/* Vídeo */}
           <div className="absolute inset-0 overflow-hidden">
             <iframe
               src="https://www.youtube.com/embed/3HN847uE9Kc?autoplay=1&mute=1&loop=1&playlist=3HN847uE9Kc&controls=0&rel=0&playsinline=1&modestbranding=1"
               allow="autoplay; encrypted-media"
               allowFullScreen
-              className="absolute pointer-events-none"
-              style={{
-                top: "50%",
-                left: "50%",
-                width: "177.78vh",
-                height: "100vh",
-                minWidth: "100%",
-                minHeight: "56.25vw",
-                transform: "translate(-50%, -50%) scale(1.5)",
-                filter: "brightness(0.72)",
-              }}
+              className="absolute"
+              style={{ ...IFRAME_STYLE, filter: "brightness(0.58)" }}
             />
           </div>
-          <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to left, rgba(13,11,11,0.2) 0%, rgba(13,11,11,0.6) 100%)" }} />
 
-          {/* Texto central sobreposto */}
+          {/* Overlay quente — bordeaux-rosê */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: "linear-gradient(160deg, rgba(42,8,18,0.3) 0%, rgba(42,8,18,0.68) 100%)" }}
+          />
+
+          {/* Texto centralizado */}
           <motion.div
-            className="absolute inset-0 flex flex-col items-center justify-center z-10 px-8 text-center"
+            className="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-8"
             variants={staggerContainer}
             initial="hidden"
             animate="visible"
           >
-            <motion.p className="label-slc mb-4" variants={fadeInUp} style={{ color: "rgba(247,244,238,0.6)", textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}>
-              S Luxury Collection
-            </motion.p>
-            <motion.h1
-              className="font-serif font-normal leading-none mb-1"
-              style={{ fontSize: "clamp(2.5rem,5vw,4.5rem)", color: "#F7F4EE", textShadow: "0 2px 8px rgba(0,0,0,0.7)" }}
+            <motion.p
               variants={fadeInUp}
+              className="mb-4"
+              style={{ fontSize: "0.6rem", letterSpacing: "0.55em", textTransform: "uppercase", color: "#C47860", textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}
             >
-              {config.title}
-            </motion.h1>
-            <motion.h1
-              className="font-serif italic font-normal leading-none mb-6"
-              style={{ fontSize: "clamp(2.5rem,5vw,4.5rem)", color: "#B8963E", textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}
-              variants={fadeInUp}
-            >
-              {config.titleItalic}
-            </motion.h1>
-            <motion.hr className="divider-gold" style={{ margin: "0 auto 1.5rem", width: "2.5rem" }} variants={fadeInUp} />
-            <motion.p className="label-slc mb-8" variants={fadeInUp} style={{ color: "rgba(247,244,238,0.7)", textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}>
-              {config.tagline}
+              Coleção
             </motion.p>
-            <motion.div className="flex gap-4 flex-wrap justify-center" variants={fadeInUp}>
+            <motion.h2
+              variants={fadeInUp}
+              className="font-serif font-light leading-none"
+              style={{ fontSize: "clamp(2rem,3.5vw,3.8rem)", color: "#F4D4C8", textShadow: "0 2px 10px rgba(0,0,0,0.75)" }}
+            >
+              Moda
+            </motion.h2>
+            <motion.h2
+              variants={fadeInUp}
+              className="font-serif italic font-light leading-none mb-6"
+              style={{ fontSize: "clamp(2rem,3.5vw,3.8rem)", color: "#F4D4C8", textShadow: "0 2px 10px rgba(0,0,0,0.75)" }}
+            >
+              Feminina
+            </motion.h2>
+            <motion.div
+              variants={fadeInUp}
+              style={{ width: "2rem", height: "1px", backgroundColor: "#C47860", margin: "0 auto 1.5rem" }}
+            />
+            <motion.div variants={fadeInUp}>
               <Link
-                href={config.cta1Href}
-                className="px-8 py-3 text-[10px] tracking-[0.4em] uppercase transition-all"
-                style={{ backgroundColor: "#B8963E", color: "#F7F4EE" }}
+                href="/bolsas"
+                className="transition-opacity hover:opacity-70"
+                style={{ fontSize: "0.6rem", letterSpacing: "0.45em", textTransform: "uppercase", color: "#E8B8A8", textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}
               >
-                {config.cta1Text}
-              </Link>
-              <Link
-                href={config.cta2Href}
-                className="px-8 py-3 text-[10px] tracking-[0.4em] uppercase border transition-all"
-                style={{ borderColor: "rgba(247,244,238,0.5)", color: "#F7F4EE" }}
-              >
-                {config.cta2Text}
+                Explorar →
               </Link>
             </motion.div>
           </motion.div>
-
-          {/* Label categoria direita (desktop) */}
-          <div className="absolute bottom-10 right-8 z-10 text-right hidden md:block">
-            <p className="label-slc mb-1" style={{ color: "rgba(247,244,238,0.6)" }}>Categoria</p>
-            <Link href={config.labelRightHref} className="font-serif text-2xl font-light text-white hover:text-[#B8963E] transition-colors">
-              ← {config.labelRight}
-            </Link>
-          </div>
         </div>
 
       </div>
