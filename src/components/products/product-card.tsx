@@ -24,6 +24,7 @@ export function ProductCard({ product }: { product: ProductWithRelations }) {
           <div className="absolute inset-0 flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: "linear-gradient(to top, rgba(13,11,11,0.5) 0%, transparent 60%)" }}>
             <span className="text-white cta-link">Ver Produto</span>
           </div>
+          <span className="absolute top-3 right-3 text-[8px] tracking-widest uppercase px-2 py-1 font-bold" style={{ backgroundColor: "rgba(13,11,11,0.75)", color: "#B8963E", backdropFilter: "blur(4px)", border: "1px solid rgba(184,150,62,0.35)" }}>Superclone</span>
           {product.comparePrice && (
             <span className="absolute top-3 left-3 text-[9px] tracking-widest uppercase px-2 py-1 text-white" style={{ backgroundColor: "#6B1A2A" }}>Oferta</span>
           )}
