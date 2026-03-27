@@ -37,9 +37,10 @@ export default async function AdminCategorias() {
               <form action={async (fd: FormData) => {
                 "use server";
                 await updateCategory(cat.id, fd);
-              }} className="flex gap-2">
+              }} className="flex gap-2 flex-wrap">
                 <input name="name" defaultValue={cat.name} className="border px-2 py-1 text-xs outline-none" style={{ borderColor: "rgba(13,11,11,0.2)" }} />
                 <input name="sortOrder" type="number" defaultValue={cat.sortOrder} className="border px-2 py-1 text-xs w-16 outline-none" style={{ borderColor: "rgba(13,11,11,0.2)" }} />
+                <input name="video" defaultValue={cat.video ?? ""} placeholder="URL embed YouTube do vídeo banner" className="border px-2 py-1 text-xs outline-none w-80" style={{ borderColor: "rgba(13,11,11,0.2)" }} />
                 <button type="submit" className="label-slc px-3 py-1 bg-[#B8963E]/10 text-[#B8963E]">Salvar</button>
               </form>
               <form action={async () => {

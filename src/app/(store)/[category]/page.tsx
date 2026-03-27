@@ -25,23 +25,37 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   return (
     <main>
       {/* Banner da categoria */}
-      <div className="relative w-full pt-16" style={{ height: "340px" }}>
-        {heroImg && (
-          <Image src={heroImg} alt={category.name} fill className="object-cover" priority />
-        )}
+      <div className="relative w-full pt-16 overflow-hidden" style={{ height: "70vh", minHeight: "480px" }}>
+        {category.video ? (
+          <iframe
+            src={category.video}
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+            className="absolute pointer-events-none"
+            style={{
+              top: "50%", left: "50%",
+              width: "177.78vh", height: "100vh",
+              minWidth: "100%", minHeight: "56.25vw",
+              transform: "translate(-50%, -50%) scale(1.05)",
+              filter: "brightness(0.55)",
+            }}
+          />
+        ) : heroImg ? (
+          <Image src={heroImg} alt={category.name} fill className="object-cover" priority style={{ filter: "brightness(0.55)" }} />
+        ) : null}
         <div
           className="absolute inset-0"
-          style={{ background: "linear-gradient(to top, rgba(13,11,11,0.8) 0%, rgba(13,11,11,0.3) 100%)" }}
+          style={{ background: "linear-gradient(to top, rgba(13,11,11,0.75) 0%, rgba(13,11,11,0.15) 70%, transparent 100%)" }}
         />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
           <p className="label-slc mb-3" style={{ color: "rgba(247,244,238,0.5)" }}>Coleção</p>
           <h1
             className="font-serif font-light text-white uppercase"
-            style={{ fontSize: "clamp(2rem,5vw,4rem)", letterSpacing: "0.15em", textShadow: "0 2px 12px rgba(0,0,0,0.5)" }}
+            style={{ fontSize: "clamp(2.5rem,6vw,5rem)", letterSpacing: "0.18em", textShadow: "0 2px 16px rgba(0,0,0,0.6)" }}
           >
             {category.name.replace(" de Luxo", "")}
           </h1>
-          <div style={{ width: "2rem", height: "1px", backgroundColor: "#B8963E", marginTop: "1.25rem" }} />
+          <div style={{ width: "2.5rem", height: "1px", backgroundColor: "#B8963E", marginTop: "1.5rem" }} />
         </div>
       </div>
 

@@ -26,7 +26,8 @@ export async function createCategory(formData: FormData) {
 export async function updateCategory(id: string, formData: FormData) {
   await checkAdmin();
   const name = formData.get("name") as string;
-  await prisma.category.update({ where: { id }, data: { name, sortOrder: Number(formData.get("sortOrder") ?? 0) } });
+  const video = (formData.get("video") as string) || null;
+  await prisma.category.update({ where: { id }, data: { name, sortOrder: Number(formData.get("sortOrder") ?? 0), video } });
   revalidatePath("/admin/categorias");
 }
 
