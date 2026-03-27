@@ -1,5 +1,5 @@
 import { HeroSection } from "@/components/home/hero-section";
-import { CategoryShowcase } from "@/components/home/category-showcase";
+import { BrandCollection } from "@/components/home/brand-collection";
 import { EditorialGrid } from "@/components/home/editorial-grid";
 import { BrandHighlights } from "@/components/home/brand-highlights";
 import { getCategories, getFeaturedProducts } from "@/actions/products";
@@ -34,7 +34,7 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection config={heroConfig} />
-      <CategoryShowcase categories={categories} />
+      <BrandCollection categories={categories} />
       <EditorialGrid products={featured} />
       <BrandHighlights categories={categories} />
     </>

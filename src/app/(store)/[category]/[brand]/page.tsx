@@ -17,24 +17,75 @@ export default async function BrandPage({ params }: { params: Promise<{ category
   const { products } = await getProducts({ brandId: brand.id, take: 40 });
 
   return (
-    <main className="pt-16">
-      {/* Brand banner */}
-      <div className="relative w-full" style={{ height: "320px" }}>
+    <main>
+      {/* Hero cinematográfico — 60vh */}
+      <div className="relative w-full" style={{ height: "60vh", minHeight: "420px" }}>
         {brand.banner ? (
-          <Image src={brand.banner} alt={brand.name} fill className="object-cover" />
+          <Image src={brand.banner} alt={brand.name} fill className="object-cover" priority />
         ) : (
-          <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: "#1C1917" }} />
+          <div className="w-full h-full" style={{ backgroundColor: "#0D0B0B" }} />
         )}
-        <div className="absolute inset-0 flex flex-col items-center justify-center" style={{ background: "rgba(13,11,11,0.45)" }}>
-          <p className="label-slc mb-3" style={{ color: "rgba(247,244,238,0.5)" }}>{category.name}</p>
-          <h1 className="font-serif text-5xl font-light text-white tracking-widest uppercase">{brand.name}</h1>
-          {brand.description && <p className="text-white text-sm max-w-lg text-center mt-4 opacity-70 leading-relaxed">{brand.description}</p>}
+
+        {/* Overlay profundo */}
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(to top, rgba(13,11,11,0.85) 0%, rgba(13,11,11,0.35) 60%, rgba(13,11,11,0.15) 100%)" }}
+        />
+
+        {/* Conteúdo centrado */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
+          {/* Logo da marca */}
+          {brand.logo && (
+            <div
+              className="w-16 h-16 rounded-full flex items-center justify-center mb-6"
+              style={{ backgroundColor: "rgba(247,244,238,0.08)", border: "1px solid rgba(184,150,62,0.35)" }}
+            >
+              <img src={brand.logo} alt={brand.name} className="w-12 h-12 object-contain" />
+            </div>
+          )}
+
+          {/* Label categoria */}
+          <p className="label-slc mb-4" style={{ color: "rgba(247,244,238,0.45)" }}>
+            {category.name}
+          </p>
+
+          {/* Nome da marca */}
+          <h1
+            className="font-serif font-light text-white uppercase"
+            style={{ fontSize: "clamp(2.5rem,6vw,5rem)", letterSpacing: "0.18em", textShadow: "0 2px 20px rgba(0,0,0,0.5)" }}
+          >
+            {brand.name}
+          </h1>
+
+          {/* Linha dourada */}
+          <div style={{ width: "2.5rem", height: "1px", backgroundColor: "#B8963E", margin: "1.5rem auto" }} />
+
+          {/* Descrição */}
+          {brand.description && (
+            <p
+              className="font-serif font-light leading-relaxed"
+              style={{ color: "rgba(247,244,238,0.65)", maxWidth: "36rem", fontSize: "0.95rem" }}
+            >
+              {brand.description}
+            </p>
+          )}
+        </div>
+
+        {/* Scroll cue */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1">
+          <span className="label-slc" style={{ color: "rgba(247,244,238,0.4)", fontSize: "0.55rem" }}>
+            Ver Coleção
+          </span>
+          <span style={{ color: "rgba(184,150,62,0.6)", fontSize: "1rem" }}>↓</span>
         </div>
       </div>
 
-      {/* Products */}
-      <div className="mx-auto max-w-7xl px-6 py-12">
-        <p className="label-slc mb-8">{(products as ProductWithRelations[]).length} produtos</p>
+      {/* Produtos */}
+      <div className="mx-auto max-w-7xl px-6 py-14">
+        <p className="label-slc mb-2" style={{ color: "rgba(13,11,11,0.4)" }}>Coleção {brand.name}</p>
+        <p className="label-slc mb-10" style={{ color: "rgba(13,11,11,0.3)" }}>
+          {(products as ProductWithRelations[]).length} peças
+        </p>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {(products as ProductWithRelations[]).map(p => (
             <ProductCard key={p.id} product={p} />
