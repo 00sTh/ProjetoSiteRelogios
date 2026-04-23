@@ -32,12 +32,13 @@ function isYouTube(url: string) {
 
 function toNoCookieHD(url: string): string {
   if (!url) return url;
-  return url
-    .replace("www.youtube.com/embed", "www.youtube-nocookie.com/embed")
-    .replace("youtube.com/embed", "youtube-nocookie.com/embed")
-    .replace(/&vq=[^&]*/g, "")
-    .replace(/&iv_load_policy=[^&]*/g, "") +
-    "&vq=hd1080&iv_load_policy=3";
+  const m = url.match(/(?:youtube(?:-nocookie)?\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+  if (!m) return url;
+  const id = m[1];
+  const hasAutoplay = url.includes("autoplay=1");
+  const base = `https://www.youtube-nocookie.com/embed/${id}`;
+  if (hasAutoplay) return `${base}?autoplay=1&mute=1&loop=1&playlist=${id}&rel=0`;
+  return base;
 }
 
 const IFRAME_STYLE: React.CSSProperties = {

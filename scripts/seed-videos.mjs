@@ -33,11 +33,11 @@ function extractYouTubeId(url) {
 }
 
 function makeProductEmbedUrl(videoId) {
-  return `https://www.youtube-nocookie.com/embed/${videoId}?vq=hd1080&iv_load_policy=3`;
+  return `https://www.youtube-nocookie.com/embed/${videoId}`;
 }
 
 function makeBackgroundEmbedUrl(videoId) {
-  return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&disablekb=1&vq=hd1080&iv_load_policy=3`;
+  return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&rel=0`;
 }
 
 async function pickBestVideo(videos, context) {
