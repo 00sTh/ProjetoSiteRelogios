@@ -19,9 +19,22 @@ export default async function BrandPage({ params }: { params: Promise<{ category
   return (
     <main>
       {/* Hero cinematográfico — 60vh */}
-      <div className="relative w-full" style={{ height: "60vh", minHeight: "420px" }}>
-        {brand.banner ? (
-          <Image src={brand.banner} alt={brand.name} fill className="object-cover" priority />
+      <div className="relative w-full overflow-hidden" style={{ height: "60vh", minHeight: "420px" }}>
+        {brand.video ? (
+          <iframe
+            src={brand.video}
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+            className="absolute pointer-events-none"
+            style={{
+              top: "50%", left: "50%",
+              width: "56.25vh", height: "100vh",
+              transform: "translate(-50%, -50%) scale(3.5)",
+              filter: "brightness(0.55)",
+            }}
+          />
+        ) : brand.banner ? (
+          <Image src={brand.banner} alt={brand.name} fill className="object-cover" priority style={{ filter: "brightness(0.55)" }} />
         ) : (
           <div className="w-full h-full" style={{ backgroundColor: "#0D0B0B" }} />
         )}

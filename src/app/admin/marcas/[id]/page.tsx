@@ -59,6 +59,18 @@ export default async function EditBrand({ params }: { params: Promise<{ id: stri
             <input name="banner" type="file" accept="image/*" className="text-sm" />
           </div>
 
+          <div className="flex flex-col gap-1">
+            <label className="label-slc">Vídeo (URL embed YouTube)</label>
+            <input
+              name="video"
+              defaultValue={brand.video ?? ""}
+              placeholder="https://www.youtube.com/embed/ID?autoplay=1&mute=1&loop=1&playlist=ID&controls=0"
+              className="border px-3 py-2 text-sm outline-none focus:border-[#B8963E]"
+              style={{ borderColor: "rgba(13,11,11,0.2)" }}
+            />
+            <p className="text-[10px] opacity-40">Cole a URL embed completa. Aparece como hero de vídeo na página da marca.</p>
+          </div>
+
           <button type="submit" className="px-5 py-2 text-[10px] tracking-widest uppercase text-white mt-2" style={{ backgroundColor: "#0D0B0B" }}>Salvar</button>
         </form>
       </div>

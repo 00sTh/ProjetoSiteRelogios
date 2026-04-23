@@ -89,9 +89,10 @@ export async function createOrder(input: CreateOrderInput) {
         customerEmail: input.customer.email,
       });
       const paymentId = result?.Payment?.PaymentId;
-      const qrCode = result?.Payment?.QrCode || result?.Payment?.PixQrCode;
+      const qrCodeBase64 = result?.Payment?.QrCodeBase64Image ?? result?.Payment?.QrCode ?? null;
+      const qrCode = result?.Payment?.QrCodeString ?? result?.Payment?.PixQrCode ?? null;
       await prisma.order.update({ where: { id: order.id }, data: { payment: result } });
-      return { success: true, type: "pix", orderId: order.id, paymentId, qrCode };
+      return { success: true, type: "pix" as const, orderId: order.id, paymentId, qrCode, qrCodeBase64 };
     }
   } catch {
     await prisma.order.update({ where: { id: order.id }, data: { status: "CANCELLED" } });

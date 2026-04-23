@@ -15,14 +15,22 @@ export function CheckoutClient() {
   const [card, setCard] = useState({ number: "", holder: "", expiration: "", cvv: "", installments: 1 });
 
   async function handleSubmit() {
+    if (!customer.name || !customer.email || !customer.cpf || !customer.cep || !customer.street || !customer.city || !customer.state) {
+      setError("Preencha todos os campos obrigatórios."); return;
+    }
+    if (method === "CREDIT_CARD" && (!card.number || !card.holder || !card.expiration || !card.cvv)) {
+      setError("Preencha os dados do cartão."); return;
+    }
     setLoading(true);
     setError(null);
     try {
       const result = await createOrder({ customer, items, paymentMethod: method, card: method === "CREDIT_CARD" ? card : undefined });
       if (!result.success) { setError(result.error ?? "Erro no pagamento"); return; }
       clearCart();
-      if (result.type === "pix") router.push(`/checkout/pix?orderId=${result.orderId}&paymentId=${result.paymentId}&qrCode=${encodeURIComponent(result.qrCode ?? "")}`);
-      else router.push(`/checkout/sucesso?orderId=${result.orderId}`);
+      if (result.type === "pix") {
+        const params = new URLSearchParams({ orderId: result.orderId ?? "", paymentId: result.paymentId ?? "", qrCode: result.qrCode ?? "", qrCodeBase64: result.qrCodeBase64 ?? "" });
+        router.push(`/checkout/pix?${params.toString()}`);
+      } else router.push(`/checkout/sucesso?orderId=${result.orderId}`);
     } catch { setError("Erro inesperado. Tente novamente."); }
     finally { setLoading(false); }
   }

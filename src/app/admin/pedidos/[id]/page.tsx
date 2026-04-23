@@ -79,12 +79,12 @@ export default async function PedidoDetail({ params }: { params: Promise<{ id: s
           <div className="space-y-3">
             {order.items.map(item => (
               <div key={item.id} className="flex gap-3 items-center border-b pb-3 last:border-0 last:pb-0" style={{ borderColor: "rgba(13,11,11,0.06)" }}>
-                {item.product.images[0] && (
+                {item.product?.images?.[0] && (
                   <img src={item.product.images[0]} alt={item.product.name} className="w-14 h-14 object-cover" />
                 )}
                 <div className="flex-1">
-                  <p className="text-sm font-medium">{item.product.name}</p>
-                  <p className="label-slc opacity-40">Qtd: {item.quantity}</p>
+                  <p className="text-sm font-medium">{item.product?.name ?? "Produto removido"}</p>
+                  <p className="label-slc opacity-40">Qtd: {item.quantity}{item.color ? ` · ${item.color}` : ""}</p>
                 </div>
                 <p className="font-mono text-sm">{formatPrice(Number(item.price) * item.quantity)}</p>
               </div>

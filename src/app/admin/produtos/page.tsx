@@ -1,9 +1,12 @@
-import { getProducts } from "@/actions/products";
+import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
 export const dynamic = "force-dynamic";
 export default async function AdminProdutos() {
-  const { products, total } = await getProducts({ take: 50 });
+  const [products, total] = await Promise.all([
+    prisma.product.findMany({ orderBy: { createdAt: "desc" }, take: 100, include: { brand: true, category: true } }),
+    prisma.product.count(),
+  ]);
   return (
     <div>
       <div className="flex justify-between items-center mb-6">

@@ -7,6 +7,7 @@ import Link from "next/link";
 function PixContent() {
   const params = useSearchParams();
   const router = useRouter();
+  const orderId = params.get("orderId");
   const paymentId = params.get("paymentId");
   const qrCode = params.get("qrCode");
   const qrCodeBase64 = params.get("qrCodeBase64");
@@ -15,18 +16,18 @@ function PixContent() {
   const [status, setStatus] = useState<"pending" | "paid" | "expired">("pending");
 
   const pollPayment = useCallback(async () => {
-    if (!paymentId || status !== "pending") return;
+    if (!paymentId || !orderId || status !== "pending") return;
     try {
-      const res = await fetch(`/api/check-payment?paymentId=${paymentId}`);
+      const res = await fetch(`/api/check-payment?paymentId=${paymentId}&orderId=${orderId}`);
       const data = await res.json();
-      if (data.status === "paid") {
+      if (data.paid === true) {
         setStatus("paid");
-        setTimeout(() => router.push("/checkout/sucesso"), 1500);
+        setTimeout(() => router.push(`/checkout/sucesso?orderId=${orderId}`), 1500);
       }
     } catch {
       // ignore
     }
-  }, [paymentId, status, router]);
+  }, [paymentId, orderId, status, router]);
 
   useEffect(() => {
     if (!paymentId) return;
@@ -48,7 +49,7 @@ function PixContent() {
   const minutes = Math.floor(timeLeft / 60).toString().padStart(2, "0");
   const seconds = (timeLeft % 60).toString().padStart(2, "0");
 
-  if (!paymentId && !qrCode) {
+  if (!paymentId && !qrCode && !orderId) {
     return (
       <div className="pt-24 min-h-screen flex flex-col items-center justify-center gap-4">
         <p className="text-sm opacity-50">Sessão de pagamento inválida.</p>

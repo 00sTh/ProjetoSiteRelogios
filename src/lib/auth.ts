@@ -1,11 +1,11 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 
 export async function requireAdmin() {
-  const { userId, sessionClaims } = await auth();
-  if (!userId) return null;
-  const role = (sessionClaims?.metadata as { role?: string } | undefined)?.role;
+  const user = await currentUser();
+  if (!user) return null;
+  const role = user.publicMetadata?.role as string | undefined;
   if (role !== "admin") return null;
-  return userId;
+  return user.id;
 }
 
 export async function getAuthUser() {

@@ -10,7 +10,13 @@ export async function GET(req: NextRequest) {
     const result = await queryPayment(paymentId);
     const status = result?.Payment?.Status;
     if (status === 2) {
-      await prisma.order.update({ where: { id: orderId }, data: { status: "PAID", payment: result } });
+      const order = await prisma.order.findUnique({ where: { id: orderId }, include: { items: true } });
+      if (order && order.status !== "PAID") {
+        await prisma.order.update({ where: { id: orderId }, data: { status: "PAID", payment: result } });
+        for (const item of order.items) {
+          await prisma.product.update({ where: { id: item.productId }, data: { stock: { decrement: item.quantity } } });
+        }
+      }
       return NextResponse.json({ paid: true });
     }
     return NextResponse.json({ paid: false, status });
