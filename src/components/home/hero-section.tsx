@@ -19,11 +19,16 @@ export type HeroConfig = {
   labelRightHref: string;
 };
 
-// Rolex Welcomes 2025 Testimonees | Hermès — Start the Movement (canais oficiais, embedding liberado)
-const DEFAULT_VIDEO_LEFT =
-  "https://www.youtube-nocookie.com/embed/w0jkpD4HB5c?autoplay=1&mute=1&loop=1&playlist=w0jkpD4HB5c&controls=0&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&vq=hd1080";
-const DEFAULT_VIDEO_RIGHT =
-  "https://www.youtube-nocookie.com/embed/CHkIsc0UWsI?autoplay=1&mute=1&loop=1&playlist=CHkIsc0UWsI&controls=0&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&vq=hd1080";
+const DEFAULT_IMG_LEFT = "https://res.cloudinary.com/dwmkytbxf/image/upload/v1776974188/slc/categories/hoa3a70va8oh8gpxoyca.jpg";
+const DEFAULT_IMG_RIGHT = "https://res.cloudinary.com/dwmkytbxf/image/upload/v1776976180/slc/categories/d9civfnqn9xlseifwhhh.jpg";
+
+function isDirectVideo(url: string) {
+  return /\.(mp4|webm|ogg)(\?|$)/i.test(url);
+}
+
+function isYouTube(url: string) {
+  return url.includes("youtube.com/embed") || url.includes("youtube-nocookie.com/embed");
+}
 
 function toNoCookieHD(url: string): string {
   if (!url) return url;
@@ -47,9 +52,40 @@ const IFRAME_STYLE: React.CSSProperties = {
   pointerEvents: "none",
 };
 
+function HeroBg({ url, fallback, brightness }: { url: string; fallback: string; brightness: number }) {
+  const src = url || fallback;
+  if (isDirectVideo(src)) {
+    return (
+      <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" style={{ filter: `brightness(${brightness})` }}>
+        <source src={src} type="video/mp4" />
+      </video>
+    );
+  }
+  if (isYouTube(src)) {
+    return (
+      <iframe
+        src={toNoCookieHD(src)}
+        allow="autoplay; encrypted-media"
+        allowFullScreen
+        className="absolute"
+        style={{ ...IFRAME_STYLE, filter: `brightness(${brightness})` }}
+      />
+    );
+  }
+  // imagem (Cloudinary ou qualquer URL)
+  return (
+    <img
+      src={src}
+      alt=""
+      className="absolute inset-0 w-full h-full object-cover"
+      style={{ filter: `brightness(${brightness})` }}
+    />
+  );
+}
+
 export function HeroSection({ config }: { config: HeroConfig }) {
-  const videoLeft = toNoCookieHD(config.videoLeft || DEFAULT_VIDEO_LEFT);
-  const videoRight = toNoCookieHD(config.videoRight || DEFAULT_VIDEO_RIGHT);
+  const videoLeft = config.videoLeft || "";
+  const videoRight = config.videoRight || "";
 
   return (
     <section
@@ -71,13 +107,7 @@ export function HeroSection({ config }: { config: HeroConfig }) {
         {/* ── Esquerda: Moda Masculina ── */}
         <div className="relative hidden md:flex" style={{ width: "50%" }}>
           <div className="absolute inset-0 overflow-hidden bg-[#0D0B0B]">
-            <iframe
-              src={videoLeft}
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-              className="absolute"
-              style={{ ...IFRAME_STYLE, filter: "brightness(0.6)" }}
-            />
+            <HeroBg url={videoLeft} fallback={DEFAULT_IMG_LEFT} brightness={0.6} />
           </div>
 
           <div
@@ -134,13 +164,7 @@ export function HeroSection({ config }: { config: HeroConfig }) {
         {/* ── Direita: Moda Feminina ── */}
         <div className="relative flex-1">
           <div className="absolute inset-0 overflow-hidden bg-[#0D0B0B]">
-            <iframe
-              src={videoRight}
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-              className="absolute"
-              style={{ ...IFRAME_STYLE, filter: "brightness(0.58)" }}
-            />
+            <HeroBg url={videoRight} fallback={DEFAULT_IMG_RIGHT} brightness={0.58} />
           </div>
 
           <div
