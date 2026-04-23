@@ -19,10 +19,11 @@ export type HeroConfig = {
   labelRightHref: string;
 };
 
+// Rolex Welcomes 2025 Testimonees | Hermès — Start the Movement (canais oficiais, embedding liberado)
 const DEFAULT_VIDEO_LEFT =
-  "https://www.youtube-nocookie.com/embed/mMuPO0r8KKM?autoplay=1&mute=1&loop=1&playlist=mMuPO0r8KKM&controls=0&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&vq=hd1080";
+  "https://www.youtube-nocookie.com/embed/w0jkpD4HB5c?autoplay=1&mute=1&loop=1&playlist=w0jkpD4HB5c&controls=0&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&vq=hd1080";
 const DEFAULT_VIDEO_RIGHT =
-  "https://www.youtube-nocookie.com/embed/3HN847uE9Kc?autoplay=1&mute=1&loop=1&playlist=3HN847uE9Kc&controls=0&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&vq=hd1080";
+  "https://www.youtube-nocookie.com/embed/CHkIsc0UWsI?autoplay=1&mute=1&loop=1&playlist=CHkIsc0UWsI&controls=0&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&vq=hd1080";
 
 function toNoCookieHD(url: string): string {
   if (!url) return url;
