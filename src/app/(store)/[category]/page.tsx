@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getCategoryBySlug, getProducts } from "@/actions/products";
 import { ProductCard } from "@/components/products/product-card";
+import { toEmbedUrl } from "@/lib/video-utils";
 import type { ProductWithRelations } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -25,12 +26,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   return (
     <main>
       {/* Banner da categoria */}
-      <div className="relative w-full pt-16 overflow-hidden" style={{ height: "70vh", minHeight: "480px" }}>
+      <div className="relative w-full pt-20 overflow-hidden" style={{ height: "70vh", minHeight: "480px" }}>
         {category.video ? (
           <iframe
-            src={category.video.replace("youtube.com/embed", "youtube-nocookie.com/embed") + (category.video.includes("vq=") ? "" : "&vq=hd1080") + (category.video.includes("iv_load_policy") ? "" : "&iv_load_policy=3")}
-            allow="autoplay; encrypted-media"
+            src={toEmbedUrl(category.video)}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
             className="absolute pointer-events-none"
             style={{
               top: "50%", left: "50%",
@@ -73,7 +75,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                   style={{ borderColor: "rgba(13,11,11,0.12)" }}
                 >
                   {brand.logo ? (
-                    <img src={brand.logo} alt={brand.name} className="w-7 h-7 object-contain opacity-70 group-hover:opacity-100 transition-opacity" />
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0" style={{ backgroundColor: "rgba(247,244,238,0.88)", border: "1px solid rgba(184,150,62,0.2)" }}>
+                      <img src={brand.logo} alt={brand.name} className="w-6 h-6 object-contain opacity-80 group-hover:opacity-100 transition-opacity" />
+                    </div>
                   ) : (
                     <span className="font-serif text-xs" style={{ color: "#B8963E" }}>{brand.name.slice(0, 2)}</span>
                   )}

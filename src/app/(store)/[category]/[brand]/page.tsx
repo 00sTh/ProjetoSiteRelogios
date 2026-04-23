@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { getCategoryBySlug, getBrandBySlug, getProducts } from "@/actions/products";
 import { ProductCard } from "@/components/products/product-card";
+import { toEmbedUrl } from "@/lib/video-utils";
 import type { ProductWithRelations } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -22,14 +23,16 @@ export default async function BrandPage({ params }: { params: Promise<{ category
       <div className="relative w-full overflow-hidden" style={{ height: "60vh", minHeight: "420px" }}>
         {brand.video ? (
           <iframe
-            src={brand.video}
-            allow="autoplay; encrypted-media"
+            src={toEmbedUrl(brand.video)}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
             className="absolute pointer-events-none"
             style={{
               top: "50%", left: "50%",
-              width: "56.25vh", height: "100vh",
-              transform: "translate(-50%, -50%) scale(3.5)",
+              width: "200vw", height: "112.5vw",
+              minWidth: "177.78vh", minHeight: "100vh",
+              transform: "translate(-50%, -50%)",
               filter: "brightness(0.55)",
             }}
           />
@@ -50,8 +53,8 @@ export default async function BrandPage({ params }: { params: Promise<{ category
           {/* Logo da marca */}
           {brand.logo && (
             <div
-              className="w-16 h-16 rounded-full flex items-center justify-center mb-6"
-              style={{ backgroundColor: "rgba(247,244,238,0.08)", border: "1px solid rgba(184,150,62,0.35)" }}
+              className="w-16 h-16 rounded-full flex items-center justify-center mb-6 overflow-hidden"
+              style={{ backgroundColor: "rgba(247,244,238,0.92)", border: "1px solid rgba(184,150,62,0.5)" }}
             >
               <img src={brand.logo} alt={brand.name} className="w-12 h-12 object-contain" />
             </div>

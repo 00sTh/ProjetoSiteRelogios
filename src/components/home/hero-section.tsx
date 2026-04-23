@@ -65,8 +65,9 @@ function HeroBg({ url, fallback, brightness }: { url: string; fallback: string; 
     return (
       <iframe
         src={toNoCookieHD(src)}
-        allow="autoplay; encrypted-media"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
+        referrerPolicy="no-referrer-when-downgrade"
         className="absolute"
         style={{ ...IFRAME_STYLE, filter: `brightness(${brightness})` }}
       />

@@ -7,6 +7,7 @@ import { ShoppingBag } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 import { useGuestCart } from "@/hooks/use-guest-cart";
 import { fadeInUp } from "@/lib/animations";
+import { toEmbedUrl, IFRAME_ALLOW } from "@/lib/video-utils";
 import type { ProductWithRelations } from "@/types";
 
 export function ProductDetailClient({ product }: { product: ProductWithRelations }) {
@@ -162,13 +163,10 @@ export function ProductDetailClient({ product }: { product: ProductWithRelations
             }
           >
             <iframe
-              src={(product.video
-                .replace("youtube.com/embed", "youtube-nocookie.com/embed") +
-                (product.video.includes("vq=") ? "" : "&vq=hd1080") +
-                (product.video.includes("iv_load_policy") ? "" : "&iv_load_policy=3")
-              )}
-              allow="autoplay; encrypted-media"
+              src={toEmbedUrl(product.video)}
+              allow={IFRAME_ALLOW}
               allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
               style={{
                 position: "absolute", top: "50%", left: "50%",
                 width: isShorts ? "120%" : "110%",

@@ -19,7 +19,7 @@ export function NavbarClient({ categories }: { categories: CategoryWithBrands[] 
         className="fixed top-0 left-0 right-0 z-50 border-b"
         style={{ backgroundColor: "#0D0B0B", borderColor: "rgba(184,150,62,0.25)" }}
       >
-        <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
+        <div className="mx-auto max-w-7xl px-6 h-20 flex items-center justify-between">
 
           {/* Esquerda: categorias */}
           <nav className="hidden lg:flex items-center gap-8">
@@ -107,13 +107,13 @@ export function NavbarClient({ categories }: { categories: CategoryWithBrands[] 
                           style={{ minWidth: "72px" }}
                         >
                           <div
-                            className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden border transition-colors"
-                            style={{ borderColor: "rgba(184,150,62,0.2)", backgroundColor: "rgba(247,244,238,0.05)" }}
+                            className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden border transition-colors"
+                            style={{ borderColor: "rgba(184,150,62,0.35)", backgroundColor: "rgba(247,244,238,0.92)" }}
                             onMouseEnter={e => (e.currentTarget.style.borderColor = "#B8963E")}
-                            onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(184,150,62,0.2)")}
+                            onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(184,150,62,0.35)")}
                           >
                             {brand.logo ? (
-                              <img src={brand.logo} alt={brand.name} className="w-9 h-9 object-contain" />
+                              <img src={brand.logo} alt={brand.name} className="w-11 h-11 object-contain" />
                             ) : (
                               <span className="font-serif text-[10px] tracking-wider text-center" style={{ color: "#B8963E" }}>
                                 {brand.name.slice(0, 2).toUpperCase()}
@@ -179,11 +179,11 @@ export function NavbarClient({ categories }: { categories: CategoryWithBrands[] 
                               onClick={() => setMobileOpen(false)}
                             >
                               <div
-                                className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden border"
-                                style={{ borderColor: "rgba(184,150,62,0.3)", backgroundColor: "rgba(247,244,238,0.05)" }}
+                                className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden border"
+                                style={{ borderColor: "rgba(184,150,62,0.35)", backgroundColor: "rgba(247,244,238,0.92)" }}
                               >
                                 {brand.logo ? (
-                                  <img src={brand.logo} alt={brand.name} className="w-8 h-8 object-contain" />
+                                  <img src={brand.logo} alt={brand.name} className="w-10 h-10 object-contain" />
                                 ) : (
                                   <span className="font-serif text-[9px]" style={{ color: "#B8963E" }}>
                                     {brand.name.slice(0, 2).toUpperCase()}

@@ -20,7 +20,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const related = await getRelatedProducts(product.id, product.brandId, 4);
 
   return (
-    <main className="pt-16">
+    <main className="pt-20">
       <ProductDetailClient product={product as ProductWithRelations} />
 
       {related.length > 0 && (
