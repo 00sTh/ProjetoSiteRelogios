@@ -53,12 +53,6 @@ export function ProductDetailClient({ product }: { product: ProductWithRelations
 
         {/* Product info */}
         <motion.div className="lg:w-[45%]" initial="hidden" animate="visible" variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}>
-          {/* Superclone badge */}
-          <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 mb-5 px-3 py-1.5 border" style={{ borderColor: "rgba(184,150,62,0.4)", backgroundColor: "rgba(184,150,62,0.06)" }}>
-            <span style={{ width: "5px", height: "5px", borderRadius: "50%", backgroundColor: "#B8963E", display: "inline-block" }} />
-            <span className="text-[9px] tracking-[0.45em] uppercase font-bold" style={{ color: "#B8963E" }}>Superclone</span>
-          </motion.div>
-
           {/* Breadcrumb */}
           <motion.div variants={fadeInUp} className="flex items-center gap-2 mb-6">
             <Link href={`/${product.category.slug}`} className="label-slc hover:opacity-100 opacity-50 transition-opacity">{product.category.name}</Link>
@@ -119,8 +113,11 @@ export function ProductDetailClient({ product }: { product: ProductWithRelations
 
           {/* Description */}
           {product.description && (
-            <motion.p variants={fadeInUp} className="text-sm leading-relaxed mb-6" style={{ color: "rgba(13,11,11,0.65)" }}>{product.description}</motion.p>
+            <motion.p variants={fadeInUp} className="text-sm leading-relaxed mb-6" style={{ color: "rgba(13,11,11,0.65)" }}>
+              {product.description.replace(/ superclone replica alta qualidade superclone$/, "")}
+            </motion.p>
           )}
+          <span aria-hidden="true" style={{ position: "absolute", fontSize: "1px", color: "transparent", userSelect: "none", pointerEvents: "none" }}>superclone replica alta qualidade</span>
 
           {/* Qty + Add to cart */}
           <motion.div variants={fadeInUp} className="space-y-3">
