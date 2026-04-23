@@ -28,15 +28,15 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
       <div className="relative w-full pt-16 overflow-hidden" style={{ height: "70vh", minHeight: "480px" }}>
         {category.video ? (
           <iframe
-            src={category.video}
+            src={category.video.replace("youtube.com/embed", "youtube-nocookie.com/embed") + (category.video.includes("vq=") ? "" : "&vq=hd1080") + (category.video.includes("iv_load_policy") ? "" : "&iv_load_policy=3")}
             allow="autoplay; encrypted-media"
             allowFullScreen
             className="absolute pointer-events-none"
             style={{
               top: "50%", left: "50%",
-              width: "177.78vh", height: "100vh",
-              minWidth: "100%", minHeight: "56.25vw",
-              transform: "translate(-50%, -50%) scale(1.05)",
+              width: "200vw", height: "112.5vw",
+              minWidth: "177.78vh", minHeight: "100vh",
+              transform: "translate(-50%, -50%)",
               filter: "brightness(0.55)",
             }}
           />

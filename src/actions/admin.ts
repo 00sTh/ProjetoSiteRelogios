@@ -64,7 +64,8 @@ export async function updateBrand(id: string, formData: FormData) {
   const name = formData.get("name") as string;
   const categoryId = formData.get("categoryId") as string;
   const description = formData.get("description") as string || null;
-  const data: Record<string, unknown> = { name, description, categoryId };
+  const video = (formData.get("video") as string) || null;
+  const data: Record<string, unknown> = { name, description, categoryId, video };
   const logoFile = formData.get("logo") as File | null;
   const bannerFile = formData.get("banner") as File | null;
   if (logoFile && logoFile.size > 0) data.logo = await uploadImage(logoFile, "slc/brands");
@@ -101,16 +102,25 @@ export async function detectProductColors(imageUrl: string): Promise<string[]> {
 }
 
 // ── Products ───────────────────────────────────────────────────────────────
+async function uniqueProductSlug(base: string): Promise<string> {
+  let slug = base;
+  let i = 1;
+  while (await prisma.product.findUnique({ where: { slug } })) {
+    slug = `${base}-${i++}`;
+  }
+  return slug;
+}
+
 export async function createProduct(formData: FormData) {
   await checkAdmin();
   const name = formData.get("name") as string;
-  const slug = slugify(name);
+  const slug = await uniqueProductSlug(slugify(name));
   const brandId = formData.get("brandId") as string;
   const categoryId = formData.get("categoryId") as string;
   const price = parseFloat(formData.get("price") as string);
   const comparePriceRaw = formData.get("comparePrice") as string;
   const comparePrice = comparePriceRaw ? parseFloat(comparePriceRaw) : null;
-  const stock = parseInt(formData.get("stock") as string ?? "0");
+  const stock = parseInt(formData.get("stock") as string || "0") || 0;
   const description = formData.get("description") as string || null;
   const sku = formData.get("sku") as string || null;
   const featured = formData.get("featured") === "true";
@@ -121,6 +131,7 @@ export async function createProduct(formData: FormData) {
   }
   const colorsRaw = formData.get("colors") as string;
   const colors = colorsRaw ? colorsRaw.split(",").map((c) => c.trim()).filter(Boolean) : [];
+  const video = (formData.get("video") as string) || null;
 
   const imageFiles = formData.getAll("images") as File[];
   const images: string[] = [];
@@ -128,7 +139,7 @@ export async function createProduct(formData: FormData) {
     if (f.size > 0) images.push(await uploadImage(f, "slc"));
   }
 
-  await prisma.product.create({ data: { name, slug, brandId, categoryId, price, comparePrice, stock, description, sku, featured, images, attributes, colors } });
+  await prisma.product.create({ data: { name, slug, brandId, categoryId, price, comparePrice, stock, description, sku, featured, images, attributes, colors, video } });
   revalidatePath("/admin/produtos");
 }
 
@@ -140,7 +151,7 @@ export async function updateProduct(id: string, formData: FormData) {
   const price = parseFloat(formData.get("price") as string);
   const comparePriceRaw = formData.get("comparePrice") as string;
   const comparePrice = comparePriceRaw ? parseFloat(comparePriceRaw) : null;
-  const stock = parseInt(formData.get("stock") as string ?? "0");
+  const stock = parseInt(formData.get("stock") as string || "0") || 0;
   const description = formData.get("description") as string || null;
   const sku = formData.get("sku") as string || null;
   const featured = formData.get("featured") === "true";
@@ -154,6 +165,7 @@ export async function updateProduct(id: string, formData: FormData) {
   try { existingImages = JSON.parse((formData.get("existingImages") as string) ?? "[]"); } catch { existingImages = []; }
   const colorsRaw = formData.get("colors") as string;
   const colors = colorsRaw ? colorsRaw.split(",").map((c) => c.trim()).filter(Boolean) : [];
+  const video = (formData.get("video") as string) || null;
 
   const imageFiles = formData.getAll("images") as File[];
   const newImages: string[] = [];
@@ -161,13 +173,19 @@ export async function updateProduct(id: string, formData: FormData) {
     if (f.size > 0) newImages.push(await uploadImage(f, "slc"));
   }
 
-  await prisma.product.update({ where: { id }, data: { name, brandId, categoryId, price, comparePrice, stock, description, sku, featured, active, attributes, colors, images: [...existingImages, ...newImages] } });
+  await prisma.product.update({ where: { id }, data: { name, brandId, categoryId, price, comparePrice, stock, description, sku, featured, active, attributes, colors, video, images: [...existingImages, ...newImages] } });
   revalidatePath("/admin/produtos");
 }
 
 export async function deleteProduct(id: string) {
   await checkAdmin();
-  await prisma.product.delete({ where: { id } });
+  const hasOrders = await prisma.orderItem.count({ where: { productId: id } });
+  if (hasOrders > 0) {
+    // Produto tem pedidos — só desativa (preserva histórico)
+    await prisma.product.update({ where: { id }, data: { active: false } });
+  } else {
+    await prisma.product.delete({ where: { id } });
+  }
   revalidatePath("/admin/produtos");
 }
 

@@ -2,10 +2,19 @@ import { prisma } from "@/lib/prisma";
 import { updateProduct, deleteProduct } from "@/actions/admin";
 import { ColorDetector } from "@/components/admin/color-detector";
 import { notFound, redirect } from "next/navigation";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 export const dynamic = "force-dynamic";
 
-export default async function EditProduto({ params }: { params: Promise<{ id: string }> }) {
+export default async function EditProduto({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ error?: string }>;
+}) {
   const { id } = await params;
+  const sp = await searchParams;
+  const errorMsg = sp.error ? decodeURIComponent(sp.error) : null;
   const [product, categories, brands] = await Promise.all([
     prisma.product.findUnique({ where: { id }, include: { brand: true, category: true } }),
     prisma.category.findMany({ orderBy: { sortOrder: "asc" } }),
@@ -13,22 +22,33 @@ export default async function EditProduto({ params }: { params: Promise<{ id: st
   ]);
   if (!product) notFound();
 
-  const attrs = product.attributes
-    ? JSON.stringify(product.attributes, null, 2)
-    : "";
+  const attrs = product.attributes ? JSON.stringify(product.attributes, null, 2) : "";
 
   return (
     <div>
       <h1 className="font-serif text-2xl font-light mb-1">Editar Produto</h1>
       <p className="label-slc opacity-50 mb-8">{product.slug}</p>
 
+      {errorMsg && (
+        <div className="mb-4 p-4 border-l-4 text-sm max-w-2xl" style={{ borderColor: "#6B1A2A", backgroundColor: "rgba(107,26,42,0.06)", color: "#6B1A2A" }}>
+          <strong>Erro ao salvar produto:</strong> {errorMsg}
+        </div>
+      )}
+
+      {/* Formulário de edição */}
       <form action={async (fd: FormData) => {
         "use server";
-        await updateProduct(id, fd);
+        try {
+          await updateProduct(id, fd);
+        } catch (e) {
+          if (isRedirectError(e)) throw e;
+          const msg = e instanceof Error ? e.message : String(e);
+          redirect(`/admin/produtos/${id}?error=${encodeURIComponent(msg)}`);
+          return;
+        }
         redirect("/admin/produtos");
       }} encType="multipart/form-data" className="bg-white border p-6 max-w-2xl" style={{ borderColor: "rgba(13,11,11,0.1)" }}>
 
-        {/* Hidden existing images */}
         <input type="hidden" name="existingImages" value={JSON.stringify(product.images)} />
 
         <div className="grid gap-4 sm:grid-cols-2">
@@ -86,6 +106,12 @@ export default async function EditProduto({ params }: { params: Promise<{ id: st
             <ColorDetector imageUrl={product.images[0]} defaultColors={product.colors.join(", ")} />
           </div>
 
+          <div className="flex flex-col gap-1 sm:col-span-2">
+            <label className="label-slc">Vídeo (URL embed YouTube)</label>
+            <input name="video" defaultValue={product.video ?? ""} placeholder="https://www.youtube.com/embed/ID?autoplay=1&mute=1&loop=1&playlist=ID&controls=0" className="border px-3 py-2 text-sm outline-none focus:border-[#B8963E]" style={{ borderColor: "rgba(13,11,11,0.2)" }} />
+            <p className="text-[10px] opacity-40">Deixe em branco para remover o vídeo. Shorts (9:16) ou normal (16:9).</p>
+          </div>
+
           {product.images.length > 0 && (
             <div className="sm:col-span-2">
               <label className="label-slc mb-2 block">Imagens atuais</label>
@@ -113,16 +139,18 @@ export default async function EditProduto({ params }: { params: Promise<{ id: st
           </div>
         </div>
 
-        <div className="flex gap-3 mt-6">
-          <button type="submit" className="px-6 py-2.5 text-[10px] tracking-widest uppercase text-white" style={{ backgroundColor: "#0D0B0B" }}>Salvar</button>
-          <form action={async () => {
-            "use server";
-            await deleteProduct(id);
-            redirect("/admin/produtos");
-          }}>
-            <button type="submit" className="px-6 py-2.5 text-[10px] tracking-widest uppercase text-white" style={{ backgroundColor: "#6B1A2A" }}>Excluir produto</button>
-          </form>
-        </div>
+        <button type="submit" className="mt-6 px-6 py-2.5 text-[10px] tracking-widest uppercase text-white" style={{ backgroundColor: "#0D0B0B" }}>Salvar</button>
+      </form>
+
+      {/* Formulário de exclusão — FORA do form de edição */}
+      <form action={async () => {
+        "use server";
+        await deleteProduct(id);
+        redirect("/admin/produtos");
+      }} className="mt-3 max-w-2xl">
+        <button type="submit" className="px-6 py-2.5 text-[10px] tracking-widest uppercase text-white" style={{ backgroundColor: "#6B1A2A" }}>
+          Excluir produto
+        </button>
       </form>
     </div>
   );

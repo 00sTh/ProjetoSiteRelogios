@@ -19,19 +19,37 @@ export type HeroConfig = {
   labelRightHref: string;
 };
 
+const DEFAULT_VIDEO_LEFT =
+  "https://www.youtube-nocookie.com/embed/mMuPO0r8KKM?autoplay=1&mute=1&loop=1&playlist=mMuPO0r8KKM&controls=0&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&vq=hd1080";
+const DEFAULT_VIDEO_RIGHT =
+  "https://www.youtube-nocookie.com/embed/3HN847uE9Kc?autoplay=1&mute=1&loop=1&playlist=3HN847uE9Kc&controls=0&rel=0&playsinline=1&modestbranding=1&iv_load_policy=3&vq=hd1080";
+
+function toNoCookieHD(url: string): string {
+  if (!url) return url;
+  return url
+    .replace("www.youtube.com/embed", "www.youtube-nocookie.com/embed")
+    .replace("youtube.com/embed", "youtube-nocookie.com/embed")
+    .replace(/&vq=[^&]*/g, "")
+    .replace(/&iv_load_policy=[^&]*/g, "") +
+    "&vq=hd1080&iv_load_policy=3";
+}
+
 const IFRAME_STYLE: React.CSSProperties = {
   position: "absolute",
   top: "50%",
   left: "50%",
-  width: "177.78vh",
-  height: "100vh",
-  minWidth: "100%",
-  minHeight: "56.25vw",
-  transform: "translate(-50%, -50%) scale(1.5)",
+  width: "200vw",
+  height: "112.5vw",
+  minWidth: "177.78vh",
+  minHeight: "100vh",
+  transform: "translate(-50%, -50%)",
   pointerEvents: "none",
 };
 
-export function HeroSection({ config: _ }: { config: HeroConfig }) {
+export function HeroSection({ config }: { config: HeroConfig }) {
+  const videoLeft = toNoCookieHD(config.videoLeft || DEFAULT_VIDEO_LEFT);
+  const videoRight = toNoCookieHD(config.videoRight || DEFAULT_VIDEO_RIGHT);
+
   return (
     <section
       className="relative w-full overflow-hidden"
@@ -51,10 +69,9 @@ export function HeroSection({ config: _ }: { config: HeroConfig }) {
 
         {/* ── Esquerda: Moda Masculina ── */}
         <div className="relative hidden md:flex" style={{ width: "50%" }}>
-          {/* Vídeo */}
-          <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden bg-[#0D0B0B]">
             <iframe
-              src="https://www.youtube.com/embed/mMuPO0r8KKM?autoplay=1&mute=1&loop=1&playlist=mMuPO0r8KKM&controls=0&rel=0&playsinline=1&modestbranding=1"
+              src={videoLeft}
               allow="autoplay; encrypted-media"
               allowFullScreen
               className="absolute"
@@ -62,13 +79,11 @@ export function HeroSection({ config: _ }: { config: HeroConfig }) {
             />
           </div>
 
-          {/* Overlay frio — azul-escuro */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{ background: "linear-gradient(160deg, rgba(8,14,32,0.35) 0%, rgba(8,14,32,0.72) 100%)" }}
           />
 
-          {/* Texto centralizado */}
           <motion.div
             className="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-8"
             variants={staggerContainer}
@@ -117,10 +132,9 @@ export function HeroSection({ config: _ }: { config: HeroConfig }) {
 
         {/* ── Direita: Moda Feminina ── */}
         <div className="relative flex-1">
-          {/* Vídeo */}
-          <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden bg-[#0D0B0B]">
             <iframe
-              src="https://www.youtube.com/embed/3HN847uE9Kc?autoplay=1&mute=1&loop=1&playlist=3HN847uE9Kc&controls=0&rel=0&playsinline=1&modestbranding=1"
+              src={videoRight}
               allow="autoplay; encrypted-media"
               allowFullScreen
               className="absolute"
@@ -128,13 +142,11 @@ export function HeroSection({ config: _ }: { config: HeroConfig }) {
             />
           </div>
 
-          {/* Overlay quente — bordeaux-rosê */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{ background: "linear-gradient(160deg, rgba(42,8,18,0.3) 0%, rgba(42,8,18,0.68) 100%)" }}
           />
 
-          {/* Texto centralizado */}
           <motion.div
             className="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-8"
             variants={staggerContainer}

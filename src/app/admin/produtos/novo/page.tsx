@@ -2,9 +2,17 @@ import { prisma } from "@/lib/prisma";
 import { createProduct } from "@/actions/admin";
 import { ColorDetector } from "@/components/admin/color-detector";
 import { redirect } from "next/navigation";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 export const dynamic = "force-dynamic";
 
-export default async function NovoProduto() {
+export default async function NovoProduto({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const sp = await searchParams;
+  const errorMsg = sp.error ? decodeURIComponent(sp.error) : null;
+
   const [categories, brands] = await Promise.all([
     prisma.category.findMany({ orderBy: { sortOrder: "asc" } }),
     prisma.brand.findMany({ orderBy: { name: "asc" }, include: { category: true } }),
@@ -14,9 +22,22 @@ export default async function NovoProduto() {
     <div>
       <h1 className="font-serif text-2xl font-light mb-8">Novo Produto</h1>
 
+      {errorMsg && (
+        <div className="mb-4 p-4 border-l-4 text-sm max-w-2xl" style={{ borderColor: "#6B1A2A", backgroundColor: "rgba(107,26,42,0.06)", color: "#6B1A2A" }}>
+          <strong>Erro ao criar produto:</strong> {errorMsg}
+        </div>
+      )}
+
       <form action={async (fd: FormData) => {
         "use server";
-        await createProduct(fd);
+        try {
+          await createProduct(fd);
+        } catch (e) {
+          if (isRedirectError(e)) throw e;
+          const msg = e instanceof Error ? e.message : String(e);
+          redirect(`/admin/produtos/novo?error=${encodeURIComponent(msg)}`);
+          return;
+        }
         redirect("/admin/produtos");
       }} encType="multipart/form-data" className="bg-white border p-6 max-w-2xl" style={{ borderColor: "rgba(13,11,11,0.1)" }}>
 
@@ -75,6 +96,12 @@ export default async function NovoProduto() {
           <div className="flex flex-col gap-1 sm:col-span-2">
             <label className="label-slc">Cores disponíveis</label>
             <ColorDetector />
+          </div>
+
+          <div className="flex flex-col gap-1 sm:col-span-2">
+            <label className="label-slc">Vídeo (URL embed YouTube)</label>
+            <input name="video" placeholder="https://www.youtube.com/embed/ID?autoplay=1&mute=1&loop=1&playlist=ID&controls=0" className="border px-3 py-2 text-sm outline-none focus:border-[#B8963E]" style={{ borderColor: "rgba(13,11,11,0.2)" }} />
+            <p className="text-[10px] opacity-40">Shorts (vertical 9:16) ou vídeo normal (horizontal 16:9)</p>
           </div>
 
           <div className="flex flex-col gap-1 sm:col-span-2">

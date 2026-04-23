@@ -26,6 +26,8 @@ export function ProductDetailClient({ product }: { product: ProductWithRelations
     setTimeout(() => setAdded(false), 2000);
   }
 
+  const isShorts = product.video?.includes("shorts") || false;
+
   return (
     <div className="mx-auto max-w-7xl px-6 py-10">
       <div className="flex flex-col lg:flex-row gap-12">
@@ -149,6 +151,37 @@ export function ProductDetailClient({ product }: { product: ProductWithRelations
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Vídeo do produto */}
+      {product.video && (
+        <div className="mx-auto max-w-7xl px-6 pb-14">
+          <div style={{ width: "3rem", height: "1px", backgroundColor: "rgba(184,150,62,0.3)", margin: "0 auto 3rem" }} />
+          <p className="label-slc text-center mb-6" style={{ color: "rgba(13,11,11,0.4)" }}>Em Detalhe</p>
+          <div
+            className="relative overflow-hidden mx-auto"
+            style={isShorts
+              ? { width: "min(400px, 100%)", aspectRatio: "9/16" }
+              : { width: "100%", aspectRatio: "16/9", maxWidth: "900px" }
+            }
+          >
+            <iframe
+              src={(product.video
+                .replace("youtube.com/embed", "youtube-nocookie.com/embed") +
+                (product.video.includes("vq=") ? "" : "&vq=hd1080") +
+                (product.video.includes("iv_load_policy") ? "" : "&iv_load_policy=3")
+              )}
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+              style={{
+                position: "absolute", top: "50%", left: "50%",
+                width: isShorts ? "120%" : "110%",
+                height: isShorts ? "120%" : "110%",
+                transform: "translate(-50%, -50%)",
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
