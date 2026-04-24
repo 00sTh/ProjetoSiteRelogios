@@ -24,8 +24,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <ProductDetailClient product={product as ProductWithRelations} />
 
       {related.length > 0 && (
-        <section className="mx-auto max-w-7xl px-6 py-16">
-          <p className="label-slc mb-8">Mais de {product.brand.name}</p>
+        <section className="mx-auto max-w-7xl px-6 py-16 border-t" style={{ borderColor: "rgba(13,11,11,0.08)" }}>
+          <p className="label-slc mb-8 tracking-[0.28em] opacity-50">Mais de {product.brand.name}</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
             {(related as ProductWithRelations[]).map(p => <ProductCard key={p.id} product={p} />)}
           </div>

@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 import { useGuestCart } from "@/hooks/use-guest-cart";
@@ -17,166 +17,284 @@ export function ProductDetailClient({ product }: { product: ProductWithRelations
   const [selectedColor, setSelectedColor] = useState<string | undefined>(
     product.colors.length > 0 ? product.colors[0] : undefined
   );
+  const [specsOpen, setSpecsOpen] = useState(true);
   const { addItem } = useGuestCart();
 
   const attrs = product.attributes as Record<string, string> | null;
+  const attrEntries = attrs ? Object.entries(attrs) : [];
+  const cleanDescription = product.description?.replace(/ superclone replica alta qualidade superclone$/, "");
+  const isShorts = product.video?.includes("shorts") || false;
 
   function handleAdd() {
     addItem(product.id, qty, selectedColor);
     setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
+    setTimeout(() => setAdded(false), 2500);
   }
 
-  const isShorts = product.video?.includes("shorts") || false;
-
   return (
-    <div className="mx-auto max-w-7xl px-6 py-10">
-      <div className="flex flex-col lg:flex-row gap-12">
-        {/* Image gallery */}
-        <div className="lg:w-[55%] lg:sticky" style={{ top: "80px", alignSelf: "flex-start" }}>
-          <div className="relative bg-white overflow-hidden" style={{ aspectRatio: "4/5" }}>
-            {product.images[selectedImage] ? (
-              <Image src={product.images[selectedImage]} alt={product.name} fill className="object-cover" priority />
-            ) : (
-              <div className="w-full h-full" style={{ backgroundColor: "#EDE9E0" }} />
-            )}
-          </div>
-          {product.images.length > 1 && (
-            <div className="flex gap-2 mt-3">
-              {product.images.map((img, i) => (
-                <button key={i} onClick={() => setSelectedImage(i)} className="relative flex-shrink-0 overflow-hidden border-2 transition-all" style={{ width: 60, height: 72, borderColor: i === selectedImage ? "#B8963E" : "transparent" }}>
-                  <Image src={img} alt="" fill className="object-cover" />
-                </button>
-              ))}
-            </div>
-          )}
+    <>
+      {/* ── Breadcrumb ─────────────────────────────────────────────────── */}
+      <div className="mx-auto max-w-7xl px-6 pt-8 pb-5">
+        <div className="flex items-center gap-2">
+          <Link href={`/${product.category.slug}`} className="label-slc opacity-40 hover:opacity-80 transition-opacity">{product.category.name}</Link>
+          <span className="opacity-20 text-xs">›</span>
+          <Link href={`/${product.category.slug}/${product.brand.slug}`} className="label-slc opacity-40 hover:opacity-80 transition-opacity">{product.brand.name}</Link>
         </div>
+      </div>
 
-        {/* Product info */}
-        <motion.div className="lg:w-[45%]" initial="hidden" animate="visible" variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}>
-          {/* Breadcrumb */}
-          <motion.div variants={fadeInUp} className="flex items-center gap-2 mb-6">
-            <Link href={`/${product.category.slug}`} className="label-slc hover:opacity-100 opacity-50 transition-opacity">{product.category.name}</Link>
-            <span className="opacity-30 text-xs">›</span>
-            <Link href={`/${product.category.slug}/${product.brand.slug}`} className="label-slc hover:opacity-100 opacity-50 transition-opacity">{product.brand.name}</Link>
-          </motion.div>
+      {/* ── Two-column: Image + Info ────────────────────────────────────── */}
+      <div className="mx-auto max-w-7xl px-6 pb-0">
+        <div className="flex flex-col lg:flex-row lg:gap-20">
 
-          <motion.p variants={fadeInUp} className="label-slc mb-1" style={{ color: "#B8963E" }}>{product.brand.name}</motion.p>
-          <motion.h1 variants={fadeInUp} className="font-serif text-3xl font-light leading-tight mb-1">{product.name}</motion.h1>
-          {product.sku && <motion.p variants={fadeInUp} className="font-mono text-xs mb-4" style={{ color: "rgba(13,11,11,0.35)" }}>REF: {product.sku}</motion.p>}
-
-          <motion.div variants={fadeInUp} className="flex items-baseline gap-3 mb-6">
-            <span className="font-mono text-2xl font-medium">{formatPrice(product.price)}</span>
-            {product.comparePrice && <span className="font-mono text-sm line-through" style={{ color: "rgba(13,11,11,0.4)" }}>{formatPrice(product.comparePrice)}</span>}
-          </motion.div>
-
-          {/* Color selector */}
-          {product.colors.length > 0 && (
-            <motion.div variants={fadeInUp} className="mb-6">
-              <p className="label-slc mb-3">
-                Cor: <span style={{ color: "#0D0B0B", fontWeight: 500 }}>{selectedColor}</span>
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {product.colors.map((color) => (
+          {/* LEFT: Image gallery */}
+          <div className="lg:w-[58%]">
+            {/* Main image — square */}
+            <div className="relative overflow-hidden bg-white" style={{ aspectRatio: "1/1" }}>
+              {product.images[selectedImage] ? (
+                <Image
+                  src={product.images[selectedImage]}
+                  alt={product.name}
+                  fill
+                  className="object-cover transition-transform duration-700 hover:scale-[1.04]"
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 58vw"
+                />
+              ) : (
+                <div className="w-full h-full" style={{ backgroundColor: "#EDE9E0" }} />
+              )}
+            </div>
+            {/* Thumbnail strip */}
+            {product.images.length > 1 && (
+              <div className="flex gap-2 mt-3 overflow-x-auto pb-1">
+                {product.images.map((img, i) => (
                   <button
-                    key={color}
-                    type="button"
-                    onClick={() => setSelectedColor(color)}
-                    className="px-4 py-1.5 text-xs border transition-all"
+                    key={i}
+                    onClick={() => setSelectedImage(i)}
+                    className="relative flex-shrink-0 overflow-hidden bg-white transition-all"
                     style={{
-                      borderColor: selectedColor === color ? "#B8963E" : "rgba(13,11,11,0.15)",
-                      color: selectedColor === color ? "#B8963E" : "#0D0B0B",
-                      backgroundColor: selectedColor === color ? "rgba(184,150,62,0.05)" : "transparent",
+                      width: 72, height: 72,
+                      outline: i === selectedImage ? "2px solid #B8963E" : "2px solid transparent",
+                      outlineOffset: "2px",
                     }}
                   >
-                    {color}
+                    <Image src={img} alt="" fill className="object-cover" sizes="72px" />
                   </button>
                 ))}
               </div>
-            </motion.div>
-          )}
+            )}
+          </div>
 
-          {/* Attributes */}
-          {attrs && Object.keys(attrs).length > 0 && (
-            <motion.div variants={fadeInUp} className="mb-6 border-t border-b py-4" style={{ borderColor: "rgba(13,11,11,0.08)" }}>
-              <table className="w-full text-xs">
-                <tbody>
-                  {Object.entries(attrs).map(([k, v]) => (
-                    <tr key={k} className="border-b last:border-0" style={{ borderColor: "rgba(13,11,11,0.05)" }}>
-                      <td className="py-1.5 pr-4 label-slc w-1/2">{k.replace(/_/g, " ")}</td>
-                      <td className="py-1.5">{v}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </motion.div>
-          )}
-
-          {/* Description */}
-          {product.description && (
-            <motion.p variants={fadeInUp} className="text-sm leading-relaxed mb-6" style={{ color: "rgba(13,11,11,0.65)" }}>
-              {product.description.replace(/ superclone replica alta qualidade superclone$/, "")}
+          {/* RIGHT: Product info — sticky */}
+          <motion.div
+            className="lg:w-[42%] pt-10 lg:pt-0 lg:sticky"
+            style={{ alignSelf: "flex-start", top: "100px" }}
+            initial="hidden"
+            animate="visible"
+            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07 } } }}
+          >
+            {/* Brand */}
+            <motion.p variants={fadeInUp} className="label-slc mb-3" style={{ color: "#B8963E", letterSpacing: "0.22em" }}>
+              {product.brand.name}
             </motion.p>
-          )}
-          <span aria-hidden="true" style={{ position: "absolute", fontSize: "1px", color: "transparent", userSelect: "none", pointerEvents: "none" }}>superclone replica alta qualidade</span>
 
-          {/* Qty + Add to cart */}
-          <motion.div variants={fadeInUp} className="space-y-3">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center border" style={{ borderColor: "rgba(13,11,11,0.15)" }}>
-                <button onClick={() => setQty(q => Math.max(1, q - 1))} className="px-3 py-2 text-lg" style={{ color: "#0D0B0B" }}>−</button>
-                <span className="px-4 py-2 font-mono text-sm min-w-[3rem] text-center">{qty}</span>
-                <button onClick={() => setQty(q => Math.min(product.stock, q + 1))} className="px-3 py-2 text-lg" style={{ color: "#0D0B0B" }}>+</button>
+            {/* Title */}
+            <motion.h1 variants={fadeInUp} className="font-serif font-light leading-tight mb-3" style={{ fontSize: "clamp(1.75rem, 2.5vw, 2.5rem)" }}>
+              {product.name}
+            </motion.h1>
+
+            {/* REF */}
+            {product.sku && (
+              <motion.p variants={fadeInUp} className="font-mono text-xs mb-5" style={{ color: "rgba(13,11,11,0.3)" }}>
+                REF. {product.sku}
+              </motion.p>
+            )}
+
+            {/* Divider */}
+            <motion.div variants={fadeInUp} className="mb-6" style={{ height: "1px", backgroundColor: "rgba(13,11,11,0.1)" }} />
+
+            {/* Price */}
+            <motion.div variants={fadeInUp} className="flex items-baseline gap-3 mb-5">
+              <span className="font-mono text-2xl font-medium">{formatPrice(product.price)}</span>
+              {product.comparePrice && (
+                <span className="font-mono text-sm line-through" style={{ color: "rgba(13,11,11,0.3)" }}>
+                  {formatPrice(product.comparePrice)}
+                </span>
+              )}
+            </motion.div>
+
+            {/* Color selector */}
+            {product.colors.length > 0 && (
+              <motion.div variants={fadeInUp} className="mb-5">
+                <p className="label-slc mb-3 text-[10px]">
+                  Cor: <span className="font-medium" style={{ color: "#0D0B0B" }}>{selectedColor}</span>
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {product.colors.map((color) => (
+                    <button
+                      key={color}
+                      type="button"
+                      onClick={() => setSelectedColor(color)}
+                      className="px-4 py-1.5 text-xs border transition-all"
+                      style={{
+                        borderColor: selectedColor === color ? "#B8963E" : "rgba(13,11,11,0.15)",
+                        color: selectedColor === color ? "#B8963E" : "rgba(13,11,11,0.7)",
+                        backgroundColor: selectedColor === color ? "rgba(184,150,62,0.04)" : "transparent",
+                      }}
+                    >
+                      {color}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {/* Stock status */}
+            <motion.p variants={fadeInUp} className="label-slc text-[10px] mb-4" style={{
+              color: product.stock === 0 ? "#6B1A2A" : product.stock < 3 ? "#B8963E" : "rgba(13,11,11,0.35)",
+            }}>
+              {product.stock === 0 ? "Esgotado" : product.stock < 3 ? `Apenas ${product.stock} unidades disponíveis` : "Em estoque"}
+            </motion.p>
+
+            {/* Qty + CTA */}
+            <motion.div variants={fadeInUp} className="space-y-3 mb-7">
+              <div className="flex gap-3 items-center">
+                <div className="flex items-center border" style={{ borderColor: "rgba(13,11,11,0.15)" }}>
+                  <button onClick={() => setQty(q => Math.max(1, q - 1))} className="w-10 h-11 flex items-center justify-center text-lg select-none" style={{ color: "#0D0B0B" }}>−</button>
+                  <span className="w-10 h-11 flex items-center justify-center font-mono text-sm">{qty}</span>
+                  <button onClick={() => setQty(q => Math.min(product.stock, q + 1))} className="w-10 h-11 flex items-center justify-center text-lg select-none" style={{ color: "#0D0B0B" }}>+</button>
+                </div>
               </div>
-              <span className="label-slc" style={{ color: product.stock < 3 ? "#6B1A2A" : "rgba(13,11,11,0.4)" }}>
-                {product.stock === 0 ? "Esgotado" : product.stock < 3 ? `Apenas ${product.stock} em estoque` : "Em estoque"}
-              </span>
-            </div>
 
-            <button
-              onClick={handleAdd}
-              disabled={product.stock === 0}
-              className="w-full py-4 text-[10px] tracking-[0.4em] uppercase transition-all flex items-center justify-center gap-2"
-              style={{ backgroundColor: added ? "#6B1A2A" : "#0D0B0B", color: "#F7F4EE" }}
-            >
-              <ShoppingBag size={14} strokeWidth={1.5} />
-              {added ? "Adicionado!" : "Adicionar ao Carrinho"}
-            </button>
+              <button
+                onClick={handleAdd}
+                disabled={product.stock === 0}
+                className="w-full py-[14px] text-[10px] tracking-[0.4em] uppercase transition-all flex items-center justify-center gap-3 disabled:opacity-30"
+                style={{ backgroundColor: added ? "#6B1A2A" : "#0D0B0B", color: "#F7F4EE" }}
+              >
+                <ShoppingBag size={13} strokeWidth={1.5} />
+                {added ? "Adicionado ao Carrinho" : "Adicionar ao Carrinho"}
+              </button>
 
-            <Link href="/carrinho" className="w-full py-3.5 text-[10px] tracking-[0.4em] uppercase border text-center block transition-colors hover:bg-ink hover:text-ivory" style={{ borderColor: "rgba(13,11,11,0.2)", color: "#0D0B0B" }}>
-              Ver Carrinho
-            </Link>
+              <Link
+                href="/carrinho"
+                className="w-full py-3.5 text-[10px] tracking-[0.4em] uppercase border text-center block transition-all"
+                style={{ borderColor: "rgba(13,11,11,0.2)", color: "#0D0B0B" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#0D0B0B"; (e.currentTarget as HTMLElement).style.color = "#F7F4EE"; (e.currentTarget as HTMLElement).style.borderColor = "#0D0B0B"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLElement).style.color = "#0D0B0B"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(13,11,11,0.2)"; }}
+              >
+                Ver Carrinho
+              </Link>
+            </motion.div>
+
+            {/* Key specs preview — first 3 attributes */}
+            {attrEntries.length > 0 && (
+              <motion.div variants={fadeInUp} className="border-t pt-5" style={{ borderColor: "rgba(13,11,11,0.08)" }}>
+                <div className="space-y-3">
+                  {attrEntries.slice(0, 3).map(([k, v]) => (
+                    <div key={k} className="flex items-baseline justify-between">
+                      <span className="label-slc opacity-40 text-[9px] tracking-[0.18em]">{k.replace(/_/g, " ").toUpperCase()}</span>
+                      <span className="text-xs text-right max-w-[58%] font-medium">{v}</span>
+                    </div>
+                  ))}
+                  {attrEntries.length > 3 && (
+                    <button
+                      type="button"
+                      onClick={() => document.getElementById("slc-specs")?.scrollIntoView({ behavior: "smooth" })}
+                      className="label-slc text-[9px] opacity-40 hover:opacity-80 transition-opacity mt-1"
+                    >
+                      + {attrEntries.length - 3} especificações ↓
+                    </button>
+                  )}
+                </div>
+              </motion.div>
+            )}
           </motion.div>
-        </motion.div>
+        </div>
       </div>
 
-      {/* Vídeo do produto */}
-      {product.video && (
-        <div className="mx-auto max-w-7xl px-6 pb-14">
-          <div style={{ width: "3rem", height: "1px", backgroundColor: "rgba(184,150,62,0.3)", margin: "0 auto 3rem" }} />
-          <p className="label-slc text-center mb-6" style={{ color: "rgba(13,11,11,0.4)" }}>Em Detalhe</p>
-          <div
-            className="relative overflow-hidden mx-auto"
-            style={isShorts
-              ? { width: "min(400px, 100%)", aspectRatio: "9/16" }
-              : { width: "100%", aspectRatio: "16/9", maxWidth: "900px" }
-            }
-          >
-            <iframe
-              src={toEmbedUrl(product.video)}
-              allow={IFRAME_ALLOW}
-              allowFullScreen
-              referrerPolicy="no-referrer-when-downgrade"
-              style={{
-                position: "absolute", top: "50%", left: "50%",
-                width: isShorts ? "120%" : "110%",
-                height: isShorts ? "120%" : "110%",
-                transform: "translate(-50%, -50%)",
-              }}
-            />
+      {/* ── ESPECIFICAÇÕES — full-width accordion ──────────────────────── */}
+      {attrEntries.length > 0 && (
+        <div id="slc-specs" className="mx-auto max-w-7xl px-6 mt-16">
+          <div className="border-t" style={{ borderColor: "rgba(13,11,11,0.1)" }}>
+            <button
+              className="w-full flex items-center justify-between py-5"
+              onClick={() => setSpecsOpen(o => !o)}
+            >
+              <span className="label-slc tracking-[0.28em]">Especificações</span>
+              <span className="font-light text-xl" style={{ color: "rgba(13,11,11,0.35)" }}>{specsOpen ? "−" : "+"}</span>
+            </button>
+            <AnimatePresence initial={false}>
+              {specsOpen && (
+                <motion.div
+                  key="specs"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="overflow-hidden"
+                >
+                  <div className="grid sm:grid-cols-2 gap-x-20 pb-12">
+                    {attrEntries.map(([k, v]) => (
+                      <div key={k} className="flex items-baseline justify-between border-b py-3.5" style={{ borderColor: "rgba(13,11,11,0.06)" }}>
+                        <span className="label-slc opacity-45 text-[10px] tracking-widest w-2/5 flex-shrink-0">{k.replace(/_/g, " ").toUpperCase()}</span>
+                        <span className="text-sm text-right">{v}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       )}
-    </div>
+
+      {/* ── DESCRIÇÃO — editorial, full-width centered ─────────────────── */}
+      {cleanDescription && (
+        <div className="border-t mt-0" style={{ borderColor: "rgba(13,11,11,0.08)" }}>
+          <div className="mx-auto max-w-2xl px-6 py-16 text-center">
+            <p className="label-slc opacity-30 mb-8 tracking-[0.3em]">Sobre este produto</p>
+            <div className="space-y-5">
+              {cleanDescription.split(/\n\n+/).map((para, i) => (
+                <p key={i} className="font-serif text-[1.05rem] font-light leading-[1.95]" style={{ color: "rgba(13,11,11,0.7)" }}>
+                  {para}
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── VÍDEO ──────────────────────────────────────────────────────── */}
+      {product.video && (
+        <div className="border-t" style={{ borderColor: "rgba(13,11,11,0.08)" }}>
+          <div className="mx-auto max-w-7xl px-6 py-16">
+            <p className="label-slc text-center mb-10 tracking-[0.28em] opacity-30">Em Detalhe</p>
+            <div
+              className="relative overflow-hidden mx-auto"
+              style={isShorts
+                ? { width: "min(380px, 100%)", aspectRatio: "9/16" }
+                : { width: "100%", aspectRatio: "16/9", maxWidth: "1000px" }
+              }
+            >
+              <iframe
+                src={toEmbedUrl(product.video)}
+                allow={IFRAME_ALLOW}
+                allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+                style={{
+                  position: "absolute", top: "50%", left: "50%",
+                  width: isShorts ? "120%" : "110%",
+                  height: isShorts ? "120%" : "110%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Hidden SEO */}
+      <span aria-hidden="true" style={{ position: "absolute", fontSize: "1px", color: "transparent", userSelect: "none", pointerEvents: "none" }}>superclone replica alta qualidade</span>
+    </>
   );
 }
