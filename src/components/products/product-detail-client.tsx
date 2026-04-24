@@ -134,33 +134,33 @@ export function ProductDetailClient({ product }: { product: ProductWithRelations
               )}
             </div>
 
-            {/* ── Desktop: hero + grade 2 colunas ────────────────────── */}
+            {/* ── Desktop: hero 4:5 + grade 2 colunas 4:5 ───────────── */}
             <div className="hidden lg:block">
-              {/* Imagem 1 — hero full-width */}
+              {/* Imagem 1 — hero portrait 4:5 */}
               <motion.div className="relative w-full overflow-hidden"
-                style={{ aspectRatio: "1/1", backgroundColor: "#F2F2F2" }}
+                style={{ aspectRatio: "4/5", backgroundColor: "#F4F4F4" }}
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                 transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}>
                 {product.images[0] && (
                   <Image src={product.images[0]} alt={product.name} fill
-                    className="object-contain p-10 hover:scale-[1.03] transition-transform duration-700"
+                    className="object-contain p-8 hover:scale-[1.025] transition-transform duration-700"
                     priority sizes="58vw" />
                 )}
               </motion.div>
 
-              {/* Imagens 2+ em grade 2 colunas */}
+              {/* Imagens 2+ — grade 2 colunas, cada uma 4:5 */}
               {product.images.length > 1 && (
-                <div className="grid grid-cols-2 gap-1.5 mt-1.5">
+                <div className="grid grid-cols-2 gap-[3px] mt-[3px]">
                   {product.images.slice(1).map((img, i) => (
                     <motion.div key={i + 1} className="relative overflow-hidden"
-                      style={{ aspectRatio: "1/1", backgroundColor: "#F2F2F2" }}
-                      initial={{ opacity: 0, y: 16 }}
+                      style={{ aspectRatio: "4/5", backgroundColor: "#F4F4F4" }}
+                      initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.1 + i * 0.05, ease: [0.25, 0.46, 0.45, 0.94] }}>
+                      transition={{ duration: 0.45, delay: 0.08 + i * 0.04, ease: [0.25, 0.46, 0.45, 0.94] }}>
                       <Image src={img}
-                        alt={`${product.name} — ângulo ${i + 2}`}
+                        alt={`${product.name} — detalhe ${i + 2}`}
                         fill
-                        className="object-contain p-6 hover:scale-[1.04] transition-transform duration-700"
+                        className="object-contain p-5 hover:scale-[1.04] transition-transform duration-700"
                         sizes="29vw" />
                     </motion.div>
                   ))}
