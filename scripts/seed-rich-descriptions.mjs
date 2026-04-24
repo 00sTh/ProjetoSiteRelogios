@@ -43,6 +43,24 @@ async function serperSearch(q, num = 5) {
 }
 
 async function scrapePage(url) {
+  // Try Jina AI first — renders JS, returns clean text
+  try {
+    const r = await fetch(`https://r.jina.ai/${url}`, {
+      headers: { "Accept": "text/plain", "X-Return-Format": "text" },
+      signal: AbortSignal.timeout(25000),
+    });
+    if (r.ok) {
+      const text = await r.text();
+      const SKIP_PAT = /^(skip to|add to|view in|discover in|menu|search|store|favourites?|sign in|log in|back to|share|filter|sort|close|open|toggle|\$|€|£|R\$|usd|eur|reference \w+$|[*#>|\\])/i;
+      const lines = text.split("\n")
+        .map(l => l.trim())
+        .filter(l => l.length > 40 && !SKIP_PAT.test(l));
+      const content = lines.slice(0, 12).join(" ").replace(/\s+/g, " ").substring(0, 1500);
+      if (content.length > 100) return content;
+    }
+  } catch {}
+
+  // Fallback: plain fetch + meta tags
   try {
     const r = await fetch(url, {
       headers: { "User-Agent": UA, "Accept": "text/html", "Accept-Language": "en-US,en;q=0.9" },
@@ -52,9 +70,7 @@ async function scrapePage(url) {
     const html = await r.text();
     const metaDesc =
       html.match(/<meta\s[^>]*name=["']description["'][^>]*content=["']([^"']{30,})/i)?.[1] ||
-      html.match(/<meta\s[^>]*content=["']([^"']{30,})["'][^>]*name=["']description["']/i)?.[1] ||
-      html.match(/<meta\s[^>]*property=["']og:description["'][^>]*content=["']([^"']{30,})/i)?.[1] ||
-      html.match(/<meta\s[^>]*content=["']([^"']{30,})["'][^>]*property=["']og:description["']/i)?.[1] || "";
+      html.match(/<meta\s[^>]*property=["']og:description["'][^>]*content=["']([^"']{30,})/i)?.[1] || "";
     const paras = [...html.matchAll(/<p[^>]*>([^<]{80,600})<\/p>/g)]
       .map(m => m[1].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim())
       .filter(t => t.length > 60 && !/cookie|privacy|javascript|loading/i.test(t))
@@ -216,7 +232,7 @@ async function main() {
     JOIN brands b ON p."brandId" = b.id
     JOIN categories c ON p."categoryId" = c.id
     WHERE p.active = true
-      AND (p.description IS NULL OR length(p.description) < 200)
+      AND (p.description IS NULL OR length(p.description) < 1500)
     ORDER BY c.slug, b.name, p.name
   `;
 
