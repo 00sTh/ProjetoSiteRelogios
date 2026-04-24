@@ -230,11 +230,32 @@ export async function setSiteConfigsFromForm(formData: FormData) {
 
 export async function getAdminStats() {
   await checkAdmin();
-  const [totalProducts, totalOrders, pendingOrders] = await Promise.all([
+  const [totalProducts, totalOrders, pendingOrders, recentOrders, lowStock] = await Promise.all([
     prisma.product.count({ where: { active: true } }),
     prisma.order.count(),
     prisma.order.count({ where: { status: "PENDING" } }),
+    prisma.order.findMany({ orderBy: { createdAt: "desc" }, take: 5, select: { id: true, orderNumber: true, customer: true, total: true, status: true, createdAt: true } }),
+    prisma.product.findMany({ where: { active: true, stock: { lte: 3 } }, select: { id: true, name: true, stock: true }, orderBy: { stock: "asc" }, take: 10 }),
   ]);
   const revenue = await prisma.order.aggregate({ where: { status: { in: ["PAID", "SHIPPED", "DELIVERED"] } }, _sum: { total: true } });
-  return { totalProducts, totalOrders, pendingOrders, revenue: Number(revenue._sum.total ?? 0) };
+  return { totalProducts, totalOrders, pendingOrders, revenue: Number(revenue._sum.total ?? 0), recentOrders, lowStock };
+}
+
+export async function getAdminCustomers() {
+  await checkAdmin();
+  const [customers, total] = await Promise.all([
+    prisma.userProfile.findMany({
+      orderBy: { email: "asc" },
+      take: 100,
+      include: { _count: { select: { orders: true } } },
+    }),
+    prisma.userProfile.count(),
+  ]);
+  const spentByUser = await prisma.order.groupBy({
+    by: ["userId"],
+    where: { userId: { in: customers.map(c => c.id) }, status: { in: ["PAID", "SHIPPED", "DELIVERED"] } },
+    _sum: { total: true },
+  });
+  const spentMap = Object.fromEntries(spentByUser.map(s => [s.userId!, Number(s._sum.total ?? 0)]));
+  return { customers: customers.map(c => ({ ...c, totalSpent: spentMap[c.id] ?? 0 })), total };
 }
