@@ -108,51 +108,95 @@ export function ProductDetailClient({ product }: { product: ProductWithRelations
       <div className="mx-auto max-w-7xl px-6 pb-0">
         <div className="flex flex-col lg:flex-row lg:gap-20">
 
-          {/* LEFT: Image gallery */}
-          <div className="lg:w-[58%]">
-            {/* Main image — square */}
-            <div className="relative overflow-hidden bg-white" style={{ aspectRatio: "1/1" }}>
-              {product.images[selectedImage] ? (
-                <Image
-                  src={product.images[selectedImage]}
-                  alt={product.name}
-                  fill
-                  className="object-cover transition-transform duration-700 hover:scale-[1.04]"
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 58vw"
-                />
-              ) : (
-                <div className="w-full h-full" style={{ backgroundColor: "#EDE9E0" }} />
-              )}
-            </div>
-            {/* Thumbnail strip */}
+          {/* LEFT: Image stack — todas as fotos empilhadas verticalmente */}
+          <div className="lg:w-[58%] flex gap-3">
+            {/* Thumbnail strip vertical (lado esquerdo) — só desktop */}
             {product.images.length > 1 && (
-              <div className="flex gap-2 mt-3 overflow-x-auto pb-1">
-                {product.images.slice(0, 6).map((img, i) => (
+              <div className="hidden lg:flex flex-col gap-2 flex-shrink-0">
+                {product.images.map((img, i) => (
                   <button
                     key={i}
                     onClick={() => setSelectedImage(i)}
-                    className="relative flex-shrink-0 overflow-hidden bg-white transition-all"
+                    className="relative flex-shrink-0 overflow-hidden transition-all"
                     style={{
-                      width: 72, height: 72,
-                      outline: i === selectedImage ? "2px solid #B8963E" : "2px solid transparent",
+                      width: 60, height: 72,
+                      outline: i === selectedImage ? "1.5px solid #B8963E" : "1.5px solid transparent",
                       outlineOffset: "2px",
+                      backgroundColor: "#EDE9E0",
                     }}
                   >
-                    <Image src={img} alt="" fill className="object-cover" sizes="72px" />
+                    <Image src={img} alt="" fill className="object-cover" sizes="60px" />
                   </button>
                 ))}
-                {product.images.length > 6 && (
-                  <button
-                    onClick={() => setSelectedImage(6)}
-                    className="relative flex-shrink-0 overflow-hidden bg-white flex items-center justify-center"
-                    style={{ width: 72, height: 72, border: "1px solid rgba(13,11,11,0.12)" }}
-                  >
-                    <span className="label-slc text-[8px]">+{product.images.length - 6}</span>
-                  </button>
-                )}
               </div>
             )}
+
+            {/* Coluna principal de imagens */}
+            <div className="flex-1 flex flex-col gap-3">
+              {/* Mobile: mostra só a imagem selecionada */}
+              <div className="lg:hidden relative overflow-hidden" style={{ aspectRatio: "4/5", backgroundColor: "#EDE9E0" }}>
+                {product.images[selectedImage] && (
+                  <Image
+                    src={product.images[selectedImage]}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                    priority
+                    sizes="100vw"
+                  />
+                )}
+              </div>
+              {/* Mobile: thumbnail strip horizontal */}
+              {product.images.length > 1 && (
+                <div className="lg:hidden flex gap-2 overflow-x-auto pb-1">
+                  {product.images.map((img, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setSelectedImage(i)}
+                      className="relative flex-shrink-0 overflow-hidden"
+                      style={{
+                        width: 56, height: 56,
+                        outline: i === selectedImage ? "1.5px solid #B8963E" : "1.5px solid transparent",
+                        outlineOffset: "2px",
+                        backgroundColor: "#EDE9E0",
+                      }}
+                    >
+                      <Image src={img} alt="" fill className="object-cover" sizes="56px" />
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Desktop: todas as imagens empilhadas */}
+              <div className="hidden lg:flex flex-col gap-3">
+                {product.images.map((img, i) => (
+                  <motion.div
+                    key={i}
+                    className="relative overflow-hidden w-full"
+                    style={{ aspectRatio: "4/5", backgroundColor: "#EDE9E0" }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: i * 0.06, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  >
+                    <Image
+                      src={img}
+                      alt={i === 0 ? product.name : `${product.name} — ângulo ${i + 1}`}
+                      fill
+                      className="object-cover hover:scale-[1.03] transition-transform duration-700"
+                      priority={i === 0}
+                      sizes="(max-width: 1024px) 100vw, 55vw"
+                    />
+                    {/* Contador discreto no canto */}
+                    <span
+                      className="absolute bottom-3 right-4 label-slc text-[9px]"
+                      style={{ color: "rgba(13,11,11,0.35)" }}
+                    >
+                      {i + 1} / {product.images.length}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* RIGHT: Product info — sticky */}
