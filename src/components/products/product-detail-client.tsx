@@ -108,94 +108,64 @@ export function ProductDetailClient({ product }: { product: ProductWithRelations
       <div className="mx-auto max-w-7xl px-6 pb-0">
         <div className="flex flex-col lg:flex-row lg:gap-20">
 
-          {/* LEFT: Image stack — todas as fotos empilhadas verticalmente */}
-          <div className="lg:w-[58%] flex gap-3">
-            {/* Thumbnail strip vertical (lado esquerdo) — só desktop */}
-            {product.images.length > 1 && (
-              <div className="hidden lg:flex flex-col gap-2 flex-shrink-0">
-                {product.images.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setSelectedImage(i)}
-                    className="relative flex-shrink-0 overflow-hidden transition-all"
-                    style={{
-                      width: 60, height: 72,
-                      outline: i === selectedImage ? "1.5px solid #B8963E" : "1.5px solid transparent",
-                      outlineOffset: "2px",
-                      backgroundColor: "#EDE9E0",
-                    }}
-                  >
-                    <Image src={img} alt="" fill className="object-cover" sizes="60px" />
-                  </button>
-                ))}
-              </div>
-            )}
+          {/* LEFT: Galeria estilo Omega */}
+          <div className="lg:w-[58%]">
 
-            {/* Coluna principal de imagens */}
-            <div className="flex-1 flex flex-col gap-3">
-              {/* Mobile: mostra só a imagem selecionada */}
-              <div className="lg:hidden relative overflow-hidden" style={{ aspectRatio: "4/5", backgroundColor: "#EDE9E0" }}>
+            {/* ── Mobile: imagem selecionada + strip ─────────────────── */}
+            <div className="lg:hidden">
+              <div className="relative overflow-hidden" style={{ aspectRatio: "1/1", backgroundColor: "#F2F2F2" }}>
                 {product.images[selectedImage] && (
-                  <Image
-                    src={product.images[selectedImage]}
-                    alt={product.name}
-                    fill
-                    className="object-cover"
-                    priority
-                    sizes="100vw"
-                  />
+                  <Image src={product.images[selectedImage]} alt={product.name} fill
+                    className="object-contain p-6" priority sizes="100vw" />
                 )}
               </div>
-              {/* Mobile: thumbnail strip horizontal */}
               {product.images.length > 1 && (
-                <div className="lg:hidden flex gap-2 overflow-x-auto pb-1">
+                <div className="flex gap-1.5 mt-2 overflow-x-auto pb-1">
                   {product.images.map((img, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setSelectedImage(i)}
-                      className="relative flex-shrink-0 overflow-hidden"
-                      style={{
-                        width: 56, height: 56,
+                    <button key={i} onClick={() => setSelectedImage(i)}
+                      className="relative flex-shrink-0 overflow-hidden transition-all"
+                      style={{ width: 58, height: 58, backgroundColor: "#F2F2F2",
                         outline: i === selectedImage ? "1.5px solid #B8963E" : "1.5px solid transparent",
-                        outlineOffset: "2px",
-                        backgroundColor: "#EDE9E0",
-                      }}
-                    >
-                      <Image src={img} alt="" fill className="object-cover" sizes="56px" />
+                        outlineOffset: "2px" }}>
+                      <Image src={img} alt="" fill className="object-contain p-1" sizes="58px" />
                     </button>
                   ))}
                 </div>
               )}
+            </div>
 
-              {/* Desktop: todas as imagens empilhadas */}
-              <div className="hidden lg:flex flex-col gap-3">
-                {product.images.map((img, i) => (
-                  <motion.div
-                    key={i}
-                    className="relative overflow-hidden w-full"
-                    style={{ aspectRatio: "4/5", backgroundColor: "#EDE9E0" }}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: i * 0.06, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  >
-                    <Image
-                      src={img}
-                      alt={i === 0 ? product.name : `${product.name} — ângulo ${i + 1}`}
-                      fill
-                      className="object-cover hover:scale-[1.03] transition-transform duration-700"
-                      priority={i === 0}
-                      sizes="(max-width: 1024px) 100vw, 55vw"
-                    />
-                    {/* Contador discreto no canto */}
-                    <span
-                      className="absolute bottom-3 right-4 label-slc text-[9px]"
-                      style={{ color: "rgba(13,11,11,0.35)" }}
-                    >
-                      {i + 1} / {product.images.length}
-                    </span>
-                  </motion.div>
-                ))}
-              </div>
+            {/* ── Desktop: hero + grade 2 colunas ────────────────────── */}
+            <div className="hidden lg:block">
+              {/* Imagem 1 — hero full-width */}
+              <motion.div className="relative w-full overflow-hidden"
+                style={{ aspectRatio: "1/1", backgroundColor: "#F2F2F2" }}
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}>
+                {product.images[0] && (
+                  <Image src={product.images[0]} alt={product.name} fill
+                    className="object-contain p-10 hover:scale-[1.03] transition-transform duration-700"
+                    priority sizes="58vw" />
+                )}
+              </motion.div>
+
+              {/* Imagens 2+ em grade 2 colunas */}
+              {product.images.length > 1 && (
+                <div className="grid grid-cols-2 gap-1.5 mt-1.5">
+                  {product.images.slice(1).map((img, i) => (
+                    <motion.div key={i + 1} className="relative overflow-hidden"
+                      style={{ aspectRatio: "1/1", backgroundColor: "#F2F2F2" }}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.1 + i * 0.05, ease: [0.25, 0.46, 0.45, 0.94] }}>
+                      <Image src={img}
+                        alt={`${product.name} — ângulo ${i + 2}`}
+                        fill
+                        className="object-contain p-6 hover:scale-[1.04] transition-transform duration-700"
+                        sizes="29vw" />
+                    </motion.div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
