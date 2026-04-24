@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getCategoryBySlug, getProducts } from "@/actions/products";
 import { ProductCard } from "@/components/products/product-card";
-import { toEmbedUrl } from "@/lib/video-utils";
+import { toBackgroundEmbedUrl } from "@/lib/video-utils";
 import type { ProductWithRelations } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -29,7 +29,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
       <div className="relative w-full pt-20 overflow-hidden" style={{ height: "70vh", minHeight: "480px" }}>
         {category.video ? (
           <iframe
-            src={toEmbedUrl(category.video)}
+            src={toBackgroundEmbedUrl(category.video)}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"

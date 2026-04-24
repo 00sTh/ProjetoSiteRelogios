@@ -30,15 +30,23 @@ function isYouTube(url: string) {
   return url.includes("youtube.com/embed") || url.includes("youtube-nocookie.com/embed");
 }
 
-function toNoCookieHD(url: string): string {
+function isVimeo(url: string) {
+  return url.includes("vimeo.com");
+}
+
+function toBackgroundEmbed(url: string): string {
   if (!url) return url;
-  const m = url.match(/(?:youtube(?:-nocookie)?\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
-  if (!m) return url;
-  const id = m[1];
-  const hasAutoplay = url.includes("autoplay=1");
-  const base = `https://www.youtube-nocookie.com/embed/${id}`;
-  if (hasAutoplay) return `${base}?autoplay=1&mute=1&loop=1&playlist=${id}&rel=0`;
-  return base;
+  // YouTube
+  const yt = url.match(/(?:youtube(?:-nocookie)?\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+  if (yt) {
+    const id = yt[1];
+    const base = `https://www.youtube-nocookie.com/embed/${id}`;
+    return `${base}?autoplay=1&mute=1&loop=1&playlist=${id}&rel=0`;
+  }
+  // Vimeo
+  const vm = url.match(/(?:vimeo\.com\/|player\.vimeo\.com\/video\/)(\d+)/);
+  if (vm) return `https://player.vimeo.com/video/${vm[1]}?autoplay=1&muted=1&loop=1&background=1`;
+  return url;
 }
 
 const IFRAME_STYLE: React.CSSProperties = {
@@ -62,10 +70,10 @@ function HeroBg({ url, fallback, brightness }: { url: string; fallback: string; 
       </video>
     );
   }
-  if (isYouTube(src)) {
+  if (isYouTube(src) || isVimeo(src)) {
     return (
       <iframe
-        src={toNoCookieHD(src)}
+        src={toBackgroundEmbed(src)}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
         referrerPolicy="no-referrer-when-downgrade"

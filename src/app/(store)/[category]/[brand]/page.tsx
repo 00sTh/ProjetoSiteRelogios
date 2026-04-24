@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { getCategoryBySlug, getBrandBySlug, getProducts } from "@/actions/products";
 import { ProductCard } from "@/components/products/product-card";
-import { toEmbedUrl } from "@/lib/video-utils";
+import { toBackgroundEmbedUrl } from "@/lib/video-utils";
 import type { ProductWithRelations } from "@/types";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +23,7 @@ export default async function BrandPage({ params }: { params: Promise<{ category
       <div className="relative w-full overflow-hidden" style={{ height: "60vh", minHeight: "420px" }}>
         {brand.video ? (
           <iframe
-            src={toEmbedUrl(brand.video)}
+            src={toBackgroundEmbedUrl(brand.video)}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"
