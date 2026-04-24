@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { updateProduct, deleteProduct } from "@/actions/admin";
 import { ColorDetector } from "@/components/admin/color-detector";
+import { ProductImageManager } from "@/components/admin/product-image-manager";
 import { notFound, redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 export const dynamic = "force-dynamic";
@@ -49,7 +50,7 @@ export default async function EditProduto({
         redirect("/admin/produtos");
       }} encType="multipart/form-data" className="bg-white border p-6 max-w-2xl" style={{ borderColor: "rgba(13,11,11,0.1)" }}>
 
-        <input type="hidden" name="existingImages" value={JSON.stringify(product.images)} />
+        {/* ProductImageManager manages existingImages hidden input */}
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="flex flex-col gap-1 sm:col-span-2">
@@ -112,16 +113,7 @@ export default async function EditProduto({
             <p className="text-[10px] opacity-40">Deixe em branco para remover o vídeo. Shorts (9:16) ou normal (16:9).</p>
           </div>
 
-          {product.images.length > 0 && (
-            <div className="sm:col-span-2">
-              <label className="label-slc mb-2 block">Imagens atuais</label>
-              <div className="flex gap-2 flex-wrap">
-                {product.images.map((img, i) => (
-                  <img key={i} src={img} alt={`img-${i}`} className="w-20 h-20 object-cover border" style={{ borderColor: "rgba(13,11,11,0.1)" }} />
-                ))}
-              </div>
-            </div>
-          )}
+          <ProductImageManager initialImages={product.images} />
 
           <div className="flex flex-col gap-1 sm:col-span-2">
             <label className="label-slc">Adicionar imagens</label>
