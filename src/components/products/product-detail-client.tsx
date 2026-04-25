@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -330,13 +331,41 @@ export function ProductDetailClient({ product }: { product: ProductWithRelations
               >
                 <div className="mx-auto max-w-2xl px-6 py-16 text-center">
                   <p className="label-slc opacity-30 mb-8 tracking-[0.3em]">Sobre este produto</p>
-                  <div className="space-y-5">
-                    {cleanDescription.split(/\n\n+/).map((para, i) => (
-                      <p key={i} className="font-serif text-[1.05rem] font-light leading-[1.95]" style={{ color: "rgba(13,11,11,0.7)" }}>
-                        {para}
-                      </p>
-                    ))}
-                  </div>
+                  {(() => {
+                    const paras = cleanDescription.split(/\n\n+/);
+                    const imgs = (product as ProductWithRelations & { descriptionImages?: string[] }).descriptionImages ?? [];
+                    const result: React.ReactNode[] = [];
+                    paras.forEach((para, i) => {
+                      result.push(
+                        <p key={`p-${i}`} className="font-serif text-[1.05rem] font-light leading-[1.95]" style={{ color: "rgba(13,11,11,0.7)" }}>
+                          {para}
+                        </p>
+                      );
+                      if (i === 1 && imgs[0]) {
+                        result.push(
+                          <div key="img-0" className="my-10 relative w-full overflow-hidden" style={{ aspectRatio: "16/9" }}>
+                            <Image src={imgs[0]} fill className="object-cover" sizes="672px" alt="" />
+                          </div>
+                        );
+                      }
+                      if (i === 3 && (imgs[1] || imgs[2])) {
+                        result.push(
+                          <div key="img-12" className="my-10 grid grid-cols-2 gap-1">
+                            {imgs[1] && <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}><Image src={imgs[1]} fill className="object-cover" sizes="336px" alt="" /></div>}
+                            {imgs[2] && <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}><Image src={imgs[2]} fill className="object-cover" sizes="336px" alt="" /></div>}
+                          </div>
+                        );
+                      }
+                    });
+                    if (imgs[3]) {
+                      result.push(
+                        <div key="img-3" className="mt-10 relative w-full overflow-hidden" style={{ aspectRatio: "16/9" }}>
+                          <Image src={imgs[3]} fill className="object-cover" sizes="672px" alt="" />
+                        </div>
+                      );
+                    }
+                    return <div className="space-y-5">{result}</div>;
+                  })()}
                 </div>
               </motion.div>
             )}
